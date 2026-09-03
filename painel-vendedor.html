@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel do Vendedor</title>
+
+<!-- ==== TELA INICIAL DO ANDROID / IOS (abre em tela cheia, com ícone) ==== -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Painel do Vendedor">
+<meta name="theme-color" content="#35657a">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='70' font-size='56' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ======================================================================
+     PAINEL DO VENDEDOR — app de tela única
+     Cor: tinta pálida, 1 tom por bloco, número escuro. Fundo branco.
+     ====================================================================== */
+  :root{
+    --ground:#fff; --surface:#fff; --ink:#211e18; --ink-soft:#5c574c; --ink-faint:#8d8778; --hair:#e4dfd4;
+    --green-bg:#eef5ef; --green-ink:#35673f; --green-edge:#6ea277;
+    --amber-bg:#fbf2dc; --amber-ink:#7d5f0f; --amber-edge:#cba646;
+    --clay-bg:#f8e9e3;  --clay-ink:#93402f;  --clay-edge:#c47e69;
+    --blue-bg:#e9f0f3;  --blue-ink:#2b5f73;  --blue-edge:#71a2b3;
+    --slate-bg:#f0ede4; --slate-ink:#66604f; --slate-edge:#b2ab99;
+    --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
+    --radius:9px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#100f0a; --surface:#191811; --ink:#f0eadc; --ink-soft:#aaa290; --ink-faint:#7a7364; --hair:#302d22;
+    --green-bg:#17211a; --green-ink:#93c79c; --green-edge:#3c6446;
+    --amber-bg:#241d0e; --amber-ink:#ddb662; --amber-edge:#6c5720;
+    --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
+    --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
+    --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
+  }}
+  :root[data-theme="dark"]{
+    --ground:#100f0a; --surface:#191811; --ink:#f0eadc; --ink-soft:#aaa290; --ink-faint:#7a7364; --hair:#302d22;
+    --green-bg:#17211a; --green-ink:#93c79c; --green-edge:#3c6446;
+    --amber-bg:#241d0e; --amber-ink:#ddb662; --amber-edge:#6c5720;
+    --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
+    --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
+    --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;line-height:1.48;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 60px}
+
+  /* header */
+  .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+  .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.15rem,4vw,1.6rem);letter-spacing:-.01em;margin:0}
+  .masthead h1 span{color:var(--ink-soft);font-weight:600}
+  .meta{display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--ink-soft)}
+  .chip-co{font-family:"Archivo",sans-serif;font-weight:600;font-size:.66rem;letter-spacing:.03em;padding:2px 8px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
+
+  .statusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;font-size:.74rem;color:var(--ink-faint)}
+  .statusbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-edge);margin-right:6px;vertical-align:middle}
+  .statusbar.stale .dot{background:var(--amber-edge)}
+  .statusbar.err .dot{background:var(--clay-edge)}
+  .btn{font:inherit;font-size:.75rem;font-weight:600;padding:5px 12px;border:1px solid var(--hair);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+
+  section{margin-top:22px}
+  .band-label{font-family:"Archivo",sans-serif;font-weight:600;font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 6px;display:flex;align-items:center;gap:12px}
+  .band-label::after{content:"";flex:1;height:1px;background:var(--hair)}
+  .band-hint{margin:0 0 12px;font-size:.76rem;color:var(--ink-soft)}
+  .band-hint b{color:var(--ink);font-weight:600}
+
+  /* hero */
+  .hero{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hero-main{border:1px solid;border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
+  .hero-main.blue{background:var(--blue-bg);border-color:var(--blue-edge)}
+  .hero-main.amber{background:var(--amber-bg);border-color:var(--amber-edge)}
+  .hero-main .k{font-family:"Archivo",sans-serif;font-weight:600;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+  .hero-main.blue .k{color:var(--blue-ink)} .hero-main.amber .k{color:var(--amber-ink)}
+  .hero-main .v{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:clamp(2.4rem,11vw,3.6rem);line-height:.95;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .hero-main.blue .v{color:var(--blue-ink)} .hero-main.amber .v{color:var(--amber-ink)}
+  .hero-main .sub{font-size:.76rem;color:var(--ink-soft)}
+  .hero-main .lnk{font-size:.74rem;font-weight:600;color:var(--blue-ink);margin-top:2px;text-decoration:none}
+  .hero-main .breakdown{margin-top:10px;padding-top:8px;border-top:1px solid var(--blue-edge);font-size:.74rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;line-height:1.7}
+  .hero-main .breakdown b{color:var(--ink);font-family:"IBM Plex Mono",monospace;font-weight:600}
+  .hero-main .breakdown .off{color:var(--ink-faint)}
+
+  .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+  .kpi{background:var(--surface);border:1px solid var(--hair);border-top:3px solid var(--slate-edge);border-radius:var(--radius);padding:11px 12px;display:flex;flex-direction:column;gap:3px}
+  .kpi .k{font-family:"Archivo",sans-serif;font-weight:600;font-size:.63rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
+  .kpi .v{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.5rem;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .kpi .v.link{font-family:"Archivo",sans-serif;font-size:.95rem;font-weight:600}
+  .kpi .note{font-size:.66rem;color:var(--ink-faint)}
+  .kpi.green{border-top-color:var(--green-edge)} .kpi.green .k{color:var(--green-ink)}
+  .kpi.amber{border-top-color:var(--amber-edge)} .kpi.amber .k{color:var(--amber-ink)} .kpi.amber .v{color:var(--amber-ink)}
+  .kpi.blue{border-top-color:var(--blue-edge)}   .kpi.blue .k{color:var(--blue-ink)}  .kpi.blue .v{color:var(--blue-ink)}
+  .kpi a{color:inherit;text-decoration:none}
+
+  /* agenda */
+  .agenda{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;background:var(--amber-bg);border:1px solid var(--amber-edge);border-left:4px solid var(--amber-edge);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow)}
+  .agenda .big{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:2.2rem;line-height:1;color:var(--amber-ink);font-variant-numeric:tabular-nums}
+  .agenda .txt strong{font-family:"Archivo",sans-serif;font-weight:600;display:block;font-size:.92rem}
+  .agenda .txt span{font-size:.77rem;color:var(--ink-soft)}
+  .agenda .over{color:var(--clay-ink);font-weight:600}
+
+  /* rows */
+  .rows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+  .row{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--hair);border-left-width:3px;background:var(--surface)}
+  .row.a{background:var(--amber-bg);border-left-color:var(--amber-edge)}
+  .row.c{background:var(--clay-bg);border-left-color:var(--clay-edge)}
+  .row.g{background:var(--green-bg);border-left-color:var(--green-edge)}
+  .row.s{background:var(--surface);border-left-color:var(--slate-edge)}
+  .row .count{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.5rem;text-align:right;font-variant-numeric:tabular-nums}
+  .row.a .count{color:var(--amber-ink)} .row.c .count{color:var(--clay-ink)} .row.g .count{color:var(--green-ink)} .row.s .count{color:var(--ink-faint)}
+  .row .name{font-family:"Archivo",sans-serif;font-weight:600;font-size:.86rem}
+  .row .name small{display:block;font-family:"IBM Plex Sans",sans-serif;font-weight:400;font-size:.71rem;color:var(--ink-soft);margin-top:1px}
+  .row .name .lnk{font-size:.68rem;color:var(--blue-ink);font-weight:600;cursor:pointer;text-decoration:underline}
+
+  /* listas (impressão / rolar) */
+  .listbox{display:flex;flex-direction:column;gap:12px}
+  .listcard{border:1px solid var(--hair);border-radius:8px;overflow:hidden}
+  .lc-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;background:var(--slate-bg);font-family:"Archivo",sans-serif;font-weight:600;font-size:.8rem}
+  .lc-h .n{font-family:"IBM Plex Mono",monospace;color:var(--ink-soft)}
+  .lc-wrap{overflow-x:auto}
+  table.lc{border-collapse:collapse;width:100%;font-size:.72rem}
+  table.lc th,table.lc td{text-align:left;padding:5px 10px;border-top:1px solid var(--hair);white-space:nowrap;color:var(--ink-soft)}
+  table.lc th{font-family:"Archivo",sans-serif;font-size:.64rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface);position:sticky;top:0}
+  table.lc td:first-child,table.lc th:first-child{white-space:normal;color:var(--ink);font-weight:500}
+  .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
+
+  .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
+  .loading{padding:40px 0;text-align:center;color:var(--ink-faint);font-size:.85rem}
+
+  @media (max-width:820px){
+    .hero{grid-template-columns:1fr}
+    .kpi-strip{grid-template-columns:1fr 1fr}
+    .rows{grid-template-columns:1fr}
+  }
+
+  @media print{
+    @page{size:A4 portrait;margin:9mm}
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+    :root{--shadow:none}
+    body{background:#fff;font-size:10.5px}
+    .wrap{max-width:100%;padding:0}
+    .statusbar .btn,.no-print{display:none!important}
+    .hero{grid-template-columns:1fr 1fr!important}
+    .kpi-strip{grid-template-columns:repeat(4,1fr)!important}
+    .rows{grid-template-columns:1fr 1fr 1fr!important}
+    section,.hero,.hero-main,.kpi,.agenda,.rows,.row,.listcard{break-inside:avoid}
+    .band-label{break-after:avoid}
+    section{margin-top:12px}
+    .hero-main .v{font-size:2.4rem}
+    .agenda .big{font-size:1.9rem}
+    .row{padding:8px 10px}
+    .row .count{font-size:1.2rem}
+    table.lc th,table.lc td{padding:3px 7px;font-size:.66rem}
+    #listas{break-before:page}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <h1>Painel do Vendedor <span>— Carteira &amp; Missões</span></h1>
+    <div class="meta">
+      <span class="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
+      <span id="hoje">—</span>
+    </div>
+  </header>
+
+  <div class="statusbar" id="statusbar">
+    <span><span class="dot"></span><span id="status-text">carregando…</span></span>
+    <button class="btn no-print" id="btn-refresh">Atualizar</button>
+  </div>
+
+  <div id="content" hidden>
+
+    <div class="hero">
+      <div class="hero-main amber">
+        <span class="k">▸ 1º &nbsp; Em Negociação</span>
+        <span class="v" data-k="em_negociacao">–</span>
+        <span class="sub">fechar o que já está quente — sua maior chance de venda hoje</span>
+        <span class="lnk" data-goto="em_negociacao">↗ abrir lista</span>
+      </div>
+      <div class="hero-main blue">
+        <span class="k">Minha carteira ativa</span>
+        <span class="v" data-k="carteira_ativa">–</span>
+        <span class="sub">é o meu placar — em prospecção tem muito mais pra puxar</span>
+        <span class="breakdown">
+          <b data-k="c_ativos">–</b> ativos &nbsp;·&nbsp; <b data-k="c_negociacao">–</b> em negociação &nbsp;·&nbsp; <b data-k="c_semmov">–</b> sem movimentação
+          &nbsp;|&nbsp; <span class="off"><b data-k="c_inativos">–</b> inativos (fora do book)</span>
+        </span>
+      </div>
+    </div>
+
+    <section>
+      <p class="band-label">2º · Agenda de hoje — o vendedor agradece</p>
+      <p class="band-hint">O que a inteligência <b>já agendou</b> pra você — as atividades da cadência de relacionamento. Depois de olhar o que dá pra fechar, o dia começa aqui.</p>
+      <div class="agenda">
+        <span class="big" data-k="atividades">–</span>
+        <span class="txt">
+          <strong>Atividades programadas</strong>
+          <span>ligações, follow-ups e visitas com data marcada · <span class="over"><span data-k="atividades_atrasadas">–</span> atrasadas</span></span>
+        </span>
+      </div>
+    </section>
+
+    <div class="kpi-strip">
+      <div class="kpi green">
+        <span class="k">Vendas do mês</span>
+        <span class="v" data-k="vendas_mes">–</span>
+        <span class="note">pedidos confirmados · mês atual</span>
+      </div>
+      <div class="kpi amber">
+        <span class="k">Alvos do mês</span>
+        <span class="v" data-k="alvos_mes" data-goto="alvos" style="cursor:pointer">–</span>
+        <span class="note">não compraram este mês ↗</span>
+      </div>
+      <div class="kpi blue">
+        <span class="k">Curva A</span>
+        <span class="v link"><a id="link-curva-a" href="#">Quem são ↗</a></span>
+        <span class="note">grandes contas · 12 meses móveis</span>
+      </div>
+      <div class="kpi blue">
+        <span class="k">Prospecção</span>
+        <span class="v link"><a id="link-prospeccao" href="#">Ver painel ↗</a></span>
+        <span class="note">potenciais pra puxar</span>
+      </div>
+    </div>
+
+    <section>
+      <p class="band-label">3º · Missões — disparos da cadência</p>
+      <p class="band-hint">Conta <b>só quem ainda não teve contato feito</b> — por isso não bate com a carteira. (Em Negociação não entra aqui, é tratativa ativa e está no topo.)</p>
+      <div class="rows">
+        <div class="row s">
+          <span class="count" data-k="contato_preventivo">–</span>
+          <span class="name">Contato Preventivo<small>entrou no período de nova compra — ligar antes de precisar</small><span class="lnk" data-goto="contato_preventivo">↗ abrir lista</span></span>
+        </div>
+        <div class="row g">
+          <span class="count" data-k="recuperacao">–</span>
+          <span class="name">Recuperação<small>passou da previsão de recompra — resgatar antes de esfriar</small><span class="lnk" data-goto="recuperacao">↗ abrir lista</span></span>
+        </div>
+        <div class="row s">
+          <span class="count" data-k="em_formacao">–</span>
+          <span class="name">Em Formação<small>cliente novo — ainda sem histórico pra calcular quando recompra</small><span class="lnk" data-goto="em_formacao">↗ abrir lista</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <p class="band-label">4º · Alertas — pra ninguém ser esquecido</p>
+      <p class="band-hint">Aqui o número <b>empurra pro contato certo</b>: quem está escorregando da carteira e quem sumiu do radar.</p>
+      <div class="rows">
+        <div class="row c">
+          <span class="count" data-k="sem_movimentacao_30d">–</span>
+          <span class="name">Sem Movimentação +30 dias<small>caíram do "Ativos" — risco de perder</small><span class="lnk" data-goto="sem_movimentacao">↗ abrir lista</span></span>
+        </div>
+        <div class="row a">
+          <span class="count" data-k="sem_conversa_zap">–</span>
+          <span class="name">Sem conversa no Zap +20 dias<small>relacionamento esfriando — mandar mensagem</small><span class="lnk" data-goto="conversa_zap">↗ abrir lista</span></span>
+        </div>
+        <div class="row c">
+          <span class="count" data-k="inativos_missao">–</span>
+          <span class="name">Inativos<small>fora do ciclo — meta de resgate do mês</small><span class="lnk" data-goto="inativos">↗ abrir lista</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="listas">
+      <p class="band-label">Listas — pro Daniel imprimir tudo de uma vez</p>
+      <p class="band-hint">As mesmas listas na íntegra. Role e imprima a página inteira (Ctrl+P no PC, ou "Compartilhar → Imprimir" no celular).</p>
+      <div class="listbox" id="listbox"></div>
+    </section>
+
+    <p class="updated">Atualizado em <span id="updated-at">—</span></p>
+  </div>
+
+  <div class="loading" id="loading">carregando o painel…</div>
+
+</div>
+
+<script>
+/* ============================================================================
+   CONFIGURAÇÃO — troque a URL abaixo pela do seu webhook no n8n
+   ex: https://SEU-N8N/webhook/painel-vendedor
+   ============================================================================ */
+const WEBHOOK_URL   = "https://auto.ialink.com.br/webhook/painel-vendedor";
+const REFRESH_MIN   = 5;      // re-busca sozinho a cada X minutos
+const LINK_CURVA_A   = "";    // URL da aba/painel da Curva A (deixe "" por enquanto)
+const LINK_PROSPECCAO= "";    // URL do Painel de Prospecção (deixe "" por enquanto)
+
+/* ---- definição das listas que aparecem embaixo ---- */
+const LISTAS = [
+  {k:"em_negociacao",      titulo:"Em Negociação"},
+  {k:"contato_preventivo", titulo:"Contato Preventivo"},
+  {k:"recuperacao",        titulo:"Recuperação"},
+  {k:"em_formacao",        titulo:"Em Formação"},
+  {k:"atividades",         titulo:"Atividades programadas"},
+  {k:"sem_movimentacao",   titulo:"Sem Movimentação +30 dias"},
+  {k:"conversa_zap",       titulo:"Sem conversa no Zap +20 dias"},
+  {k:"alvos",              titulo:"Alvos do mês — não compraram este mês"},
+  {k:"inativos",           titulo:"Inativos"}
+];
+const COLS = {
+  padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["ultimo_pedido","Último pedido"]],
+  atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]]
+};
+
+/* ---- helpers ---- */
+const $  = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const fmtInt = n => (n==null||isNaN(n)) ? "–" : Number(n).toLocaleString("pt-BR");
+const fmtBRL = n => (n==null||isNaN(n)) ? "R$ –" : Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const fmtDateTime = iso => { try{ return new Date(iso).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}catch(e){return iso||"—";} };
+
+function setStatus(state, text){
+  const sb = $("#statusbar");
+  sb.classList.remove("stale","err");
+  if(state) sb.classList.add(state);
+  $("#status-text").textContent = text;
+}
+
+function fill(data){
+  const kpi = data.kpis || {};
+  const c   = kpi.carteira || {};
+  const m   = kpi.missoes || {};
+  const al  = kpi.alertas || {};
+  const map = {
+    em_negociacao: kpi.em_negociacao,
+    carteira_ativa: kpi.carteira_ativa,
+    c_ativos: c.ativos, c_negociacao: c.negociacao, c_semmov: c.sem_movimentacao, c_inativos: c.inativos,
+    alvos_mes: kpi.alvos_mes,
+    atividades: kpi.atividades, atividades_atrasadas: kpi.atividades_atrasadas,
+    contato_preventivo: m.contato_preventivo, recuperacao: m.recuperacao, em_formacao: m.em_formacao,
+    sem_movimentacao_30d: al.sem_movimentacao_30d, sem_conversa_zap: al.sem_conversa_zap, inativos_missao: al.inativos
+  };
+  for(const [k,v] of Object.entries(map)){
+    const el = document.querySelector('[data-k="'+k+'"]');
+    if(el) el.textContent = fmtInt(v);
+  }
+  const vm = document.querySelector('[data-k="vendas_mes"]');
+  if(vm) vm.textContent = fmtBRL(kpi.vendas_mes);
+
+  $("#updated-at").textContent = fmtDateTime(data.atualizado_em);
+  $("#hoje").textContent = new Date(data.atualizado_em||Date.now()).toLocaleDateString("pt-BR");
+
+  renderListas(data.listas || {});
+}
+
+function renderListas(listas){
+  const box = $("#listbox"); box.innerHTML = "";
+  for(const {k,titulo} of LISTAS){
+    const rows = listas[k] || [];
+    const cols = COLS[k] || COLS.padrao;
+    const card = document.createElement("div"); card.className = "listcard"; card.id = "lista-"+k;
+    const h = document.createElement("div"); h.className = "lc-h";
+    h.innerHTML = '<span>'+titulo+'</span><span class="n">'+rows.length+'</span>';
+    card.appendChild(h);
+    if(!rows.length){
+      const e = document.createElement("div"); e.className="lc-empty"; e.textContent="— nada nesta lista agora —";
+      card.appendChild(e);
+    } else {
+      const wrap = document.createElement("div"); wrap.className="lc-wrap";
+      const t = document.createElement("table"); t.className="lc";
+      t.innerHTML = "<thead><tr>"+cols.map(c=>"<th>"+c[1]+"</th>").join("")+"</tr></thead>";
+      const tb = document.createElement("tbody");
+      for(const r of rows){
+        tb.innerHTML += "<tr>"+cols.map(c=>"<td>"+(r[c[0]]??"")+"</td>").join("")+"</tr>";
+      }
+      t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
+    }
+    box.appendChild(card);
+  }
+}
+
+/* clique nos "↗ abrir lista" rola até a lista embaixo */
+document.addEventListener("click", e=>{
+  const g = e.target.closest("[data-goto]");
+  if(g){ const el = $("#lista-"+g.dataset.goto); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); }
+});
+
+const DEMO = {
+  atualizado_em: new Date().toISOString(),
+  kpis: { carteira_ativa:59, em_negociacao:9, alvos_mes:51, vendas_mes:98935.25, atividades:16, atividades_atrasadas:16,
+    carteira:{ativos:33,negociacao:9,sem_movimentacao:17,inativos:32},
+    missoes:{contato_preventivo:1,recuperacao:2,em_formacao:40},
+    alertas:{sem_movimentacao_30d:6,sem_conversa_zap:4,inativos:26} },
+  listas: { alvos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"5511…",cidade:"São Paulo",uf:"SP",marcadores:"BB CLIENTE AÇO",estagio:"Clientes Ativos",ultimo_pedido:"2026-08-12"}],
+    em_negociacao:[{cliente:"(exemplo) ANNA DECOR",fantasia:"Anna Decor",zap:"5519…",cidade:"Piracicaba",uf:"SP",marcadores:"",ultima_interacao:"2026-09-01"}],
+    contato_preventivo:[],recuperacao:[],em_formacao:[],sem_movimentacao:[],conversa_zap:[],inativos:[],
+    atividades:[{cliente:"(exemplo) BM NOGUEIRA",tipo:"Ligar",resumo:"follow-up cotação",vencimento:"2026-09-03",estado:"atrasada",responsavel:"Daniel Medeiros"}] }
+};
+
+async function load(){
+  if(WEBHOOK_URL.startsWith("COLE_AQUI")){
+    setStatus("stale","DEMONSTRAÇÃO — configure WEBHOOK_URL no arquivo pra ligar no Odoo");
+    fill(DEMO);
+    $("#loading").hidden = true;
+    $("#content").hidden = false;
+    return;
+  }
+  try{
+    setStatus(null,"atualizando…");
+    const r = await fetch(WEBHOOK_URL, {cache:"no-store"});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const data = await r.json();
+    fill(data);
+    $("#loading").hidden = true;
+    $("#content").hidden = false;
+    const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
+    setStatus(age>20 ? "stale" : null, "ao vivo · " + fmtDateTime(data.atualizado_em));
+  }catch(err){
+    setStatus("err","erro ao carregar — tentando de novo em 1 min ("+err.message+")");
+    if($("#content").hidden) $("#loading").textContent = "Não consegui carregar. Verifique o webhook. ("+err.message+")";
+    setTimeout(load, 60000);
+  }
+}
+
+if(LINK_CURVA_A)    { $("#link-curva-a").href = LINK_CURVA_A; }
+if(LINK_PROSPECCAO) { $("#link-prospeccao").href = LINK_PROSPECCAO; }
+$("#btn-refresh").addEventListener("click", load);
+load();
+setInterval(load, REFRESH_MIN*60000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) load(); });
+</script>
+</body>
+</html>
