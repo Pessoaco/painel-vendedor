@@ -123,6 +123,8 @@
   .row.c{background:var(--clay-bg);border-left-color:var(--clay-edge)}
   .row.g{background:var(--green-bg);border-left-color:var(--green-edge)}
   .row.s{background:var(--surface);border-left-color:var(--slate-edge)}
+  .row[data-goto],.kpi[data-goto],.hero-main[data-goto]{cursor:pointer}
+  .row[data-goto]:hover,.kpi[data-goto]:hover{filter:brightness(.97)}
   .row .count{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.5rem;text-align:right;font-variant-numeric:tabular-nums}
   .row.a .count{color:var(--amber-ink)} .row.c .count{color:var(--clay-ink)} .row.g .count{color:var(--green-ink)} .row.s .count{color:var(--ink-faint)}
   .row .name{font-family:"Archivo",sans-serif;font-weight:600;font-size:.86rem}
@@ -138,7 +140,7 @@
   table.lc{border-collapse:collapse;width:100%;font-size:.72rem}
   table.lc th,table.lc td{text-align:left;padding:5px 10px;border-top:1px solid var(--hair);white-space:nowrap;color:var(--ink-soft)}
   table.lc th{font-family:"Archivo",sans-serif;font-size:.64rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface);position:sticky;top:0}
-  table.lc td:first-child,table.lc th:first-child{white-space:normal;color:var(--ink);font-weight:500}
+  table.lc td:first-child,table.lc th:first-child{color:var(--ink);font-weight:500}
   .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
 
   .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
@@ -156,19 +158,23 @@
     :root{--shadow:none}
     body{background:#fff;font-size:10.5px}
     .wrap{max-width:100%;padding:0}
-    .statusbar .btn,.no-print{display:none!important}
+    .statusbar .btn,.no-print,.login,#loading{display:none!important}
     .hero{grid-template-columns:1fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(4,1fr)!important}
     .rows{grid-template-columns:1fr 1fr 1fr!important}
-    section,.hero,.hero-main,.kpi,.agenda,.rows,.row,.listcard{break-inside:avoid}
+    .hero,.hero-main,.kpi,.agenda,.row{break-inside:avoid}
+    .listcard{break-inside:auto}
+    table.lc tr{break-inside:avoid}
     .band-label{break-after:avoid}
     section{margin-top:12px}
     .hero-main .v{font-size:2.4rem}
     .agenda .big{font-size:1.9rem}
     .row{padding:8px 10px}
     .row .count{font-size:1.2rem}
-    table.lc th,table.lc td{padding:3px 7px;font-size:.66rem}
-    #listas{break-before:page}
+    table.lc th,table.lc td{padding:3px 7px;font-size:.66rem;white-space:normal}
+    .lc-wrap{overflow:visible}
+    .updated{margin-top:8px}
+    section#listas{margin-top:14px}
   }
 
   /* ---- login ---- */
@@ -185,7 +191,7 @@
 </style>
 </head>
 <body>
-<!-- Painel do Vendedor — v2.3 (conserta tela de login que não sumia) -->
+<!-- Painel do Vendedor — v2.5 (impressão sem páginas em branco) -->
 
 <div class="login" id="login">
   <form id="login-form" autocomplete="on">
@@ -224,11 +230,11 @@
   <div id="content" hidden>
 
     <div class="hero">
-      <div class="hero-main amber">
+      <div class="hero-main amber" data-goto="em_negociacao" style="cursor:pointer">
         <span class="k">▸ 1º &nbsp; Em Negociação</span>
         <span class="v" data-k="em_negociacao">–</span>
         <span class="sub">fechar o que já está quente — sua maior chance de venda hoje</span>
-        <span class="lnk" data-goto="em_negociacao">↗ abrir lista</span>
+        <span class="lnk">↗ abrir lista</span>
       </div>
       <div class="hero-main blue">
         <span class="k">Minha carteira ativa</span>
@@ -247,10 +253,10 @@
         <span class="v" data-k="vendas_mes">–</span>
         <span class="note">pedidos confirmados · mês atual</span>
       </div>
-      <div class="kpi amber">
+      <div class="kpi amber" data-goto="alvos" style="cursor:pointer">
         <span class="k">Alvos do mês</span>
-        <span class="v" data-k="alvos_mes" data-goto="alvos" style="cursor:pointer">–</span>
-        <span class="note">não compraram este mês ↗</span>
+        <span class="v" data-k="alvos_mes">–</span>
+        <span class="note">não compraram este mês · toque pra ver ↗</span>
       </div>
       <div class="kpi blue">
         <span class="k">Curva A</span>
@@ -280,17 +286,17 @@
       <p class="band-label">Missões — disparos da cadência</p>
       <p class="band-hint">Conta <b>só quem ainda não teve contato feito</b> — por isso não bate com a carteira. (Em Negociação não entra aqui, é tratativa ativa e está no topo.)</p>
       <div class="rows">
-        <div class="row s">
+        <div class="row s" data-goto="contato_preventivo">
           <span class="count" data-k="contato_preventivo">–</span>
-          <span class="name">Contato Preventivo<small>entrou no período de nova compra — ligar antes de precisar</small><span class="lnk" data-goto="contato_preventivo">↗ abrir lista</span></span>
+          <span class="name">Contato Preventivo<small>entrou no período de nova compra — ligar antes de precisar</small><span class="lnk">↗ abrir lista</span></span>
         </div>
-        <div class="row g">
+        <div class="row g" data-goto="recuperacao">
           <span class="count" data-k="recuperacao">–</span>
-          <span class="name">Recuperação<small>passou da previsão de recompra — resgatar antes de esfriar</small><span class="lnk" data-goto="recuperacao">↗ abrir lista</span></span>
+          <span class="name">Recuperação<small>passou da previsão de recompra — resgatar antes de esfriar</small><span class="lnk">↗ abrir lista</span></span>
         </div>
-        <div class="row s">
+        <div class="row s" data-goto="em_formacao">
           <span class="count" data-k="em_formacao">–</span>
-          <span class="name">Em Formação<small>cliente novo — ainda sem histórico pra calcular quando recompra</small><span class="lnk" data-goto="em_formacao">↗ abrir lista</span></span>
+          <span class="name">Em Formação<small>cliente novo — ainda sem histórico pra calcular quando recompra</small><span class="lnk">↗ abrir lista</span></span>
         </div>
       </div>
     </section>
@@ -299,17 +305,17 @@
       <p class="band-label">Alertas — pra ninguém ser esquecido</p>
       <p class="band-hint">Aqui o número <b>empurra pro contato certo</b>: quem está escorregando da carteira e quem sumiu do radar.</p>
       <div class="rows">
-        <div class="row c">
+        <div class="row c" data-goto="sem_movimentacao">
           <span class="count" data-k="sem_movimentacao_30d">–</span>
-          <span class="name">Sem Movimentação +30 dias<small>caíram do "Ativos" — risco de perder</small><span class="lnk" data-goto="sem_movimentacao">↗ abrir lista</span></span>
+          <span class="name">Sem Movimentação +30 dias<small>caíram do "Ativos" — risco de perder</small><span class="lnk">↗ abrir lista</span></span>
         </div>
-        <div class="row a">
+        <div class="row a" data-goto="conversa_zap">
           <span class="count" data-k="sem_conversa_zap">–</span>
-          <span class="name">Sem conversa no Zap +20 dias<small>relacionamento esfriando — mandar mensagem</small><span class="lnk" data-goto="conversa_zap">↗ abrir lista</span></span>
+          <span class="name">Sem conversa no Zap +20 dias<small>relacionamento esfriando — mandar mensagem</small><span class="lnk">↗ abrir lista</span></span>
         </div>
-        <div class="row c">
+        <div class="row c" data-goto="inativos">
           <span class="count" data-k="inativos_missao">–</span>
-          <span class="name">Inativos<small>fora do ciclo — meta de resgate do mês</small><span class="lnk" data-goto="inativos">↗ abrir lista</span></span>
+          <span class="name">Inativos<small>fora do ciclo — meta de resgate do mês</small><span class="lnk">↗ abrir lista</span></span>
         </div>
       </div>
     </section>
@@ -320,7 +326,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Painel v2.3 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Painel v2.5 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
