@@ -169,9 +169,34 @@
     table.lc th,table.lc td{padding:3px 7px;font-size:.66rem}
     #listas{break-before:page}
   }
+
+  /* ---- login ---- */
+  .login{position:fixed;inset:0;z-index:50;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:24px}
+  .login form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:11px}
+  .login h2{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.25rem;margin:0}
+  .login p{margin:0 0 6px;font-size:.8rem;color:var(--ink-soft)}
+  .login input{font:inherit;padding:11px 13px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink)}
+  .login input:focus{outline:2px solid var(--blue-edge);outline-offset:1px}
+  .login button{font:inherit;font-weight:700;font-family:"Archivo",sans-serif;padding:11px;border:0;border-radius:8px;background:var(--blue-ink);color:#fff;cursor:pointer}
+  .login button:active{transform:translateY(1px)}
+  .login .msg{font-size:.78rem;color:var(--clay-ink);min-height:1.1em}
+  .logout{background:none;border:0;color:var(--ink-faint);font:inherit;font-size:.7rem;cursor:pointer;text-decoration:underline;padding:0}
 </style>
 </head>
 <body>
+<!-- Painel do Vendedor — v2 (login + multiempresa) -->
+
+<div class="login" id="login">
+  <form id="login-form" autocomplete="on">
+    <h2>Painel do Vendedor</h2>
+    <p>Acesso restrito — contém dados de clientes.</p>
+    <input id="login-user" name="username" type="text" placeholder="usuário" autocapitalize="none" autocomplete="username" required>
+    <input id="login-pass" name="password" type="password" placeholder="senha" autocomplete="current-password" required>
+    <button type="submit">Entrar</button>
+    <span class="msg" id="login-msg"></span>
+  </form>
+</div>
+
 <div class="wrap">
 
   <header class="masthead">
@@ -191,6 +216,7 @@
     <div class="statusbar" id="statusbar">
       <span><span class="dot"></span><span id="status-text">carregando…</span></span>
       <button class="btn no-print" id="btn-refresh">Atualizar</button>
+      <button class="logout no-print" id="btn-logout">sair</button>
     </div>
   </div>
 
@@ -293,10 +319,10 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Painel v2 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
-  <div class="loading" id="loading">carregando o painel…</div>
+  <div class="loading" id="loading" hidden>carregando o painel…</div>
 
 </div>
 
@@ -424,42 +450,79 @@ function setEmpresa(v){
   load();
 }
 
+/* ---- login ---- */
+let creds = null;
+try { creds = JSON.parse(localStorage.getItem("pv_auth") || "null"); } catch(e){}
+let tentando = false;
+
+function showLogin(msg){
+  $("#login").hidden = false;
+  $("#content").hidden = true;
+  $("#loading").hidden = true;
+  $("#login-msg").textContent = msg || "";
+  const u = $("#login-user"); if(u && !u.value) u.focus();
+}
+function logout(){
+  try { localStorage.removeItem("pv_auth"); } catch(e){}
+  creds = null;
+  $("#login-pass").value = "";
+  showLogin("");
+}
+
 async function load(){
   if(WEBHOOK_URL.startsWith("COLE_AQUI")){
     setStatus("stale","DEMONSTRAÇÃO — configure WEBHOOK_URL no arquivo pra ligar no Odoo");
-    fill(DEMO);
-    $("#loading").hidden = true;
-    $("#content").hidden = false;
-    return;
+    fill(DEMO); $("#loading").hidden = true; $("#content").hidden = false; return;
   }
+  if(!creds || !creds.user){ showLogin(); return; }
+  $("#login").hidden = true;
+  if($("#content").hidden){ $("#loading").hidden = false; }
   try{
     setStatus(null,"atualizando…");
-    const url = WEBHOOK_URL + (empresa ? (WEBHOOK_URL.includes("?") ? "&" : "?") + "empresa=" + empresa : "");
+    let url = WEBHOOK_URL + (WEBHOOK_URL.includes("?") ? "&" : "?")
+      + "user=" + encodeURIComponent(creds.user) + "&pass=" + encodeURIComponent(creds.pass);
+    if(empresa) url += "&empresa=" + empresa;
     const r = await fetch(url, {cache:"no-store"});
+    if(r.status === 401 || r.status === 403){ logout(); showLogin("Usuário ou senha errado."); return; }
     if(!r.ok) throw new Error("HTTP "+r.status);
     const data = await r.json();
+    if(data && data.erro){ logout(); showLogin("Usuário ou senha errado."); return; }
     fill(data);
+    $("#login").hidden = true;
     $("#loading").hidden = true;
     $("#content").hidden = false;
     const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
     const rot = empresa ? " · " + (empresa === "BNZ" ? "BNZ" : "CIAPLAC") : " · Total";
     setStatus(age>20 ? "stale" : null, "ao vivo" + rot + " · " + fmtDateTime(data.atualizado_em));
   }catch(err){
-    setStatus("err","erro ao carregar — tentando de novo em 1 min ("+err.message+")");
-    if($("#content").hidden) $("#loading").textContent = "Não consegui carregar. Verifique o webhook. ("+err.message+")";
+    // 500 do webhook = ou senha errada (nó 0) ou Odoo fora. Na 1ª carga, manda pro login.
+    if($("#content").hidden){ logout(); showLogin("Não entrou. Confira usuário e senha."); return; }
+    setStatus("err","erro ao atualizar — tentando de novo em 1 min");
     setTimeout(load, 60000);
   }
 }
 
+$("#login-form").addEventListener("submit", e => {
+  e.preventDefault();
+  creds = { user: $("#login-user").value.trim(), pass: $("#login-pass").value };
+  try { localStorage.setItem("pv_auth", JSON.stringify(creds)); } catch(e){}
+  $("#login").hidden = true;
+  $("#loading").hidden = false;
+  $("#loading").textContent = "entrando…";
+  load();
+});
+
 if(LINK_CURVA_A)    { $("#link-curva-a").href = LINK_CURVA_A; }
 if(LINK_PROSPECCAO) { $("#link-prospeccao").href = LINK_PROSPECCAO; }
 $("#btn-refresh").addEventListener("click", load);
+$("#btn-logout").addEventListener("click", logout);
 $("#seg").addEventListener("click", e => { const b = e.target.closest("button[data-emp]"); if(b) setEmpresa(b.dataset.emp); });
 $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
 $("#chip-co").textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
-load();
-setInterval(load, REFRESH_MIN*60000);
-document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) load(); });
+
+if(creds && creds.user){ load(); } else { showLogin(); }
+setInterval(()=>{ if(creds && creds.user) load(); }, REFRESH_MIN*60000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && creds && creds.user) load(); });
 </script>
 </body>
 </html>
