@@ -54,30 +54,36 @@
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;line-height:1.48;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1080px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 60px}
+  .wrap{max-width:1080px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 14px 48px}
 
   /* header */
-  .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
-  .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.15rem,4vw,1.6rem);letter-spacing:-.01em;margin:0}
+  .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+  .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:-.01em;margin:0}
   .masthead h1 span{color:var(--ink-soft);font-weight:600}
-  .meta{display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--ink-soft)}
+  .meta{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--ink-soft)}
   .chip-co{font-family:"Archivo",sans-serif;font-weight:600;font-size:.66rem;letter-spacing:.03em;padding:2px 8px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
 
-  .statusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;font-size:.74rem;color:var(--ink-faint)}
+  .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:8px}
+  .seg{display:inline-flex;border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:var(--surface)}
+  .seg button{font:inherit;font-family:"Archivo",sans-serif;font-weight:600;font-size:.76rem;padding:6px 14px;border:0;border-left:1px solid var(--hair);background:transparent;color:var(--ink-soft);cursor:pointer}
+  .seg button:first-child{border-left:0}
+  .seg button.on{background:var(--blue-bg);color:var(--blue-ink)}
+  .seg button:active{transform:translateY(1px)}
+  .statusbar{display:flex;align-items:center;gap:10px;font-size:.72rem;color:var(--ink-faint)}
   .statusbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-edge);margin-right:6px;vertical-align:middle}
   .statusbar.stale .dot{background:var(--amber-edge)}
   .statusbar.err .dot{background:var(--clay-edge)}
   .btn{font:inherit;font-size:.75rem;font-weight:600;padding:5px 12px;border:1px solid var(--hair);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer}
   .btn:active{transform:translateY(1px)}
 
-  section{margin-top:22px}
+  section{margin-top:16px}
   .band-label{font-family:"Archivo",sans-serif;font-weight:600;font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 6px;display:flex;align-items:center;gap:12px}
   .band-label::after{content:"";flex:1;height:1px;background:var(--hair)}
   .band-hint{margin:0 0 12px;font-size:.76rem;color:var(--ink-soft)}
   .band-hint b{color:var(--ink);font-weight:600}
 
   /* hero */
-  .hero{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hero{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .hero-main{border:1px solid;border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
   .hero-main.blue{background:var(--blue-bg);border-color:var(--blue-edge)}
   .hero-main.amber{background:var(--amber-bg);border-color:var(--amber-edge)}
@@ -171,14 +177,21 @@
   <header class="masthead">
     <h1>Painel do Vendedor <span>— Carteira &amp; Missões</span></h1>
     <div class="meta">
-      <span class="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
+      <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
     </div>
   </header>
 
-  <div class="statusbar" id="statusbar">
-    <span><span class="dot"></span><span id="status-text">carregando…</span></span>
-    <button class="btn no-print" id="btn-refresh">Atualizar</button>
+  <div class="topbar">
+    <div class="seg no-print" id="seg">
+      <button data-emp="" class="on">Total</button>
+      <button data-emp="BNZ">BNZ</button>
+      <button data-emp="CIAPLAC">CIAPLAC</button>
+    </div>
+    <div class="statusbar" id="statusbar">
+      <span><span class="dot"></span><span id="status-text">carregando…</span></span>
+      <button class="btn no-print" id="btn-refresh">Atualizar</button>
+    </div>
   </div>
 
   <div id="content" hidden>
@@ -200,18 +213,6 @@
         </span>
       </div>
     </div>
-
-    <section>
-      <p class="band-label">2º · Agenda de hoje — o vendedor agradece</p>
-      <p class="band-hint">O que a inteligência <b>já agendou</b> pra você — as atividades da cadência de relacionamento. Depois de olhar o que dá pra fechar, o dia começa aqui.</p>
-      <div class="agenda">
-        <span class="big" data-k="atividades">–</span>
-        <span class="txt">
-          <strong>Atividades programadas</strong>
-          <span>ligações, follow-ups e visitas com data marcada · <span class="over"><span data-k="atividades_atrasadas">–</span> atrasadas</span></span>
-        </span>
-      </div>
-    </section>
 
     <div class="kpi-strip">
       <div class="kpi green">
@@ -237,7 +238,19 @@
     </div>
 
     <section>
-      <p class="band-label">3º · Missões — disparos da cadência</p>
+      <p class="band-label">Agenda de hoje — o vendedor agradece</p>
+      <p class="band-hint">O que a inteligência <b>já agendou</b> pra você — as atividades da cadência de relacionamento.</p>
+      <div class="agenda">
+        <span class="big" data-k="atividades">–</span>
+        <span class="txt">
+          <strong>Atividades programadas</strong>
+          <span>ligações, follow-ups e visitas com data marcada · <span class="over"><span data-k="atividades_atrasadas">–</span> atrasadas</span></span>
+        </span>
+      </div>
+    </section>
+
+    <section>
+      <p class="band-label">Missões — disparos da cadência</p>
       <p class="band-hint">Conta <b>só quem ainda não teve contato feito</b> — por isso não bate com a carteira. (Em Negociação não entra aqui, é tratativa ativa e está no topo.)</p>
       <div class="rows">
         <div class="row s">
@@ -256,7 +269,7 @@
     </section>
 
     <section>
-      <p class="band-label">4º · Alertas — pra ninguém ser esquecido</p>
+      <p class="band-label">Alertas — pra ninguém ser esquecido</p>
       <p class="band-hint">Aqui o número <b>empurra pro contato certo</b>: quem está escorregando da carteira e quem sumiu do radar.</p>
       <div class="rows">
         <div class="row c">
@@ -400,6 +413,17 @@ const DEMO = {
     atividades:[{cliente:"(exemplo) BM NOGUEIRA",tipo:"Ligar",resumo:"follow-up cotação",vencimento:"2026-09-03",estado:"atrasada",responsavel:"Daniel Medeiros"}] }
 };
 
+/* ---- empresa selecionada (Total / BNZ / CIAPLAC) ---- */
+let empresa = "";
+try { empresa = localStorage.getItem("pv_empresa") || ""; } catch(e){}
+function setEmpresa(v){
+  empresa = v || "";
+  try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
+  $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
+  $("#chip-co").textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
+  load();
+}
+
 async function load(){
   if(WEBHOOK_URL.startsWith("COLE_AQUI")){
     setStatus("stale","DEMONSTRAÇÃO — configure WEBHOOK_URL no arquivo pra ligar no Odoo");
@@ -410,14 +434,16 @@ async function load(){
   }
   try{
     setStatus(null,"atualizando…");
-    const r = await fetch(WEBHOOK_URL, {cache:"no-store"});
+    const url = WEBHOOK_URL + (empresa ? (WEBHOOK_URL.includes("?") ? "&" : "?") + "empresa=" + empresa : "");
+    const r = await fetch(url, {cache:"no-store"});
     if(!r.ok) throw new Error("HTTP "+r.status);
     const data = await r.json();
     fill(data);
     $("#loading").hidden = true;
     $("#content").hidden = false;
     const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
-    setStatus(age>20 ? "stale" : null, "ao vivo · " + fmtDateTime(data.atualizado_em));
+    const rot = empresa ? " · " + (empresa === "BNZ" ? "BNZ" : "CIAPLAC") : " · Total";
+    setStatus(age>20 ? "stale" : null, "ao vivo" + rot + " · " + fmtDateTime(data.atualizado_em));
   }catch(err){
     setStatus("err","erro ao carregar — tentando de novo em 1 min ("+err.message+")");
     if($("#content").hidden) $("#loading").textContent = "Não consegui carregar. Verifique o webhook. ("+err.message+")";
@@ -428,6 +454,9 @@ async function load(){
 if(LINK_CURVA_A)    { $("#link-curva-a").href = LINK_CURVA_A; }
 if(LINK_PROSPECCAO) { $("#link-prospeccao").href = LINK_PROSPECCAO; }
 $("#btn-refresh").addEventListener("click", load);
+$("#seg").addEventListener("click", e => { const b = e.target.closest("button[data-emp]"); if(b) setEmpresa(b.dataset.emp); });
+$$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
+$("#chip-co").textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
 load();
 setInterval(load, REFRESH_MIN*60000);
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) load(); });
