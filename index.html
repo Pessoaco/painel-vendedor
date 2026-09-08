@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Painel do Vendedor</title>
+<title>Copiloto de Vendas</title>
 
 <!-- ==== TELA INICIAL DO ANDROID / IOS (abre em tela cheia, com ícone) ==== -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Painel do Vendedor">
+<meta name="apple-mobile-web-app-title" content="Copiloto de Vendas">
 <meta name="theme-color" content="#35657a">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='70' font-size='56' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='70' font-size='56' text-anchor='middle' fill='white' font-family='Arial'%3EC%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,6 +108,8 @@
   .kpi.amber{border-top-color:var(--amber-edge)} .kpi.amber .k{color:var(--amber-ink)} .kpi.amber .v{color:var(--amber-ink)}
   .kpi.blue{border-top-color:var(--blue-edge)}   .kpi.blue .k{color:var(--blue-ink)}  .kpi.blue .v{color:var(--blue-ink)}
   .kpi a{color:inherit;text-decoration:none}
+  .kpi .note .link a{color:var(--blue-ink);font-weight:600}
+  .kpi .note br{content:"";display:block;margin-top:2px}
 
   /* agenda */
   .agenda{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;background:var(--amber-bg);border:1px solid var(--amber-edge);border-left:4px solid var(--amber-edge);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow)}
@@ -142,6 +144,10 @@
   table.lc th{font-family:"Archivo",sans-serif;font-size:.64rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface);position:sticky;top:0}
   table.lc td:first-child,table.lc th:first-child{color:var(--ink);font-weight:500}
   .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
+  table.lc a.wa{color:#1fa855;display:inline-flex}
+  table.lc a.wa .ico{width:17px;height:17px}
+  table.lc .wa-num{display:none;font-variant-numeric:tabular-nums}
+  @media print{ table.lc a.wa{display:none} table.lc .wa-num{display:inline} }
 
   .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
   .loading{padding:40px 0;text-align:center;color:var(--ink-faint);font-size:.85rem}
@@ -158,7 +164,8 @@
     :root{--shadow:none}
     body{background:#fff;font-size:10.5px}
     .wrap{max-width:100%;padding:0}
-    .statusbar .btn,.no-print,.login,#loading{display:none!important}
+    .statusbar .btn,.no-print,.login,#loading,.badge,.tagline{display:none!important}
+    .hero-main{padding:12px 14px}
     .hero{grid-template-columns:1fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(4,1fr)!important}
     .rows{grid-template-columns:1fr 1fr 1fr!important}
@@ -177,6 +184,37 @@
     section#listas{margin-top:14px}
   }
 
+  /* ---- ícones ---- */
+  .ico{width:1em;height:1em;flex:none;vertical-align:-.12em}
+  .badge{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  .badge .ico{width:18px;height:18px}
+  .badge.blue{background:var(--blue-bg);color:var(--blue-ink)}
+  .badge.green{background:var(--green-bg);color:var(--green-ink)}
+  .badge.amber{background:var(--amber-bg);color:var(--amber-ink)}
+  .badge.purple{background:#efe6f7;color:#6b3fa0}
+  .badge.clay{background:var(--clay-bg);color:var(--clay-ink)}
+  .hero-main{position:relative}
+  .hero-main .badge{position:absolute;top:14px;right:14px}
+  .kpi .badge{width:26px;height:26px;align-self:flex-start;margin-bottom:2px}
+  .kpi .badge .ico{width:15px;height:15px}
+  .band-label .ico{width:14px;height:14px;color:var(--ink-soft)}
+  .band-label.missoes .ico{color:#6b3fa0}
+  .band-label.alerta .ico{color:var(--amber-ink)}
+
+  /* ---- tagline ---- */
+  .tagline{margin:6px 0 0;font-size:.78rem;color:var(--ink-soft);font-style:italic}
+
+  /* ---- legenda / callout ---- */
+  .legenda{display:block;margin-top:6px;font-size:.68rem;color:var(--ink-faint);font-style:normal;line-height:1.4}
+  .hero-main .breakdown b[data-goto]{cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
+  .callout{
+    display:flex;gap:8px;align-items:flex-start;
+    background:var(--amber-bg);border:1px solid var(--amber-edge);border-left:3px solid var(--amber-edge);
+    border-radius:8px;padding:9px 12px;margin:0 0 12px;font-size:.78rem;color:var(--ink)
+  }
+  .callout .ico{width:15px;height:15px;color:var(--amber-ink);margin-top:1px}
+  .callout b{font-weight:600}
+
   /* ---- login ---- */
   .login{position:fixed;inset:0;z-index:50;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:24px}
   .login form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:11px}
@@ -191,12 +229,21 @@
 </style>
 </head>
 <body>
-<!-- Painel do Vendedor — v2.5 (impressão sem páginas em branco) -->
+<!-- Copiloto de Vendas — v2.7 (nomes, ícones, ordem das seções, links da carteira) -->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-pessoas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 6.5a3 3 0 0 1 0 6"/><path d="M15.5 14.2c2.6.3 4.5 2.3 4.5 4.8"/></symbol>
+  <symbol id="i-dinheiro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8.5h4a2 2 0 0 1 0 4H9.5m0 0H13a2 2 0 0 1 0 4H9M11 6v2m0 8v2"/></symbol>
+  <symbol id="i-agenda" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14.5h3M8 17.5h6"/></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 12 19 5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><path d="M12 7a5 5 0 0 1 5 5"/></symbol>
+  <symbol id="i-whats" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm0 1.8a8.2 8.2 0 0 1 6.9 12.6 8.2 8.2 0 0 1-10.4 3l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 0 1 12 3.8Zm-3 3.4c-.2 0-.5 0-.7.4-.3.4-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 5 4.3 2.4 1 2.9.8 3.5.8.5-.1 1.6-.7 1.9-1.4.2-.6.2-1.2.1-1.3l-.5-.3c-.4-.2-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.2 0-.4.1-.5l.4-.4.3-.5c.1-.2 0-.3 0-.5l-.9-2c-.2-.5-.4-.5-.6-.5h-.3Z"/></symbol>
+</svg>
 
 <div class="login" id="login">
   <form id="login-form" autocomplete="on">
-    <h2>Painel do Vendedor</h2>
-    <p>Acesso restrito — contém dados de clientes.</p>
+    <h2>Copiloto de Vendas</h2>
+    <p>A inteligência que coloca a bola na sua frente. <br>Acesso restrito — contém dados de clientes.</p>
     <input id="login-user" name="username" type="text" placeholder="usuário" autocapitalize="none" autocomplete="username" required>
     <input id="login-pass" name="password" type="password" placeholder="senha" autocomplete="current-password" required>
     <button type="submit">Entrar</button>
@@ -207,12 +254,13 @@
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Painel do Vendedor <span>— Carteira &amp; Missões</span></h1>
+    <h1>Copiloto de Vendas <span>— Missões</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
     </div>
   </header>
+  <p class="tagline">Um Guia Comercial Inteligente · a bola na frente do jogador</p>
 
   <div class="topbar">
     <div class="seg no-print" id="seg">
@@ -231,68 +279,66 @@
 
     <div class="hero">
       <div class="hero-main amber" data-goto="em_negociacao" style="cursor:pointer">
+        <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
         <span class="k">▸ 1º &nbsp; Em Negociação</span>
         <span class="v" data-k="em_negociacao">–</span>
-        <span class="sub">fechar o que já está quente — sua maior chance de venda hoje</span>
+        <span class="sub">Comece por aqui · Foco do dia!</span>
         <span class="lnk">↗ abrir lista</span>
       </div>
       <div class="hero-main blue">
+        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
         <span class="k">Minha carteira ativa</span>
         <span class="v" data-k="carteira_ativa">–</span>
         <span class="sub">é o meu placar — em prospecção tem muito mais pra puxar</span>
         <span class="breakdown">
-          <b data-k="c_ativos">–</b> ativos &nbsp;·&nbsp; <b data-k="c_negociacao">–</b> em negociação &nbsp;·&nbsp; <b data-k="c_semmov">–</b> sem movimentação
-          &nbsp;|&nbsp; <span class="off"><b data-k="c_inativos">–</b> inativos (fora do book)</span>
+          <b data-k="c_ativos" data-goto="carteira_ativos">–</b> ativos &nbsp;·&nbsp;
+          <b data-k="c_negociacao" data-goto="carteira_negociacao">–</b> em negociação &nbsp;·&nbsp;
+          <b data-k="c_semmov" data-goto="carteira_semmov">–</b> sem movimentação
+          &nbsp;|&nbsp; <span class="off"><b data-k="c_inativos" data-goto="carteira_inativos">–</b> inativos (fora do placar)</span>
+          <span class="legenda">sem movimentação = 30 dias sem cotação nem pedido · inativo = 60 dias · toque num número pra ver a lista</span>
         </span>
       </div>
     </div>
 
     <div class="kpi-strip">
       <div class="kpi green">
-        <span class="k">Vendas do mês</span>
+        <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
+        <span class="k">Vendas do Mês Atual</span>
         <span class="v" data-k="vendas_mes">–</span>
-        <span class="note">pedidos confirmados · mês atual</span>
+        <span class="note">Confirmados · até o momento</span>
       </div>
       <div class="kpi amber" data-goto="alvos" style="cursor:pointer">
-        <span class="k">Alvos do mês</span>
+        <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
+        <span class="k">Não compraram este mês</span>
         <span class="v" data-k="alvos_mes">–</span>
-        <span class="note">não compraram este mês · toque pra ver ↗</span>
+        <span class="note">Alvos do mês<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
       </div>
       <div class="kpi blue">
-        <span class="k">Curva A</span>
-        <span class="v link"><a id="link-curva-a" href="#">Quem são ↗</a></span>
-        <span class="note">grandes contas · 12 meses móveis</span>
+        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
+        <span class="k">Principais Clientes</span>
+        <span class="note">Curva A · maior faturamento<br><span class="link"><a id="link-curva-a" href="#">Quem são ↗</a></span></span>
       </div>
       <div class="kpi blue">
+        <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
         <span class="k">Prospecção</span>
-        <span class="v link"><a id="link-prospeccao" href="#">Ver painel ↗</a></span>
-        <span class="note">potenciais pra puxar</span>
+        <span class="note">Buscar novos clientes<br><span class="link"><a id="link-prospeccao" href="#">Ver painel ↗</a></span></span>
       </div>
     </div>
 
     <section>
-      <p class="band-label">Agenda de hoje — o vendedor agradece</p>
-      <p class="band-hint">O que a inteligência <b>já agendou</b> pra você — as atividades da cadência de relacionamento.</p>
-      <div class="agenda">
-        <span class="big" data-k="atividades">–</span>
-        <span class="txt">
-          <strong>Atividades programadas</strong>
-          <span>ligações, follow-ups e visitas com data marcada · <span class="over"><span data-k="atividades_atrasadas">–</span> atrasadas</span></span>
-        </span>
+      <p class="band-label missoes"><svg class="ico"><use href="#i-alvo"/></svg> Missões — disparos da cadência</p>
+      <div class="callout">
+        <svg class="ico"><use href="#i-alvo"/></svg>
+        <span>Conta <b>só quem ainda não teve contato feito</b> — não bate com o placar da carteira <b>de propósito</b>: lá é o total, aqui é o que <b>falta fazer</b>.</span>
       </div>
-    </section>
-
-    <section>
-      <p class="band-label">Missões — disparos da cadência</p>
-      <p class="band-hint">Conta <b>só quem ainda não teve contato feito</b> — por isso não bate com a carteira. (Em Negociação não entra aqui, é tratativa ativa e está no topo.)</p>
       <div class="rows">
         <div class="row s" data-goto="contato_preventivo">
           <span class="count" data-k="contato_preventivo">–</span>
-          <span class="name">Contato Preventivo<small>entrou no período de nova compra — ligar antes de precisar</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Contato Preventivo<small>entrou no período de nova compra — ativar antes do cliente enviar mensagem</small><span class="lnk">↗ abrir lista</span></span>
         </div>
         <div class="row g" data-goto="recuperacao">
           <span class="count" data-k="recuperacao">–</span>
-          <span class="name">Recuperação<small>passou da previsão de recompra — resgatar antes de esfriar</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Recuperação<small>passou da previsão de recompra — resgatar</small><span class="lnk">↗ abrir lista</span></span>
         </div>
         <div class="row s" data-goto="em_formacao">
           <span class="count" data-k="em_formacao">–</span>
@@ -302,31 +348,43 @@
     </section>
 
     <section>
-      <p class="band-label">Alertas — pra ninguém ser esquecido</p>
-      <p class="band-hint">Aqui o número <b>empurra pro contato certo</b>: quem está escorregando da carteira e quem sumiu do radar.</p>
+      <p class="band-label"><svg class="ico"><use href="#i-agenda"/></svg> Check-list de Atividades</p>
+      <p class="band-hint">As atividades programadas e da cadência de relacionamento.</p>
+      <div class="agenda" data-goto="atividades" style="cursor:pointer">
+        <span class="big" data-k="atividades">–</span>
+        <span class="txt">
+          <strong>Atividades programadas</strong>
+          <span>ligações, follow-ups, mensagens, visitas · <span class="over"><span data-k="atividades_atrasadas">–</span> atrasadas</span> &nbsp;·&nbsp; <span class="lnk">↗ abrir lista</span></span>
+        </span>
+      </div>
+    </section>
+
+    <section>
+      <p class="band-label alerta"><svg class="ico"><use href="#i-radar"/></svg> Radar Inteligente — Sinal Amarelo</p>
+      <p class="band-hint"><b>Hora de agir</b> — um contato agora evita a perda.</p>
       <div class="rows">
-        <div class="row c" data-goto="sem_movimentacao">
-          <span class="count" data-k="sem_movimentacao_30d">–</span>
-          <span class="name">Sem Movimentação +30 dias<small>caíram do "Ativos" — risco de perder</small><span class="lnk">↗ abrir lista</span></span>
-        </div>
         <div class="row a" data-goto="conversa_zap">
           <span class="count" data-k="sem_conversa_zap">–</span>
-          <span class="name">Sem conversa no Zap +20 dias<small>relacionamento esfriando — mandar mensagem</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Sem conversa no Zap +20 dias<small>faz +20 dias sem falar — manter o relacionamento ativo</small><span class="lnk">↗ abrir lista</span></span>
+        </div>
+        <div class="row c" data-goto="sem_movimentacao">
+          <span class="count" data-k="sem_movimentacao_30d">–</span>
+          <span class="name">Sem Movimentação +30 dias<small>deixaram de ser ativos — 30 dias sem cotação ou pedido</small><span class="lnk">↗ abrir lista</span></span>
         </div>
         <div class="row c" data-goto="inativos">
           <span class="count" data-k="inativos_missao">–</span>
-          <span class="name">Inativos<small>fora do ciclo — meta de resgate do mês</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Inativos<small>+60 dias sem pedido — tratativa especial de recuperação</small><span class="lnk">↗ abrir lista</span></span>
         </div>
       </div>
     </section>
 
     <section id="listas">
-      <p class="band-label">Listas — pro Daniel imprimir tudo de uma vez</p>
+      <p class="band-label">Listas completas — pra imprimir tudo de uma vez</p>
       <p class="band-hint">As mesmas listas na íntegra. Role e imprima a página inteira (Ctrl+P no PC, ou "Compartilhar → Imprimir" no celular).</p>
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Painel v2.5 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Copiloto de Vendas v2.7 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -345,21 +403,26 @@ const LINK_PROSPECCAO= "";    // URL do Painel de Prospecção (deixe "" por enq
 
 /* ---- definição das listas que aparecem embaixo ---- */
 const LISTAS = [
-  {k:"em_negociacao",      titulo:"Em Negociação"},
-  {k:"contato_preventivo", titulo:"Contato Preventivo"},
-  {k:"recuperacao",        titulo:"Recuperação"},
-  {k:"em_formacao",        titulo:"Em Formação"},
-  {k:"atividades",         titulo:"Atividades programadas"},
-  {k:"sem_movimentacao",   titulo:"Sem Movimentação +30 dias"},
-  {k:"conversa_zap",       titulo:"Sem conversa no Zap +20 dias"},
-  {k:"alvos",              titulo:"Alvos do mês — não compraram este mês"},
-  {k:"inativos",           titulo:"Inativos"}
+  {k:"em_negociacao",       titulo:"Em Negociação"},
+  {k:"contato_preventivo",  titulo:"Missão · Contato Preventivo"},
+  {k:"recuperacao",         titulo:"Missão · Recuperação"},
+  {k:"em_formacao",         titulo:"Missão · Em Formação"},
+  {k:"atividades",          titulo:"Check-list de Atividades"},
+  {k:"conversa_zap",        titulo:"Alerta · Sem conversa no Zap +20 dias"},
+  {k:"sem_movimentacao",    titulo:"Alerta · Sem Movimentação +30 dias"},
+  {k:"inativos",            titulo:"Alerta · Inativos"},
+  {k:"alvos",               titulo:"Não compraram este mês (Alvos)"},
+  {k:"carteira_ativos",     titulo:"Carteira · Ativos"},
+  {k:"carteira_negociacao", titulo:"Carteira · Em Negociação"},
+  {k:"carteira_semmov",     titulo:"Carteira · Sem Movimentação"},
+  {k:"carteira_inativos",   titulo:"Carteira · Inativos (fora do placar)"}
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
   alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["ultimo_pedido","Último pedido"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]]
 };
+COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.alvos;
 
 /* ---- helpers ---- */
 const $  = s => document.querySelector(s);
@@ -420,7 +483,14 @@ function renderListas(listas){
       t.innerHTML = "<thead><tr>"+cols.map(c=>"<th>"+c[1]+"</th>").join("")+"</tr></thead>";
       const tb = document.createElement("tbody");
       for(const r of rows){
-        tb.innerHTML += "<tr>"+cols.map(c=>"<td>"+(r[c[0]]??"")+"</td>").join("")+"</tr>";
+        tb.innerHTML += "<tr>"+cols.map(c=>{
+          let v = r[c[0]] ?? "";
+          if(c[0]==="zap" && /^https?:\/\//.test(v)){
+            const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
+            v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
+          }
+          return "<td>"+v+"</td>";
+        }).join("")+"</tr>";
       }
       t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
     }
