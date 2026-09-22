@@ -176,11 +176,11 @@
   .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
   .loading{padding:40px 0;text-align:center;color:var(--ink-faint);font-size:.85rem}
 
-  /* ---- identificação da empresa repetida em toda página impressa ---- */
+  /* ---- identificação da empresa repetida em toda página impressa (canto inferior esquerdo, longe do cabeçalho) ---- */
   .print-banner{display:none}
   @media print{
     .print-banner{
-      display:block; position:fixed; top:3mm; right:9mm;
+      display:block; position:fixed; bottom:2mm; left:9mm;
       font-family:"Archivo",sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.03em;
       padding:2px 9px; border-radius:4px; background:#444; color:#fff; z-index:99;
     }
@@ -195,12 +195,15 @@
   }
 
   @media print{
-    @page{size:A4 portrait;margin:9mm}
+    @page{
+      size:A4 portrait; margin:9mm;
+      @bottom-right{ content:"página " counter(page) " de " counter(pages); font-family:Arial,sans-serif; font-size:8px; color:#888; }
+    }
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
     :root{--shadow:none}
     body{background:#fff;font-size:10.5px}
     .wrap{max-width:100%;padding:0}
-    .statusbar .btn,.no-print,.login,#loading,.badge,.tagline{display:none!important}
+    .statusbar .btn,.no-print,.login,#loading,.badge,.tagline,.chip-co{display:none!important}
     .hero-main{padding:12px 14px}
     .hero{grid-template-columns:1fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(4,1fr)!important}
@@ -265,7 +268,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.13 (cor por categoria nos títulos das listas, identificação da empresa repetida em cada página impressa) -->
+<!-- Copiloto de Vendas — v2.14 (data em formato BR nas listas, selo de impressão sem colidir com o cabeçalho, numeração de página) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -424,7 +427,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.13 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Copiloto de Vendas v2.14 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -471,6 +474,8 @@ const $$ = s => document.querySelectorAll(s);
 const fmtInt = n => (n==null||isNaN(n)) ? "–" : Number(n).toLocaleString("pt-BR");
 const fmtBRL = n => (n==null||isNaN(n)) ? "R$ –" : Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
 const fmtDateTime = iso => { try{ return new Date(iso).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}catch(e){return iso||"—";} };
+const DATE_COLS = new Set(["ultima_interacao","ultimo_pedido","vencimento"]);
+const fmtDateBR = v => { const m = String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? (m[3]+"/"+m[2]+"/"+m[1]) : (v || ""); };
 
 function setStatus(state, text){
   const sb = $("#statusbar");
@@ -505,6 +510,7 @@ function fill(data){
 
   $("#updated-at").textContent = fmtDateTime(data.atualizado_em);
   $("#hoje").textContent = new Date(data.atualizado_em||Date.now()).toLocaleDateString("pt-BR");
+  $("#print-banner").textContent = "Copiloto de Vendas · " + $("#chip-co").textContent + " · " + fmtDateTime(data.atualizado_em);
 
   renderListas(data.listas || {});
 }
@@ -529,6 +535,7 @@ function renderListas(listas){
       for(const r of rows){
         tb.innerHTML += "<tr>"+cols.map(c=>{
           let v = r[c[0]] ?? "";
+          if(DATE_COLS.has(c[0])) v = fmtDateBR(v);
           if(c[0]==="zap" && /^https?:\/\//.test(v)){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
