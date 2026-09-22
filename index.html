@@ -30,6 +30,8 @@
     --clay-bg:#f8e9e3;  --clay-ink:#93402f;  --clay-edge:#c47e69;
     --blue-bg:#e9f0f3;  --blue-ink:#2b5f73;  --blue-edge:#71a2b3;
     --slate-bg:#f0ede4; --slate-ink:#66604f; --slate-edge:#b2ab99;
+    --bnz-bg:#f7e9da; --bnz-ink:#8a4b23; --bnz-edge:#c98f52;
+    --ciaplac-bg:#e3f0ef; --ciaplac-ink:#1f6f6f; --ciaplac-edge:#4fa39c;
     --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
     --radius:9px;
   }
@@ -40,6 +42,8 @@
     --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
     --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
     --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --bnz-bg:#2a1c0f; --bnz-ink:#e3ab6c; --bnz-edge:#8a5a2c;
+    --ciaplac-bg:#0f2220; --ciaplac-ink:#7cc9c2; --ciaplac-edge:#2f6b64;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }}
   :root[data-theme="dark"]{
@@ -49,6 +53,8 @@
     --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
     --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
     --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --bnz-bg:#2a1c0f; --bnz-ink:#e3ab6c; --bnz-edge:#8a5a2c;
+    --ciaplac-bg:#0f2220; --ciaplac-ink:#7cc9c2; --ciaplac-edge:#2f6b64;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }
   *{box-sizing:border-box}
@@ -58,17 +64,23 @@
   .wrap{max-width:1080px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 14px 48px}
 
   /* header */
-  .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+  .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:8px;border-bottom:3px solid var(--ink);transition:border-color .15s}
+  body[data-empresa="BNZ"] .masthead{border-bottom-color:var(--bnz-edge)}
+  body[data-empresa="CIAPLAC"] .masthead{border-bottom-color:var(--ciaplac-edge)}
   .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:-.01em;margin:0}
   .masthead h1 span{color:var(--ink-soft);font-weight:600}
   .meta{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--ink-soft)}
-  .chip-co{font-family:"Archivo",sans-serif;font-weight:600;font-size:.66rem;letter-spacing:.03em;padding:2px 8px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
+  .chip-co{font-family:"Archivo",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.03em;padding:3px 10px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
+  .chip-co.bnz{background:var(--bnz-bg);color:var(--bnz-ink);border-color:var(--bnz-edge)}
+  .chip-co.ciaplac{background:var(--ciaplac-bg);color:var(--ciaplac-ink);border-color:var(--ciaplac-edge)}
 
   .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:8px}
   .seg{display:inline-flex;border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:var(--surface)}
   .seg button{font:inherit;font-family:"Archivo",sans-serif;font-weight:600;font-size:.76rem;padding:6px 14px;border:0;border-left:1px solid var(--hair);background:transparent;color:var(--ink-soft);cursor:pointer}
   .seg button:first-child{border-left:0}
   .seg button.on{background:var(--blue-bg);color:var(--blue-ink)}
+  .seg button[data-emp="BNZ"].on{background:var(--bnz-bg);color:var(--bnz-ink)}
+  .seg button[data-emp="CIAPLAC"].on{background:var(--ciaplac-bg);color:var(--ciaplac-ink)}
   .seg button:active{transform:translateY(1px)}
   .statusbar{display:flex;align-items:center;gap:10px;font-size:.72rem;color:var(--ink-faint)}
   .statusbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-edge);margin-right:6px;vertical-align:middle}
@@ -104,6 +116,7 @@
   .kpi .v{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.5rem;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
   .kpi .v.link{font-family:"Archivo",sans-serif;font-size:.95rem;font-weight:600}
   .kpi .note{font-size:.66rem;color:var(--ink-faint)}
+  .kpi .note b.pecas{font-family:"IBM Plex Mono",monospace;font-weight:700;color:var(--ink)}
   .kpi.green{border-top-color:var(--green-edge)} .kpi.green .k{color:var(--green-ink)}
   .kpi.amber{border-top-color:var(--amber-edge)} .kpi.amber .k{color:var(--amber-ink)} .kpi.amber .v{color:var(--amber-ink)}
   .kpi.blue{border-top-color:var(--blue-edge)}   .kpi.blue .k{color:var(--blue-ink)}  .kpi.blue .v{color:var(--blue-ink)}
@@ -229,7 +242,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.7 (nomes, ícones, ordem das seções, links da carteira) -->
+<!-- Copiloto de Vendas — v2.8 (cor por empresa, peças de drywall vendidas na BNZ, Curva A) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -306,6 +319,7 @@
         <span class="k">Vendas do Mês Atual</span>
         <span class="v" data-k="vendas_mes">–</span>
         <span class="note">Confirmados · até o momento</span>
+        <span class="note"><b class="pecas" data-k="vendas_pecas">–</b> peças vendidas</span>
       </div>
       <div class="kpi amber" data-goto="alvos" style="cursor:pointer">
         <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
@@ -313,10 +327,11 @@
         <span class="v" data-k="alvos_mes">–</span>
         <span class="note">Alvos do mês<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
       </div>
-      <div class="kpi blue">
+      <div class="kpi blue" data-goto="curva_a" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
         <span class="k">Principais Clientes</span>
-        <span class="note">Curva A · maior faturamento<br><span class="link"><a id="link-curva-a" href="#">Quem são ↗</a></span></span>
+        <span class="v" data-k="curva_a_qtd">–</span>
+        <span class="note">Curva A · 80% do faturamento (12m)<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
       </div>
       <div class="kpi blue">
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
@@ -384,7 +399,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.7 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Copiloto de Vendas v2.8 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -398,7 +413,6 @@
    ============================================================================ */
 const WEBHOOK_URL   = "https://auto.ialink.com.br/webhook/painel-vendedor";
 const REFRESH_MIN   = 5;      // re-busca sozinho a cada X minutos
-const LINK_CURVA_A   = "";    // URL da aba/painel da Curva A (deixe "" por enquanto)
 const LINK_PROSPECCAO= "";    // URL do Painel de Prospecção (deixe "" por enquanto)
 
 /* ---- definição das listas que aparecem embaixo ---- */
@@ -412,6 +426,7 @@ const LISTAS = [
   {k:"sem_movimentacao",    titulo:"Alerta · Sem Movimentação +30 dias"},
   {k:"inativos",            titulo:"Alerta · Inativos"},
   {k:"alvos",               titulo:"Não compraram este mês (Alvos)"},
+  {k:"curva_a",             titulo:"Curva A · Principais Clientes (80% do faturamento)"},
   {k:"carteira_ativos",     titulo:"Carteira · Ativos"},
   {k:"carteira_negociacao", titulo:"Carteira · Em Negociação"},
   {k:"carteira_semmov",     titulo:"Carteira · Sem Movimentação"},
@@ -420,7 +435,8 @@ const LISTAS = [
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
   alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["ultimo_pedido","Último pedido"]],
-  atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]]
+  atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
+  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["faturamento","Faturamento 12m"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.alvos;
 
@@ -450,7 +466,8 @@ function fill(data){
     alvos_mes: kpi.alvos_mes,
     atividades: kpi.atividades, atividades_atrasadas: kpi.atividades_atrasadas,
     contato_preventivo: m.contato_preventivo, recuperacao: m.recuperacao, em_formacao: m.em_formacao,
-    sem_movimentacao_30d: al.sem_movimentacao_30d, sem_conversa_zap: al.sem_conversa_zap, inativos_missao: al.inativos
+    sem_movimentacao_30d: al.sem_movimentacao_30d, sem_conversa_zap: al.sem_conversa_zap, inativos_missao: al.inativos,
+    curva_a_qtd: kpi.curva_a_qtd, vendas_pecas: kpi.vendas_pecas
   };
   for(const [k,v] of Object.entries(map)){
     const el = document.querySelector('[data-k="'+k+'"]');
@@ -509,21 +526,30 @@ const DEMO = {
   kpis: { carteira_ativa:59, em_negociacao:9, alvos_mes:51, vendas_mes:98935.25, atividades:16, atividades_atrasadas:16,
     carteira:{ativos:33,negociacao:9,sem_movimentacao:17,inativos:32},
     missoes:{contato_preventivo:1,recuperacao:2,em_formacao:40},
-    alertas:{sem_movimentacao_30d:6,sem_conversa_zap:4,inativos:26} },
+    alertas:{sem_movimentacao_30d:6,sem_conversa_zap:4,inativos:26},
+    curva_a_qtd:2, vendas_pecas:3480 },
   listas: { alvos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"5511…",cidade:"São Paulo",uf:"SP",marcadores:"BB CLIENTE AÇO",estagio:"Clientes Ativos",ultimo_pedido:"2026-08-12"}],
     em_negociacao:[{cliente:"(exemplo) ANNA DECOR",fantasia:"Anna Decor",zap:"5519…",cidade:"Piracicaba",uf:"SP",marcadores:"",ultima_interacao:"2026-09-01"}],
     contato_preventivo:[],recuperacao:[],em_formacao:[],sem_movimentacao:[],conversa_zap:[],inativos:[],
+    curva_a:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"5511…",cidade:"São Paulo",uf:"SP",faturamento:"R$ 412.000"}],
     atividades:[{cliente:"(exemplo) BM NOGUEIRA",tipo:"Ligar",resumo:"follow-up cotação",vencimento:"2026-09-03",estado:"atrasada",responsavel:"Daniel Medeiros"}] }
 };
 
 /* ---- empresa selecionada (Total / BNZ / CIAPLAC) ---- */
 let empresa = "";
 try { empresa = localStorage.getItem("pv_empresa") || ""; } catch(e){}
+function applyEmpresaUI(){
+  $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
+  const chip = $("#chip-co");
+  chip.textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
+  chip.classList.toggle("bnz", empresa === "BNZ");
+  chip.classList.toggle("ciaplac", empresa === "CIAPLAC");
+  document.body.setAttribute("data-empresa", empresa || "");
+}
 function setEmpresa(v){
   empresa = v || "";
   try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
-  $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
-  $("#chip-co").textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
+  applyEmpresaUI();
   load();
 }
 
@@ -606,13 +632,11 @@ $("#login-form").addEventListener("submit", e => {
   load();
 });
 
-if(LINK_CURVA_A)    { $("#link-curva-a").href = LINK_CURVA_A; }
 if(LINK_PROSPECCAO) { $("#link-prospeccao").href = LINK_PROSPECCAO; }
 $("#btn-refresh").addEventListener("click", load);
 $("#btn-logout").addEventListener("click", logout);
 $("#seg").addEventListener("click", e => { const b = e.target.closest("button[data-emp]"); if(b) setEmpresa(b.dataset.emp); });
-$$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
-$("#chip-co").textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
+applyEmpresaUI();
 
 if(creds && creds.user){ load(); } else { showLogin(); }
 setInterval(()=>{ if(creds && creds.user) load(); }, REFRESH_MIN*60000);
