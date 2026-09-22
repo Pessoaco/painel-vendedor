@@ -176,17 +176,6 @@
   .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
   .loading{padding:40px 0;text-align:center;color:var(--ink-faint);font-size:.85rem}
 
-  /* ---- identificação da empresa repetida em toda página impressa (canto inferior esquerdo, longe do cabeçalho) ---- */
-  .print-banner{display:none}
-  @media print{
-    .print-banner{
-      display:block; position:fixed; bottom:2mm; left:9mm;
-      font-family:"Archivo",sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.03em;
-      padding:2px 9px; border-radius:4px; background:#444; color:#fff; z-index:99;
-    }
-    body[data-empresa="BNZ"] .print-banner{background:var(--bnz-edge)}
-    body[data-empresa="CIAPLAC"] .print-banner{background:var(--ciaplac-edge)}
-  }
 
   @media (max-width:820px){
     .hero{grid-template-columns:1fr}
@@ -268,7 +257,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.14 (data em formato BR nas listas, selo de impressão sem colidir com o cabeçalho, numeração de página) -->
+<!-- Copiloto de Vendas — v2.15 (selo da empresa na impressão via @page/@top-left, position:fixed não repetia no PDF do Chrome) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -290,7 +279,7 @@
   </form>
 </div>
 
-<div class="print-banner" id="print-banner">BNZ · CIAPLAC</div>
+<style id="print-page-style"></style>
 
 <div class="wrap">
 
@@ -427,7 +416,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.14 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Copiloto de Vendas v2.15 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -510,7 +499,7 @@ function fill(data){
 
   $("#updated-at").textContent = fmtDateTime(data.atualizado_em);
   $("#hoje").textContent = new Date(data.atualizado_em||Date.now()).toLocaleDateString("pt-BR");
-  $("#print-banner").textContent = "Copiloto de Vendas · " + $("#chip-co").textContent + " · " + fmtDateTime(data.atualizado_em);
+  syncPrintPageStyle();
 
   renderListas(data.listas || {});
 }
@@ -579,8 +568,18 @@ function applyEmpresaUI(){
   chip.classList.toggle("bnz", empresa === "BNZ");
   chip.classList.toggle("ciaplac", empresa === "CIAPLAC");
   document.body.setAttribute("data-empresa", empresa || "");
-  $("#print-banner").textContent = chip.textContent;
+  syncPrintPageStyle();
 }
+/* injeta o texto (empresa + data) direto na margem nativa da página impressa —
+   position:fixed não repete de forma confiável no motor de PDF do Chrome, mas @page sim */
+function syncPrintPageStyle(){
+  const chipTxt = ($("#chip-co")?.textContent || "").trim();
+  const dataTxt = $("#updated-at")?.textContent || "";
+  const texto = ("Copiloto de Vendas · " + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
+  const el = $("#print-page-style");
+  if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
+}
+window.addEventListener("beforeprint", syncPrintPageStyle);
 function setEmpresa(v){
   empresa = v || "";
   try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
