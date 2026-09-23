@@ -257,7 +257,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.15 (selo da empresa na impressão via @page/@top-left, position:fixed não repetia no PDF do Chrome) -->
+<!-- Copiloto de Vendas — v2.18 (marcadores na lista de Alvos, pra ver se é grupo) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -416,7 +416,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.15 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Copiloto de Vendas v2.18 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -451,11 +451,15 @@ const LISTAS = [
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["ultimo_pedido","Último pedido"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["ultima_conversa_zap","Últ. conversa Zap"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
-  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["faturamento","Faturamento Acum. 12m"]]
+  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["faturamento","Faturamento Acum. 12m"]],
+  missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"]],
+  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultima_conversa_zap","Últ. conversa Zap"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.alvos;
+COLS.contato_preventivo = COLS.recuperacao = COLS.em_formacao = COLS.missao;
+COLS.conversa_zap = COLS.sem_movimentacao = COLS.inativos = COLS.alerta;
 
 /* ---- helpers ---- */
 const $  = s => document.querySelector(s);
@@ -463,7 +467,7 @@ const $$ = s => document.querySelectorAll(s);
 const fmtInt = n => (n==null||isNaN(n)) ? "–" : Number(n).toLocaleString("pt-BR");
 const fmtBRL = n => (n==null||isNaN(n)) ? "R$ –" : Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
 const fmtDateTime = iso => { try{ return new Date(iso).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}catch(e){return iso||"—";} };
-const DATE_COLS = new Set(["ultima_interacao","ultimo_pedido","vencimento"]);
+const DATE_COLS = new Set(["ultima_interacao","ultimo_pedido","vencimento","ultima_conversa_zap"]);
 const fmtDateBR = v => { const m = String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? (m[3]+"/"+m[2]+"/"+m[1]) : (v || ""); };
 
 function setStatus(state, text){
