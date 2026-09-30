@@ -445,7 +445,7 @@ const LISTAS = [
   {k:"contato_preventivo",  titulo:"Missão · Contato Preventivo",                                           cor:"purple"},
   {k:"recuperacao",         titulo:"Missão · Recuperação",                                                  cor:"purple"},
   {k:"em_formacao",         titulo:"Missão · Em Formação",                                                  cor:"purple"},
-  {k:"atividades",          titulo:"Check-list de Atividades",                                              cor:"blue"},
+  {k:"atividades",          titulo:"Check-list de Atividades",                                              cor:"amber"},
   {k:"conversa_zap",        titulo:"Alerta · Sem conversa no Zap +20 dias",                                 cor:"clay"},
   {k:"sem_movimentacao",    titulo:"Alerta · Sem Movimentação +30 dias",                                    cor:"clay"},
   {k:"inativos",            titulo:"Alerta · Inativos",                                                     cor:"clay"},
@@ -459,11 +459,11 @@ const LISTAS = [
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["entrega_efetiva","Entrega Efetiva"],["ultima_conversa_zap","Últ. conversa Zap"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Entrega Efetiva"],["ultima_conversa_zap","Últ. conversa Zap"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
   curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["faturamento","Faturamento Acum. 12m"]],
-  missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"]],
-  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultima_conversa_zap","Últ. conversa Zap"]],
+  missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
+  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ultima_conversa_zap","Últ. conversa Zap"]],
   carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"]],
   pedidos_sem_entrega: [["cliente","Cliente"],["pedido","Pedido"],["data_pedido","Data Emissão"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"]]
 };
@@ -539,6 +539,7 @@ function renderListas(listas){
         tb.innerHTML += "<tr>"+cols.map(c=>{
           let v = r[c[0]] ?? "";
           if(DATE_COLS.has(c[0])) v = fmtDateBR(v);
+          if(c[0]==="dias_desde_ultima_compra") v = (v===""||v==null) ? "–" : v+"d";
           if(c[0]==="zap" && /^https?:\/\//.test(v)){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
