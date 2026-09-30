@@ -64,7 +64,7 @@
   [hidden]{display:none!important}
   html{-webkit-text-size-adjust:100%}
   body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;line-height:1.48;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1080px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 14px 48px}
+  .wrap{max-width:1400px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 14px 48px}
 
   /* header */
   .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:8px;border-bottom:3px solid var(--ink);transition:border-color .15s}
@@ -165,8 +165,9 @@
   .lc-wrap{overflow-x:auto}
   table.lc{border-collapse:collapse;width:100%;font-size:.72rem}
   table.lc th,table.lc td{text-align:left;padding:5px 10px;border-top:1px solid var(--hair);white-space:nowrap;color:var(--ink-soft)}
-  table.lc th{font-family:"Archivo",sans-serif;font-size:.64rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface);position:sticky;top:0}
+  table.lc th{font-family:"Archivo",sans-serif;font-size:.64rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface);position:sticky;top:0;white-space:normal;line-height:1.25;max-width:110px}
   table.lc td:first-child,table.lc th:first-child{color:var(--ink);font-weight:500}
+  table.lc .col-marc{white-space:normal;max-width:190px;line-height:1.3}
   .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
   table.lc a.wa{color:#1fa855;display:inline-flex}
   table.lc a.wa .ico{width:17px;height:17px}
@@ -459,11 +460,11 @@ const LISTAS = [
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Entrega Efetiva"],["ultima_conversa_zap","Últ. conversa Zap"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Entrega Efetiva"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
   curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
-  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ultima_conversa_zap","Últ. conversa Zap"]],
+  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"]],
   pedidos_sem_entrega: [["cliente","Cliente"],["pedido","Pedido"],["data_pedido","Data Emissão"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"]]
 };
@@ -533,7 +534,7 @@ function renderListas(listas){
     } else {
       const wrap = document.createElement("div"); wrap.className="lc-wrap";
       const t = document.createElement("table"); t.className="lc";
-      t.innerHTML = "<thead><tr>"+cols.map(c=>"<th>"+c[1]+"</th>").join("")+"</tr></thead>";
+      t.innerHTML = "<thead><tr>"+cols.map(c=>"<th"+(c[0]==="marcadores"?' class="col-marc"':"")+">"+c[1]+"</th>").join("")+"</tr></thead>";
       const tb = document.createElement("tbody");
       for(const r of rows){
         tb.innerHTML += "<tr>"+cols.map(c=>{
@@ -544,7 +545,7 @@ function renderListas(listas){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
-          return "<td>"+v+"</td>";
+          return "<td"+(c[0]==="marcadores"?' class="col-marc"':"")+">"+v+"</td>";
         }).join("")+"</tr>";
       }
       t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
