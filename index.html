@@ -641,12 +641,7 @@ async function load(){
     const r = await fetch(url, {cache:"no-store", signal:ctrl.signal});
     clearTimeout(to);
     if(r.status === 401 || r.status === 403){ logout(); showLogin("Usuário ou senha errado."); return; }
-    if(!r.ok){
-      const txt = await r.text().catch(()=> "");
-      // 500 "Workflow execution failed" na 1ª carga = senha errada no nó 0
-      if($("#content").hidden){ logout(); showLogin("Não entrou. Confira usuário e senha (a senha diferencia maiúscula)."); return; }
-      throw new Error("HTTP "+r.status);
-    }
+    if(!r.ok) throw new Error("HTTP "+r.status);
     const data = await r.json();
     if(data && data.erro){ logout(); showLogin("Usuário ou senha errado."); return; }
     // mostra o painel PRIMEIRO — se fill() quebrar, pelo menos aparece
@@ -661,14 +656,19 @@ async function load(){
   }catch(err){
     clearTimeout(to);
     const demorou = err.name === "AbortError";
+    // fetch() sozinho (sem resposta nenhuma do servidor) lança TypeError quando não tem internet,
+    // DNS falha, etc — diferente de um erro HTTP (que já tem resposta e cai no throw lá em cima.
+    // Isso evita o bug de dizer "senha errada" quando o problema real é falta de conexão.
+    const semNet = err instanceof TypeError;
     if($("#content").hidden){
       $("#loading").hidden = false;
-      $("#loading").innerHTML = (demorou ? "Demorou demais pra responder." : "Não consegui carregar.") +
+      $("#loading").innerHTML = (semNet ? "📡 Sem internet. Este painel é só online — verifique sua conexão." :
+        demorou ? "Demorou demais pra responder." : "Não consegui carregar.") +
         '<br><button class="btn" style="margin-top:10px" onclick="load()">Tentar de novo</button>';
-      setStatus("err", demorou ? "sem resposta (timeout)" : "erro ao carregar");
+      setStatus("err", semNet ? "sem internet" : demorou ? "sem resposta (timeout)" : "erro ao carregar");
       return;
     }
-    setStatus("err","erro ao atualizar — tentando de novo em 1 min");
+    setStatus("err", semNet ? "📡 sem internet — este painel é só online" : "erro ao atualizar — tentando de novo em 1 min");
     setTimeout(load, 60000);
   }
 }
