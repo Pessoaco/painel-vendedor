@@ -172,6 +172,7 @@
   table.lc th .arrow{display:inline-block;width:.8em;font-size:.7rem;opacity:.35}
   table.lc th .arrow.active{opacity:1;color:var(--blue-ink)}
   table.lc td:first-child,table.lc th:first-child{color:var(--ink);font-weight:500}
+  table.lc td:first-child{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   table.lc .col-marc{white-space:normal;max-width:190px;line-height:1.3}
   .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
   table.lc a.wa{color:#1fa855;display:inline-flex}
@@ -467,13 +468,13 @@ const LISTAS = [
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Entrega Efetiva"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Data de Entrega"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
   curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
-  pedidos_sem_entrega: [["cliente","Cliente"],["pedido","Pedido"],["data_pedido","Data Emissão"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"]]
+  pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["pedido","Pedido"],["data_pedido","Data Emissão"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.carteira;
 COLS.contato_preventivo = COLS.recuperacao = COLS.em_formacao = COLS.missao;
