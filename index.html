@@ -166,6 +166,11 @@
   table.lc{border-collapse:collapse;width:100%;font-size:.72rem}
   table.lc th,table.lc td{text-align:left;padding:5px 10px;border-top:1px solid var(--hair);white-space:nowrap;color:var(--ink-soft)}
   table.lc th{font-family:"Archivo",sans-serif;font-size:.64rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface);position:sticky;top:0;white-space:normal;line-height:1.25;max-width:110px}
+  table.lc th.sortable{cursor:pointer;user-select:none}
+  table.lc th.sortable:hover{color:var(--ink)}
+  table.lc th.sortable.active{color:var(--ink)}
+  table.lc th .arrow{display:inline-block;width:.8em;font-size:.7rem;opacity:.35}
+  table.lc th .arrow.active{opacity:1;color:var(--blue-ink)}
   table.lc td:first-child,table.lc th:first-child{color:var(--ink);font-weight:500}
   table.lc .col-marc{white-space:normal;max-width:190px;line-height:1.3}
   .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
@@ -467,7 +472,7 @@ const COLS = {
   curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
-  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"]],
+  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   pedidos_sem_entrega: [["cliente","Cliente"],["pedido","Pedido"],["data_pedido","Data Emissão"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.carteira;
@@ -532,11 +537,25 @@ function fill(data){
   renderListas(data.listas || {});
 }
 
+let ULTIMA_LISTAS = {};
+const sortState = {};
+const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra"]);
+function ordenarLinhasCopiloto(rows, col, dir){
+  return [...rows].sort((a,b) => {
+    if(NUM_COLS_COPILOTO.has(col)){
+      return ((a[col] ?? -Infinity) - (b[col] ?? -Infinity)) * dir;
+    }
+    return String(a[col] ?? "").localeCompare(String(b[col] ?? ""), "pt-BR") * dir;
+  });
+}
 function renderListas(listas){
+  ULTIMA_LISTAS = listas;
   const box = $("#listbox"); box.innerHTML = "";
   for(const {k,titulo,cor} of LISTAS){
-    const rows = listas[k] || [];
+    let rows = listas[k] || [];
     const cols = COLS[k] || COLS.padrao;
+    const st = sortState[k];
+    if(st && st.col) rows = ordenarLinhasCopiloto(rows, st.col, st.dir);
     const card = document.createElement("div"); card.className = "listcard"; card.id = "lista-"+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
     h.innerHTML = '<span>'+titulo+'</span><span class="n">'+rows.length+'</span>';
@@ -547,7 +566,12 @@ function renderListas(listas){
     } else {
       const wrap = document.createElement("div"); wrap.className="lc-wrap";
       const t = document.createElement("table"); t.className="lc";
-      t.innerHTML = "<thead><tr>"+cols.map(c=>"<th"+(c[0]==="marcadores"?' class="col-marc"':"")+">"+c[1]+"</th>").join("")+"</tr></thead>";
+      t.innerHTML = "<thead><tr>"+cols.map(c=>{
+        const active = st && st.col===c[0];
+        const arrow = active ? (st.dir===1?"▲":"▼") : "⇅";
+        const marc = c[0]==="marcadores" ? " col-marc" : "";
+        return "<th class=\"sortable"+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
+      }).join("")+"</tr></thead>";
       const tb = document.createElement("tbody");
       for(const r of rows){
         tb.innerHTML += "<tr>"+cols.map(c=>{
@@ -567,8 +591,19 @@ function renderListas(listas){
   }
 }
 
-/* clique nos "↗ abrir lista" rola até a lista embaixo */
+/* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
 document.addEventListener("click", e=>{
+  const th = e.target.closest("table.lc th[data-col]");
+  if(th){
+    const card = th.closest(".listcard");
+    const k = card.id.replace(/^lista-/, "");
+    const col = th.dataset.col;
+    const st = sortState[k] || {col:null, dir:1};
+    if(st.col === col) st.dir *= -1; else { st.col = col; st.dir = 1; }
+    sortState[k] = st;
+    renderListas(ULTIMA_LISTAS);
+    return;
+  }
   const g = e.target.closest("[data-goto]");
   if(g){ const el = $("#lista-"+g.dataset.goto); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); }
 });
