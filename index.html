@@ -338,7 +338,9 @@
         <span class="k">Vendas do Mês Atual</span>
         <span class="v" data-k="vendas_mes">–</span>
         <span class="note">Confirmados · até o momento</span>
-        <span class="nota-pecas"><b class="pecas" data-k="vendas_pecas">–</b> <span data-k="vendas_pecas_label">produtos vendidos</span></span>
+        <span class="nota-pecas" id="nota-pecas-bnz"><b class="pecas" data-k="vendas_pecas">–</b> <span data-k="vendas_pecas_label">peças vendidas</span></span>
+        <span class="nota-pecas" id="nota-pecas-ciaplac-metros" hidden><b class="pecas" data-k="ciaplac_metros">–</b> m de Forro</span>
+        <span class="nota-pecas" id="nota-pecas-ciaplac-unid" hidden><b class="pecas" data-k="ciaplac_unidades">–</b> un. de Acabamento/Acessório</span>
       </div>
       <div class="kpi amber" data-goto="alvos" style="cursor:pointer">
         <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
@@ -511,6 +513,17 @@ function fill(data){
   if(vm) vm.textContent = fmtBRL(kpi.vendas_mes);
   const pl = document.querySelector('[data-k="vendas_pecas_label"]');
   if(pl) pl.textContent = kpi.vendas_pecas_label || "produtos vendidos";
+  // CIAPLAC: Forro é metro, Acabamento/Acessório é unidade — não dá pra somar num número só,
+  // por isso vira 2 linhas separadas em vez da linha única de "peças vendidas" (só faz sentido pra BNZ).
+  const isCiaplac = empresa === "CIAPLAC";
+  const notaBnz = $("#nota-pecas-bnz"), notaMetros = $("#nota-pecas-ciaplac-metros"), notaUnid = $("#nota-pecas-ciaplac-unid");
+  if(notaBnz) notaBnz.hidden = isCiaplac;
+  if(notaMetros) notaMetros.hidden = !isCiaplac;
+  if(notaUnid) notaUnid.hidden = !isCiaplac;
+  if(isCiaplac){
+    const elM = document.querySelector('[data-k="ciaplac_metros"]'); if(elM) elM.textContent = fmtInt(kpi.ciaplac_metros);
+    const elU = document.querySelector('[data-k="ciaplac_unidades"]'); if(elU) elU.textContent = fmtInt(kpi.ciaplac_unidades);
+  }
 
   $("#updated-at").textContent = fmtDateTime(data.atualizado_em);
   $("#hoje").textContent = new Date(data.atualizado_em||Date.now()).toLocaleDateString("pt-BR");
@@ -566,7 +579,7 @@ const DEMO = {
     carteira:{ativos:33,negociacao:9,sem_movimentacao:17,inativos:32},
     missoes:{contato_preventivo:1,recuperacao:2,em_formacao:40},
     alertas:{sem_movimentacao_30d:6,sem_conversa_zap:4,inativos:26},
-    curva_a_qtd:2, vendas_pecas:3480, vendas_pecas_label:"peças vendidas", pedidos_sem_entrega_qtd:1 },
+    curva_a_qtd:2, vendas_pecas:3480, vendas_pecas_label:"peças vendidas", ciaplac_metros:null, ciaplac_unidades:null, pedidos_sem_entrega_qtd:1 },
   listas: { alvos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"5511…",cidade:"São Paulo",uf:"SP",marcadores:"BB CLIENTE AÇO",estagio:"Clientes Ativos",ultimo_pedido:"2026-08-12"}],
     em_negociacao:[{cliente:"(exemplo) ANNA DECOR",fantasia:"Anna Decor",zap:"5519…",cidade:"Piracicaba",uf:"SP",marcadores:"",ultima_interacao:"2026-09-01"}],
     contato_preventivo:[],recuperacao:[],em_formacao:[],sem_movimentacao:[],conversa_zap:[],inativos:[],
