@@ -135,6 +135,7 @@
   .agenda .txt strong{font-family:"Archivo",sans-serif;font-weight:600;display:block;font-size:.92rem}
   .agenda .txt span{font-size:.77rem;color:var(--ink-soft)}
   .agenda .over{color:var(--clay-ink);font-weight:600}
+  .agenda .lnk{font-size:.68rem;color:var(--blue-ink);font-weight:600;cursor:pointer;text-decoration:underline}
 
   /* rows */
   .rows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
@@ -183,6 +184,9 @@
   @media print{ table.lc a.wa{display:none} table.lc .wa-num{display:inline} }
 
   .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
+  .updated a.autor{color:inherit;font-weight:600;text-decoration:none}
+  .updated a.autor:hover{text-decoration:underline}
+  .login .autor-login{margin-top:6px;text-align:center;font-size:.7rem;color:var(--ink-faint)}
   .loading{padding:40px 0;text-align:center;color:var(--ink-faint);font-size:.85rem}
 
 
@@ -238,10 +242,10 @@
     table.lc th.c-entrega_efetiva,table.lc th.c-data_pedido,table.lc th.c-vencimento{width:7.5%}
     table.lc th.c-tipo{width:12%} table.lc th.c-estado{width:9%} table.lc th.c-responsavel{width:14%}
     table.lc th.c-ativos,table.lc th.c-inativos{width:22%}
-    #lista-por_regiao table.lc{width:60%;min-width:0}
+    #lista-por_regiao{width:60%;min-width:0}
     .regiao-link{display:none!important}
     .lc-wrap{overflow:visible}
-    .updated{margin-top:8px}
+    .updated{display:none}  /* na impressão esse texto vai pro rodapé da página, junto do número (ver syncPrintPageStyle) */
     section#listas{margin-top:14px}
   }
 
@@ -266,8 +270,11 @@
   .tagline{margin:6px 0 0;font-size:.78rem;color:var(--ink-soft);font-style:italic}
 
   /* ---- legenda / callout ---- */
-  .hero-main .regiao-link{display:block;margin-top:8px;font-size:.74rem;font-weight:600;color:var(--blue-ink);cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
-  #lista-por_regiao table.lc{width:auto;min-width:420px}
+  .hero-main .regiao-link{display:flex;flex-direction:column;gap:2px;margin-top:8px;cursor:pointer}
+  /* só ocupa o espaço que a tabelinha usa, em vez de esticar a página inteira */
+  #lista-por_regiao{width:fit-content;min-width:380px;max-width:100%}
+  #lista-por_regiao table.lc{width:100%}
+  table.lc tr.tot td{font-weight:700;color:var(--ink);border-top:2px solid var(--slate-edge)}
   table.lc td.c-fantasia{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .legenda{display:block;margin-top:6px;font-size:.68rem;color:var(--ink-faint);font-style:normal;line-height:1.4}
   .hero-main .breakdown b[data-goto]{cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
@@ -310,6 +317,7 @@
     <input id="login-pass" name="password" type="password" placeholder="senha" autocomplete="current-password" required>
     <button type="submit">Entrar</button>
     <span class="msg" id="login-msg"></span>
+    <span class="autor-login">por @pessoaco</span>
   </form>
 </div>
 
@@ -360,7 +368,10 @@
           <b data-k="c_semmov" data-goto="carteira_semmov">–</b> sem movimentação
           &nbsp;|&nbsp; <span class="off"><b data-k="c_inativos" data-goto="carteira_inativos">–</b> inativos (fora do placar)</span>
         </span>
-        <span class="regiao-link" data-goto="por_regiao">por região — clique para ver ↗ abrir lista</span>
+        <div class="regiao-link" data-goto="por_regiao">
+          <span class="sub">Clientes por região</span>
+          <span class="lnk">↗ abrir lista</span>
+        </div>
       </div>
     </div>
 
@@ -401,7 +412,7 @@
 
     <section>
       <p class="band-label missoes"><svg class="ico"><use href="#i-alvo"/></svg> Missões — atividades da inteligência comercial</p>
-      <p class="callout">Conta <b>só quem ainda não teve contato feito</b> — não bate com o placar da carteira <b>de propósito</b>: lá é o total, aqui é o que <b>o vendedor precisa fazer</b>.</p>
+      <p class="callout">Conta <b>só quem ainda não teve contato feito</b> — é o que <b>o vendedor precisa fazer</b>.</p>
       <div class="rows">
         <div class="row s" data-goto="contato_preventivo">
           <span class="count" data-k="contato_preventivo">–</span>
@@ -450,12 +461,11 @@
     </section>
 
     <section id="listas">
-      <p class="band-label">Listas completas — pra imprimir tudo de uma vez</p>
-      <p class="band-hint">As mesmas listas na íntegra. Role e imprima a página inteira (Ctrl+P no PC, ou "Compartilhar → Imprimir" no celular).</p>
+      <p class="band-label">Minha Carteira — Listas dos números acima: carteira de clientes, missões, alertas e atividades</p>
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.21 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Copiloto de Vendas v2.21 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -492,7 +502,7 @@ const LISTAS = [
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["cidade","Cidade"],["uf","UF"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
   curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["marcadores","Marcadores"]],
@@ -612,6 +622,11 @@ function renderListas(listas){
           return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+"\">"+v+"</td>";
         }).join("")+"</tr>";
       }
+      if(k==="por_regiao"){
+        // linha de total: a soma de "ativos" tem que bater com o número grande do placar da carteira
+        const soma = c => rows.reduce((s,r)=> s + (Number(r[c])||0), 0);
+        tb.innerHTML += '<tr class="tot">'+cols.map(c => '<td class="c-'+c[0]+'">'+(c[0]==="regiao" ? "Total" : soma(c[0]))+'</td>').join("")+'</tr>';
+      }
       t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
     }
     box.appendChild(card);
@@ -668,10 +683,11 @@ function syncPrintPageStyle(){
   const chipTxt = ($("#chip-co")?.textContent || "").trim();
   const dataTxt = $("#hoje")?.textContent || "";
   const texto = ("Copiloto de Vendas — Missões · " + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
+  const rodape = ($(".updated")?.textContent || "").trim().replace(/"/g,'\\"');
   const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : "#555");
   const el = $("#print-page-style");
   // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
-  if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } }';
+  if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
 }
 window.addEventListener("beforeprint", syncPrintPageStyle);
 // Abrir o diálogo de impressão (ou "Salvar como PDF") dispara visibilitychange no Chrome, que sem essa
