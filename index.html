@@ -442,6 +442,9 @@
         <span class="k">Pedidos a Entregar</span>
         <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
         <span class="note">Confirmados, ainda sem data de entrega<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
+        <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
+        <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
+        <span class="nota-pecas" id="ped-unid" hidden><b class="pecas" data-k="pedidos_unidades">–</b> un. de Acabamento/Acessório a entregar</span>
       </div>
       <div class="kpi blue">
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
@@ -544,7 +547,7 @@
    ============================================================================ */
 const WEBHOOK_URL   = "https://auto.ialink.com.br/webhook/painel-vendedor";
 const REFRESH_MIN   = 5;      // re-busca sozinho a cada X minutos
-const LINK_PROSPECCAO= "";    // URL do Painel de Prospecção (deixe "" por enquanto)
+const LINK_PROSPECCAO= "prospects/";    // Copiloto de Prospects (pasta prospects/ no mesmo site do GitHub Pages)
 
 /* ---- definição das listas que aparecem embaixo ---- */
 const LISTAS = [
@@ -625,12 +628,27 @@ function fill(data){
   // por isso vira 2 linhas separadas em vez da linha única de "peças vendidas" (só faz sentido pra BNZ).
   const isCiaplac = empresa === "CIAPLAC";
   const notaBnz = $("#nota-pecas-bnz"), notaMetros = $("#nota-pecas-ciaplac-metros"), notaUnid = $("#nota-pecas-ciaplac-unid");
+  // BNZ = peças; CIAPLAC = metros de Forro + unidades; Total mostra as duas empresas (cada uma na sua unidade)
+  const mostraCiaplac = empresa !== "BNZ" && kpi.ciaplac_metros != null;
   if(notaBnz) notaBnz.hidden = isCiaplac;
-  if(notaMetros) notaMetros.hidden = !isCiaplac;
-  if(notaUnid) notaUnid.hidden = !isCiaplac;
-  if(isCiaplac){
+  if(notaMetros) notaMetros.hidden = !mostraCiaplac;
+  if(notaUnid) notaUnid.hidden = !mostraCiaplac;
+  if(mostraCiaplac){
     const elM = document.querySelector('[data-k="ciaplac_metros"]'); if(elM) elM.textContent = fmtInt(kpi.ciaplac_metros);
     const elU = document.querySelector('[data-k="ciaplac_unidades"]'); if(elU) elU.textContent = fmtInt(kpi.ciaplac_unidades);
+  }
+
+  // Pedidos a Entregar: quantidade a entregar, na mesma regra das vendas do mês.
+  // BNZ = peças; CIAPLAC = metros de Forro + unidades de Acabamento/Acessório; Total mostra as duas empresas.
+  const temQtdPed = kpi.pedidos_pecas != null;
+  const pedPecas = $("#ped-pecas"), pedMetros = $("#ped-metros"), pedUnid = $("#ped-unid");
+  if(pedPecas) pedPecas.hidden = !temQtdPed || empresa === "CIAPLAC";
+  if(pedMetros) pedMetros.hidden = !temQtdPed || empresa === "BNZ";
+  if(pedUnid) pedUnid.hidden = !temQtdPed || empresa === "BNZ";
+  if(temQtdPed){
+    for(const [k,v] of [["pedidos_pecas",kpi.pedidos_pecas],["pedidos_metros",kpi.pedidos_metros],["pedidos_unidades",kpi.pedidos_unidades]]){
+      const el = document.querySelector('[data-k="'+k+'"]'); if(el) el.textContent = fmtInt(v);
+    }
   }
 
   $("#updated-at").textContent = fmtDateTime(data.atualizado_em);
