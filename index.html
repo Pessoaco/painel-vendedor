@@ -189,6 +189,8 @@
   .busca-cliente:focus{outline:2px solid var(--blue-edge);outline-offset:1px}
   .busca-cliente::placeholder{color:var(--ink-faint)}
   .busca-resultado{margin-top:12px;padding:10px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg)}
+  .busca-resultado.atualizando{opacity:.4;transition:opacity .15s}
+  .busca-resultado.atualizando::before{content:"atualizando com a empresa escolhida…";display:block;font-size:.72rem;color:var(--ink-soft);margin-bottom:6px}
   .busca-resultado .listbox{margin-top:8px}
   .busca-resultado .listcard{background:var(--surface)}
   .busca-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.8rem;color:var(--blue-ink)}
@@ -548,6 +550,8 @@ function setStatus(state, text){
   const sb = $("#statusbar");
   sb.classList.remove("stale","err");
   if(state) sb.classList.add(state);
+  // enquanto recarrega (ex.: trocou Total/BNZ/CIAPLAC) o resultado da busca fica apagado, pra não parecer atual
+  $("#busca-resultado")?.classList.toggle("atualizando", String(text).startsWith("atualizando"));
   $("#status-text").textContent = text;
 }
 
