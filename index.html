@@ -185,6 +185,15 @@
   @media print{ table.lc a.wa{display:none} table.lc .wa-num{display:inline} }
 
   .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
+  .busca-cliente{font:inherit;font-size:.76rem;padding:6px 12px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);min-width:280px;flex:0 1 340px}
+  .busca-cliente:focus{outline:2px solid var(--blue-edge);outline-offset:1px}
+  .busca-cliente::placeholder{color:var(--ink-faint)}
+  .busca-resultado{margin-top:12px;padding:10px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg)}
+  .busca-resultado .listbox{margin-top:8px}
+  .busca-resultado .listcard{background:var(--surface)}
+  .busca-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.8rem;color:var(--blue-ink)}
+  .busca-sub{font-size:.72rem;color:var(--ink-soft)}
+  .busca-head .btn{margin-left:auto}
   .updated a.autor{color:inherit;font-weight:600;text-decoration:none}
   .updated a.autor:hover{text-decoration:underline}
   .login .autor-login{margin-top:6px;text-align:center;font-size:.7rem;color:var(--ink-faint)}
@@ -353,9 +362,12 @@
       <button data-emp="BNZ">BNZ</button>
       <button data-emp="CIAPLAC">CIAPLAC</button>
     </div>
+    <input type="search" id="busca-cliente" class="busca-cliente no-print" placeholder="🔎 Buscar cliente… (separe por vírgula p/ vários)" autocomplete="off">
   </div>
 
   <div id="content" hidden>
+
+    <section id="busca-resultado" class="busca-resultado" hidden></section>
 
     <div class="hero">
       <div class="hero-main amber" data-goto="em_negociacao" style="cursor:pointer">
@@ -597,10 +609,19 @@ function renderListas(listas){
   const box = $("#listbox"); box.innerHTML = "";
   for(const {k,titulo,cor} of LISTAS){
     let rows = listas[k] || [];
-    const cols = COLS[k] || COLS.padrao;
     const st = sortState[k];
     if(st && st.col) rows = ordenarLinhasCopiloto(rows, st.col, st.dir);
-    const card = document.createElement("div"); card.className = "listcard"; card.id = "lista-"+k;
+    box.appendChild(montarCard(k, titulo, cor, rows, "lista-", true));
+  }
+  renderBusca();
+}
+
+/* monta o card de uma lista (usado nas listas de baixo e no resultado da busca por cliente) */
+function montarCard(k, titulo, cor, rows, pre, sortavel){
+  {
+    const cols = COLS[k] || COLS.padrao;
+    const st = sortavel ? sortState[k] : null;
+    const card = document.createElement("div"); card.className = "listcard"; card.id = pre+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
     h.innerHTML = '<span>'+titulo+'</span><span class="n">'+rows.length+'</span>';
     card.appendChild(h);
@@ -614,6 +635,7 @@ function renderListas(listas){
         const active = st && st.col===c[0];
         const arrow = active ? (st.dir===1?"▲":"▼") : "⇅";
         const marc = c[0]==="marcadores" ? " col-marc" : "";
+        if(!sortavel) return "<th class=\"c-"+c[0]+marc+"\">"+c[1]+"</th>";
         return "<th class=\"sortable c-"+c[0]+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
       }).join("")+"</tr></thead>";
       const tb = document.createElement("tbody");
@@ -637,8 +659,43 @@ function renderListas(listas){
       }
       t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
     }
-    box.appendChild(card);
+    return card;
   }
+}
+
+/* ---- busca por cliente: mostra TODAS as listas em que o cliente aparece ---- */
+let buscaCliente = "";
+const semAcento = s => String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+// separado por vírgula = mais de um cliente na mesma busca
+const termosBusca = txt => String(txt||"").split(",").map(semAcento).map(t=>t.trim()).filter(t=>t.length>=2);
+function renderBusca(){
+  const box = $("#busca-resultado"); if(!box) return;
+  const termos = termosBusca(buscaCliente);
+  if(!termos.length){ box.hidden = true; box.innerHTML = ""; return; }
+  const casa = r => { const alvo = semAcento((r.cliente||"")+" "+(r.fantasia||"")); return termos.some(t => alvo.includes(t)); };
+  const achados = [];
+  for(const {k,titulo,cor} of LISTAS){
+    if(k==="por_regiao") continue;
+    const rows = (ULTIMA_LISTAS[k]||[]).filter(casa);
+    if(rows.length) achados.push({k,titulo,cor,rows});
+  }
+  box.hidden = false; box.innerHTML = "";
+  const h = document.createElement("div"); h.className = "busca-head";
+  const nomes = buscaCliente.split(",").map(s=>s.trim()).filter(Boolean).join(", ");
+  h.innerHTML = '<b>Onde aparece: '+nomes.replace(/</g,"&lt;")+'</b> <span class="busca-sub">'+
+    (achados.length ? achados.length+(achados.length===1?" lista":" listas") : "nenhuma lista")+
+    '</span> <button class="btn no-print" id="busca-limpar">✕ limpar</button>';
+  box.appendChild(h);
+  if(!achados.length){
+    const e = document.createElement("div"); e.className = "lc-empty";
+    e.textContent = "Nenhum cliente encontrado com esse nome nas listas do Copiloto (quem tem marcador “não fazer” não aparece em nenhuma lista).";
+    box.appendChild(e);
+  } else {
+    const lb = document.createElement("div"); lb.className = "listbox";
+    for(const a of achados) lb.appendChild(montarCard(a.k, a.titulo, a.cor, a.rows, "busca-", false));
+    box.appendChild(lb);
+  }
+  $("#busca-limpar")?.addEventListener("click", ()=>{ buscaCliente = ""; const i = $("#busca-cliente"); if(i) i.value = ""; renderBusca(); });
 }
 
 /* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
@@ -792,6 +849,7 @@ $("#login-form").addEventListener("submit", e => {
 });
 
 if(LINK_PROSPECCAO) { $("#link-prospeccao").href = LINK_PROSPECCAO; }
+$("#busca-cliente").addEventListener("input", e => { buscaCliente = e.target.value; renderBusca(); });
 $("#btn-refresh").addEventListener("click", load);
 $("#btn-logout").addEventListener("click", logout);
 $("#seg").addEventListener("click", e => { const b = e.target.closest("button[data-emp]"); if(b) setEmpresa(b.dataset.emp); });
