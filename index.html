@@ -185,6 +185,24 @@
   @media print{ table.lc a.wa{display:none} table.lc .wa-num{display:inline} }
 
   .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
+  /* ---- ações do Check-list de Atividades (Feito / Editar / Cancelar) ---- */
+  .lc-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--hair);background:var(--surface);font-size:.72rem;color:var(--ink-soft)}
+  .btn-ac{font:inherit;font-size:.68rem;font-weight:600;padding:3px 9px;border-radius:6px;border:1px solid var(--hair);background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn-ac:hover{filter:brightness(.95)}
+  .btn-ac.ok{border-color:var(--green-edge);color:var(--green-ink)}
+  .btn-ac.cancel{border-color:var(--clay-edge);color:var(--clay-ink)}
+  table.lc td.c-_acoes{white-space:nowrap}
+  table.lc td.c-_sel,table.lc th.c-_sel{width:28px;padding-right:0}
+  dialog.dlg{border:1px solid var(--hair);border-radius:12px;padding:16px 18px;width:min(440px,92vw);background:var(--surface);color:var(--ink)}
+  dialog.dlg::backdrop{background:rgba(0,0,0,.4)}
+  .dlg h3{margin:0 0 2px;font-family:"Archivo",sans-serif;font-size:1rem}
+  .dlg .dlg-desc{font-size:.76rem;color:var(--ink-soft);margin-bottom:4px}
+  .dlg label{display:block;font-size:.72rem;color:var(--ink-soft);margin:10px 0 3px}
+  .dlg label.chk{display:flex;align-items:center;gap:6px;color:var(--ink);font-weight:600}
+  .dlg textarea,.dlg input[type=text],.dlg input[type=date],.dlg select{width:100%;font:inherit;font-size:.8rem;padding:7px 9px;border:1px solid var(--hair);border-radius:7px;background:var(--surface);color:var(--ink)}
+  .dlg .dlg-acoes{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:9px 16px;border-radius:8px;font-size:.8rem;z-index:90;max-width:90vw}
+  .toast.erro{background:var(--clay-ink)}
   .busca-cliente{font:inherit;font-size:.76rem;padding:6px 12px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);min-width:280px;flex:0 1 340px}
   .busca-cliente:focus{outline:2px solid var(--blue-edge);outline-offset:1px}
   .busca-cliente::placeholder{color:var(--ink-faint)}
@@ -217,7 +235,7 @@
     :root{--shadow:none}
     body{background:#fff;font-size:10.5px}
     .wrap{max-width:100%;padding:0}
-    .statusbar,.topbar,.no-print,.login,#loading,.badge,.tagline{display:none!important}
+    .statusbar,.topbar,.no-print,.login,#loading,.badge,.tagline,.lc-bar,.c-_sel,.c-_acoes,dialog.dlg,.toast{display:none!important}
     /* cabeçalho impresso: título em negrito à esquerda; à direita selo colorido da empresa + data */
     .masthead{align-items:center;border-bottom-width:4px;padding-bottom:6px}
     .masthead h1{font-size:1.5rem;font-weight:800}
@@ -494,6 +512,31 @@
 
 </div>
 
+<dialog class="dlg" id="dlg-acao">
+  <form id="dlg-form" method="dialog">
+    <h3 id="dlg-titulo">—</h3>
+    <div class="dlg-desc" id="dlg-desc"></div>
+    <label for="dlg-nota" id="dlg-nota-label">Observação (opcional)</label>
+    <textarea id="dlg-nota" rows="3" maxlength="400" placeholder="Ex.: falei com o comprador, pediu tabela nova…"></textarea>
+    <div id="dlg-edit" hidden>
+      <label for="dlg-resumo">Resumo</label><input type="text" id="dlg-resumo" maxlength="120">
+      <label for="dlg-data">Vencimento</label><input type="date" id="dlg-data">
+    </div>
+    <div id="dlg-prox-box" hidden>
+      <label class="chk"><input type="checkbox" id="dlg-prox"> Agendar a próxima atividade</label>
+      <div id="dlg-prox-campos" hidden>
+        <label for="dlg-tipo">Tipo</label><select id="dlg-tipo"></select>
+        <label for="dlg-prox-resumo">Resumo</label><input type="text" id="dlg-prox-resumo" maxlength="120" placeholder="Ex.: voltar na semana que vem">
+        <label for="dlg-prox-data">Para quando</label><input type="date" id="dlg-prox-data">
+      </div>
+    </div>
+    <div class="dlg-acoes">
+      <button type="button" class="btn" id="dlg-voltar">Voltar</button>
+      <button type="submit" class="btn" id="dlg-ok">Confirmar</button>
+    </div>
+  </form>
+</dialog>
+
 <script>
 /* ============================================================================
    CONFIGURAÇÃO — troque a URL abaixo pela do seu webhook no n8n
@@ -594,11 +637,14 @@ function fill(data){
   $("#hoje").textContent = new Date(data.atualizado_em||Date.now()).toLocaleDateString("pt-BR");
   syncPrintPageStyle();
 
+  TIPOS = data.tipos_atividade || [];
   renderListas(data.listas || {});
 }
 
 let ULTIMA_LISTAS = {};
 const sortState = {};
+const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
+let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
 const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra","ativos","inativos"]);
 function ordenarLinhasCopiloto(rows, col, dir){
   return [...rows].sort((a,b) => {
@@ -623,12 +669,21 @@ function renderListas(listas){
 /* monta o card de uma lista (usado nas listas de baixo e no resultado da busca por cliente) */
 function montarCard(k, titulo, cor, rows, pre, sortavel){
   {
-    const cols = COLS[k] || COLS.padrao;
+    // Check-list de Atividades ganha caixinha de seleção + botões de ação (só quando o backend manda o id da atividade)
+    const comAcoes = k === "atividades" && rows.some(r => r.id);
+    const cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || COLS.padrao);
     const st = sortavel ? sortState[k] : null;
     const card = document.createElement("div"); card.className = "listcard"; card.id = pre+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
     h.innerHTML = '<span>'+titulo+'</span><span class="n">'+rows.length+'</span>';
     card.appendChild(h);
+    if(comAcoes && sortavel){
+      const bar = document.createElement("div"); bar.className = "lc-bar no-print";
+      bar.innerHTML = '<span>Selecionadas: <b id="sel-n">'+selAtiv.size+'</b></span>'+
+        '<button class="btn-ac ok" data-ac="feito-sel">✔ Feito nas selecionadas</button>'+
+        '<button class="btn-ac cancel" data-ac="cancelar-sel">✕ Cancelar selecionadas</button>';
+      card.appendChild(bar);
+    }
     if(!rows.length){
       const e = document.createElement("div"); e.className="lc-empty"; e.textContent="— nada nesta lista agora —";
       card.appendChild(e);
@@ -639,7 +694,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
         const active = st && st.col===c[0];
         const arrow = active ? (st.dir===1?"▲":"▼") : "⇅";
         const marc = c[0]==="marcadores" ? " col-marc" : "";
-        if(!sortavel) return "<th class=\"c-"+c[0]+marc+"\">"+c[1]+"</th>";
+        if(c[0]==="_sel") return "<th class=\"c-_sel\">"+(sortavel?'<input type="checkbox" class="sel-todas" title="selecionar todas">':"")+"</th>";
+        if(!sortavel || c[0][0]==="_") return "<th class=\"c-"+c[0]+marc+"\">"+c[1]+"</th>";
         return "<th class=\"sortable c-"+c[0]+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
       }).join("")+"</tr></thead>";
       const tb = document.createElement("tbody");
@@ -653,6 +709,10 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
           if(c[0]==="regiao" && !v) v = "(sem região)";
+          if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
+          if(c[0]==="_acoes") v = r.id
+            ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'">✎ Editar</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'">✕ Cancelar</button>'
+            : "";
           return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+"\">"+v+"</td>";
         }).join("")+"</tr>";
       }
@@ -702,8 +762,106 @@ function renderBusca(){
   $("#busca-limpar")?.addEventListener("click", ()=>{ buscaCliente = ""; const i = $("#busca-cliente"); if(i) i.value = ""; renderBusca(); });
 }
 
+/* ---- ações nas atividades: Feito / Editar / Cancelar (+ agendar a próxima) ---- */
+// o fluxo de ações é outro webhook do n8n (mesmo servidor, mesmo login do Copiloto)
+const WEBHOOK_ACAO = WEBHOOK_URL.replace(/\/[^\/?]*$/, "/painel-vendedor-acao");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let acaoAtual = null;
+function toast(msg, erro){
+  const t = document.createElement("div"); t.className = "toast" + (erro ? " erro" : ""); t.textContent = msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(), erro ? 6000 : 3500);
+}
+const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id));
+function atualizaSel(){ $$("#sel-n").forEach(n => n.textContent = selAtiv.size); }
+function abrirDialogo(acao, ids){
+  const acts = ids.map(atividadePorId).filter(Boolean);
+  if(!acts.length){ toast("Não achei essa atividade — atualize a página.", true); return; }
+  acaoAtual = {acao, ids: acts.map(a => a.id), acts};
+  const plural = acts.length > 1 ? "s" : "";
+  $("#dlg-titulo").textContent = acao === "feito" ? "Concluir atividade"+plural : (acao === "editar" ? "Editar atividade" : "Cancelar atividade"+plural);
+  $("#dlg-desc").innerHTML = acts.slice(0,5).map(a => "<b>"+esc(a.cliente)+"</b> — "+esc(a.tipo)+(a.resumo ? " · "+esc(a.resumo) : "")).join("<br>")
+    + (acts.length > 5 ? "<br>… e mais "+(acts.length-5) : "");
+  $("#dlg-nota").value = "";
+  $("#dlg-nota-label").textContent = acao === "cancelar" ? "Motivo (opcional)" : "Observação (opcional)";
+  $("#dlg-edit").hidden = acao !== "editar";
+  if(acao === "editar"){ $("#dlg-resumo").value = acts[0].resumo || ""; $("#dlg-data").value = acts[0].vencimento || ""; }
+  const mostraProx = acao === "feito" && acts.length === 1 && TIPOS.length > 0;
+  $("#dlg-prox-box").hidden = !mostraProx; $("#dlg-prox").checked = false; $("#dlg-prox-campos").hidden = true;
+  if(mostraProx){
+    $("#dlg-tipo").innerHTML = TIPOS.map(t => '<option value="'+t.id+'"'+(t.id === acts[0].tipo_id ? " selected" : "")+'>'+esc(t.nome)+'</option>').join("");
+    $("#dlg-prox-resumo").value = ""; $("#dlg-prox-data").value = "";
+  }
+  $("#dlg-ok").textContent = acao === "cancelar" ? "Cancelar atividade" : (acao === "editar" ? "Salvar" : "Confirmar");
+  $("#dlg-acao").showModal();
+}
+async function chamarAcao(p){
+  if(WEBHOOK_URL.startsWith("COLE_AQUI")) return {ok:true};
+  if(!creds || !creds.user) return {ok:false, erro:"entre de novo no Copiloto"};
+  const q = new URLSearchParams(Object.assign({user: creds.user, pass: creds.pass, t: Date.now()}, p));
+  const ctrl = new AbortController(); const to = setTimeout(()=>ctrl.abort(), 45000);
+  try{
+    const r = await fetch(WEBHOOK_ACAO + "?" + q.toString(), {cache:"no-store", signal: ctrl.signal});
+    clearTimeout(to);
+    if(!r.ok) return {ok:false, erro:"o servidor respondeu "+r.status+" — o fluxo de ações está ativo no n8n?"};
+    return await r.json();
+  }catch(err){
+    clearTimeout(to);
+    return {ok:false, erro: err.name === "AbortError" ? "demorou demais — confira no Odoo antes de repetir" : "sem conexão"};
+  }
+}
+function posAcao(A, p, r){
+  if(A.acao === "feito" || A.acao === "cancelar"){
+    const set = new Set(A.ids.map(String));
+    ULTIMA_LISTAS.atividades = (ULTIMA_LISTAS.atividades || []).filter(a => !set.has(String(a.id)));
+    A.ids.forEach(i => selAtiv.delete(String(i)));
+  } else if(A.acao === "editar"){
+    const a = atividadePorId(A.ids[0]);
+    if(a){ if(p.resumo) a.resumo = p.resumo; if(p.data) a.vencimento = p.data; }
+  }
+  renderListas(ULTIMA_LISTAS);
+  toast(r.aviso || (A.acao === "feito" ? "Atividade concluída ✔" : A.acao === "cancelar" ? "Atividade cancelada" : "Atividade atualizada"));
+  setTimeout(load, 1500);   // puxa os números certos do Odoo
+}
+$("#dlg-prox").addEventListener("change", e => { $("#dlg-prox-campos").hidden = !e.target.checked; });
+$("#dlg-voltar").addEventListener("click", () => $("#dlg-acao").close());
+$("#dlg-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const A = acaoAtual; if(!A) return;
+  const p = {acao: A.acao, ids: A.ids.join(","), nota: $("#dlg-nota").value.trim()};
+  if(A.acao === "editar"){ p.resumo = $("#dlg-resumo").value.trim(); p.data = $("#dlg-data").value; }
+  if(A.acao === "feito" && $("#dlg-prox").checked){
+    const data = $("#dlg-prox-data").value;
+    if(!data){ toast("Escolha para quando é a próxima atividade.", true); return; }
+    p.p_tipo = $("#dlg-tipo").value; p.p_data = data;
+    p.p_resumo = $("#dlg-prox-resumo").value.trim() || $("#dlg-tipo").selectedOptions[0].textContent;
+  }
+  $("#dlg-ok").disabled = true;
+  const r = await chamarAcao(p);
+  $("#dlg-ok").disabled = false;
+  if(r && r.ok){ $("#dlg-acao").close(); posAcao(A, p, r); }
+  else toast((r && r.erro) || "Não consegui concluir.", true);
+});
+document.addEventListener("change", e => {
+  const c = e.target;
+  if(c.classList && c.classList.contains("sel-ativ")){ c.checked ? selAtiv.add(c.dataset.id) : selAtiv.delete(c.dataset.id); atualizaSel(); }
+  else if(c.classList && c.classList.contains("sel-todas")){
+    $$("#lista-atividades .sel-ativ").forEach(x => { x.checked = c.checked; c.checked ? selAtiv.add(x.dataset.id) : selAtiv.delete(x.dataset.id); });
+    atualizaSel();
+  }
+});
+
 /* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
 document.addEventListener("click", e=>{
+  const bt = e.target.closest("button[data-ac]");
+  if(bt){
+    const ac = bt.dataset.ac;
+    if(ac === "feito-sel" || ac === "cancelar-sel"){
+      const ids = [...selAtiv];
+      if(!ids.length){ toast("Marque pelo menos uma atividade.", true); return; }
+      abrirDialogo(ac === "feito-sel" ? "feito" : "cancelar", ids);
+    } else abrirDialogo(ac, [bt.dataset.id]);
+    return;
+  }
   const th = e.target.closest("table.lc th[data-col]");
   if(th){
     const card = th.closest(".listcard");
@@ -731,7 +889,7 @@ const DEMO = {
     contato_preventivo:[],recuperacao:[],em_formacao:[],sem_movimentacao:[],conversa_zap:[],inativos:[],
     curva_a:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",marcadores:"GRUPO BRASIL",zap:"5511…",cidade:"São Paulo",uf:"SP",faturamento:"R$ 412.000"}],
     pedidos_sem_entrega:[{cliente:"(exemplo) CASA DO FORRO",fantasia:"Casa do Forro",zap:"5511…",cidade:"Guarujá",uf:"SP",marcadores:"",pedido:"S02090",data_pedido:"2026-09-10"}],
-    atividades:[{cliente:"(exemplo) BM NOGUEIRA",tipo:"Ligar",resumo:"follow-up cotação",vencimento:"2026-09-03",estado:"atrasada",responsavel:"Daniel Medeiros"}] }
+    atividades:[{id:1,lead:10,tipo_id:25,cliente:"(exemplo) BM NOGUEIRA",tipo:"Ligar",resumo:"follow-up cotação",vencimento:"2026-09-03",estado:"atrasada",responsavel:"Daniel Medeiros"}] }
 };
 
 /* ---- empresa selecionada (Total / BNZ / CIAPLAC) ---- */
