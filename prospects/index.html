@@ -355,7 +355,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v1.2 (paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v1.3 (Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -508,7 +508,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v1.2 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v1.3 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -551,8 +551,8 @@ const LINK_CLIENTES = "../";  // Copiloto de Vendas (clientes) — esta página 
 
 /* ---- definição das listas que aparecem embaixo ---- */
 const LISTAS = [
-  {k:"leads_qualificados",  titulo:"Leads Qualificados (coluna LEAD do funil)",                             cor:"amber"},
   {k:"atividades",          titulo:"Check-list de Atividades — prospects",                                   cor:"amber"},
+  {k:"leads_qualificados",  titulo:"Leads Qualificados (coluna LEAD do funil)",                             cor:"amber"},
   {k:"pediram_cotacao",     titulo:"Pediram cotação (marcador COTAÇÃO)",                                     cor:"green"},
   {k:"cotacao_sem_passo",   titulo:"Radar · Pediram cotação e estão sem próximo passo",                      cor:"clay"},
   {k:"novos_mes",           titulo:"Novos este mês — fazer o 1º contato",                                    cor:"amber"},
