@@ -10,9 +10,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Copiloto de Prospects">
-<meta name="theme-color" content="#35657a">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='70' font-size='56' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#1d6656">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231d6656'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231d6656'/%3E%3Ctext x='50' y='70' font-size='56' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,39 +25,39 @@
      ====================================================================== */
   :root{
     --ground:#fff; --surface:#fff; --ink:#211e18; --ink-soft:#5c574c; --ink-faint:#8d8778; --hair:#e4dfd4;
-    --green-bg:#eef5ef; --green-ink:#35673f; --green-edge:#6ea277;
-    --amber-bg:#fbf2dc; --amber-ink:#7d5f0f; --amber-edge:#cba646;
-    --clay-bg:#f8e9e3;  --clay-ink:#93402f;  --clay-edge:#c47e69;
-    --blue-bg:#e9f0f3;  --blue-ink:#2b5f73;  --blue-edge:#71a2b3;
-    --slate-bg:#f0ede4; --slate-ink:#66604f; --slate-edge:#b2ab99;
+    --green-bg:#f0f5e1; --green-ink:#4c6614; --green-edge:#93b23f;
+    --amber-bg:#f8e8f1; --amber-ink:#8c2c62; --amber-edge:#c9679d;
+    --clay-bg:#fbe7ea;  --clay-ink:#a02a40;  --clay-edge:#d86f82;
+    --blue-bg:#e2f3ee;  --blue-ink:#1d6656;  --blue-edge:#4fa48f;
+    --slate-bg:#eef0f1; --slate-ink:#56616a; --slate-edge:#a4aeb6;
     --bnz-bg:#e3edf7; --bnz-ink:#1f4e8a; --bnz-edge:#2a78d6;
     --ciaplac-bg:#fbe9de; --ciaplac-ink:#8a3f1f; --ciaplac-edge:#eb6834;
-    --purple-bg:#efe6f7; --purple-ink:#6b3fa0; --purple-edge:#a780c9;
+    --purple-bg:#ece8f8; --purple-ink:#56409c; --purple-edge:#9585cf;
     --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
     --radius:9px;
   }
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
     --ground:#100f0a; --surface:#191811; --ink:#f0eadc; --ink-soft:#aaa290; --ink-faint:#7a7364; --hair:#302d22;
-    --green-bg:#17211a; --green-ink:#93c79c; --green-edge:#3c6446;
-    --amber-bg:#241d0e; --amber-ink:#ddb662; --amber-edge:#6c5720;
-    --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
-    --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
-    --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --green-bg:#1b2210; --green-ink:#b5d27a; --green-edge:#56692a;
+    --amber-bg:#2a1422; --amber-ink:#e99bc6; --amber-edge:#7a3a5f;
+    --clay-bg:#2b1418;  --clay-ink:#ee98a7;  --clay-edge:#7e3443;
+    --blue-bg:#10251f;  --blue-ink:#7fcfb9;  --blue-edge:#2f6b5c;
+    --slate-bg:#1a1d20; --slate-ink:#a3adb5; --slate-edge:#46505a;
     --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
     --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
-    --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
+    --purple-bg:#1f1a33; --purple-ink:#b7a9ee; --purple-edge:#55488f;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }}
   :root[data-theme="dark"]{
     --ground:#100f0a; --surface:#191811; --ink:#f0eadc; --ink-soft:#aaa290; --ink-faint:#7a7364; --hair:#302d22;
-    --green-bg:#17211a; --green-ink:#93c79c; --green-edge:#3c6446;
-    --amber-bg:#241d0e; --amber-ink:#ddb662; --amber-edge:#6c5720;
-    --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
-    --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
-    --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --green-bg:#1b2210; --green-ink:#b5d27a; --green-edge:#56692a;
+    --amber-bg:#2a1422; --amber-ink:#e99bc6; --amber-edge:#7a3a5f;
+    --clay-bg:#2b1418;  --clay-ink:#ee98a7;  --clay-edge:#7e3443;
+    --blue-bg:#10251f;  --blue-ink:#7fcfb9;  --blue-edge:#2f6b5c;
+    --slate-bg:#1a1d20; --slate-ink:#a3adb5; --slate-edge:#46505a;
     --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
     --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
-    --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
+    --purple-bg:#1f1a33; --purple-ink:#b7a9ee; --purple-edge:#55488f;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }
   *{box-sizing:border-box}
@@ -293,14 +293,14 @@
   .badge.blue{background:var(--blue-bg);color:var(--blue-ink)}
   .badge.green{background:var(--green-bg);color:var(--green-ink)}
   .badge.amber{background:var(--amber-bg);color:var(--amber-ink)}
-  .badge.purple{background:#efe6f7;color:#6b3fa0}
+  .badge.purple{background:var(--purple-bg);color:var(--purple-ink)}
   .badge.clay{background:var(--clay-bg);color:var(--clay-ink)}
   .hero-main{position:relative}
   .hero-main .badge{position:absolute;top:14px;right:14px}
   .kpi .badge{width:26px;height:26px;align-self:flex-start;margin-bottom:2px}
   .kpi .badge .ico{width:15px;height:15px}
   .band-label .ico{width:14px;height:14px;color:var(--ink-soft)}
-  .band-label.missoes .ico{color:#6b3fa0}
+  .band-label.missoes .ico{color:var(--purple-ink)}
   .band-label.alerta .ico{color:var(--amber-ink)}
 
   /* ---- tagline ---- */
@@ -355,7 +355,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v1.0 (nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v1.2 (paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -508,7 +508,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v1.0 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v1.2 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -566,7 +566,7 @@ const LISTAS = [
 ];
 const COLS = {
   padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
-  atividades: [["cliente","Prospect"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["cidade","Cidade"],["estagio","Estágio"],["responsavel","Responsável"]],
+  atividades: [["cliente","Prospect"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["cidade","Cidade"],["estagio","Estágio"]],
   novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["prox_atividade","Próx. atividade"]],
   sem_contato_60: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   nunca_contatados: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"]],
