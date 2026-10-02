@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Copiloto de Prospects</title>
+
+<!-- ==== TELA INICIAL DO ANDROID / IOS (abre em tela cheia, com ícone) ==== -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Copiloto de Prospects">
+<meta name="theme-color" content="#35657a">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2335657a'/%3E%3Ctext x='50' y='70' font-size='56' text-anchor='middle' fill='white' font-family='Arial'%3EP%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ======================================================================
+     PAINEL DO VENDEDOR — app de tela única
+     Cor: tinta pálida, 1 tom por bloco, número escuro. Fundo branco.
+     ====================================================================== */
+  :root{
+    --ground:#fff; --surface:#fff; --ink:#211e18; --ink-soft:#5c574c; --ink-faint:#8d8778; --hair:#e4dfd4;
+    --green-bg:#eef5ef; --green-ink:#35673f; --green-edge:#6ea277;
+    --amber-bg:#fbf2dc; --amber-ink:#7d5f0f; --amber-edge:#cba646;
+    --clay-bg:#f8e9e3;  --clay-ink:#93402f;  --clay-edge:#c47e69;
+    --blue-bg:#e9f0f3;  --blue-ink:#2b5f73;  --blue-edge:#71a2b3;
+    --slate-bg:#f0ede4; --slate-ink:#66604f; --slate-edge:#b2ab99;
+    --bnz-bg:#e3edf7; --bnz-ink:#1f4e8a; --bnz-edge:#2a78d6;
+    --ciaplac-bg:#fbe9de; --ciaplac-ink:#8a3f1f; --ciaplac-edge:#eb6834;
+    --purple-bg:#efe6f7; --purple-ink:#6b3fa0; --purple-edge:#a780c9;
+    --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
+    --radius:9px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#100f0a; --surface:#191811; --ink:#f0eadc; --ink-soft:#aaa290; --ink-faint:#7a7364; --hair:#302d22;
+    --green-bg:#17211a; --green-ink:#93c79c; --green-edge:#3c6446;
+    --amber-bg:#241d0e; --amber-ink:#ddb662; --amber-edge:#6c5720;
+    --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
+    --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
+    --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
+    --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
+    --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
+    --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
+  }}
+  :root[data-theme="dark"]{
+    --ground:#100f0a; --surface:#191811; --ink:#f0eadc; --ink-soft:#aaa290; --ink-faint:#7a7364; --hair:#302d22;
+    --green-bg:#17211a; --green-ink:#93c79c; --green-edge:#3c6446;
+    --amber-bg:#241d0e; --amber-ink:#ddb662; --amber-edge:#6c5720;
+    --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
+    --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
+    --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
+    --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
+    --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
+    --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
+    --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;line-height:1.48;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1400px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 14px 48px}
+
+  /* header */
+  .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:8px;border-bottom:3px solid var(--ink);transition:border-color .15s}
+  body[data-empresa="BNZ"] .masthead{border-bottom-color:var(--bnz-edge)}
+  body[data-empresa="CIAPLAC"] .masthead{border-bottom-color:var(--ciaplac-edge)}
+  .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:-.01em;margin:0}
+  .masthead h1 span{color:var(--ink-soft);font-weight:600}
+  .meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 10px;font-size:.72rem;color:var(--ink-soft)}
+  .meta .statusbar{margin-left:4px}
+  .chip-co{font-family:"Archivo",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.03em;padding:3px 10px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
+  .chip-co.bnz{background:var(--bnz-bg);color:var(--bnz-ink);border-color:var(--bnz-edge)}
+  .chip-co.ciaplac{background:var(--ciaplac-bg);color:var(--ciaplac-ink);border-color:var(--ciaplac-edge)}
+
+  .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:8px}
+  .seg{display:inline-flex;border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:var(--surface)}
+  .seg button{font:inherit;font-family:"Archivo",sans-serif;font-weight:600;font-size:.76rem;padding:6px 14px;border:0;border-left:1px solid var(--hair);background:transparent;color:var(--ink-soft);cursor:pointer}
+  .seg button:first-child{border-left:0}
+  .seg button.on{background:var(--blue-bg);color:var(--blue-ink)}
+  .seg button[data-emp="BNZ"].on{background:var(--bnz-bg);color:var(--bnz-ink)}
+  .seg button[data-emp="CIAPLAC"].on{background:var(--ciaplac-bg);color:var(--ciaplac-ink)}
+  .seg button:active{transform:translateY(1px)}
+  .statusbar{display:flex;align-items:center;gap:10px;font-size:.72rem;color:var(--ink-faint)}
+  .statusbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-edge);margin-right:6px;vertical-align:middle}
+  .statusbar.stale .dot{background:var(--amber-edge)}
+  .statusbar.err .dot{background:var(--clay-edge)}
+  .btn{font:inherit;font-size:.75rem;font-weight:600;padding:5px 12px;border:1px solid var(--hair);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+
+  section{margin-top:16px}
+  .band-label{font-family:"Archivo",sans-serif;font-weight:600;font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 6px;display:flex;align-items:center;gap:12px}
+  .band-label::after{content:"";flex:1;height:1px;background:var(--hair)}
+  .band-hint{margin:0 0 12px;font-size:.76rem;color:var(--ink-soft)}
+  .band-hint b{color:var(--ink);font-weight:600}
+
+  /* hero */
+  .hero{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hero-main{border:1px solid;border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
+  .hero-main.blue{background:var(--blue-bg);border-color:var(--blue-edge)}
+  .hero-main.amber{background:var(--amber-bg);border-color:var(--amber-edge)}
+  .hero-main .k{font-family:"Archivo",sans-serif;font-weight:600;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+  .hero-main.blue .k{color:var(--blue-ink)} .hero-main.amber .k{color:var(--amber-ink)}
+  .hero-main .v{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:clamp(2.4rem,11vw,3.6rem);line-height:.95;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .hero-main.blue .v{color:var(--blue-ink)} .hero-main.amber .v{color:var(--amber-ink)}
+  .hero-main .sub{font-size:.76rem;color:var(--ink-soft)}
+  .hero-main .lnk{font-size:.74rem;font-weight:600;color:var(--blue-ink);margin-top:2px;text-decoration:none}
+  .hero-main .breakdown{margin-top:10px;padding-top:8px;border-top:1px solid var(--blue-edge);font-size:.74rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;line-height:1.7}
+  .hero-main .breakdown b{color:var(--ink);font-family:"IBM Plex Mono",monospace;font-weight:600}
+  .hero-main .breakdown .off{color:var(--ink-faint)}
+
+  .kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:10px}
+  .kpi{background:var(--surface);border:1px solid var(--hair);border-top:3px solid var(--slate-edge);border-radius:var(--radius);padding:11px 12px;display:flex;flex-direction:column;gap:3px}
+  .kpi .k{font-family:"Archivo",sans-serif;font-weight:600;font-size:.63rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
+  .kpi .v{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.5rem;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .kpi .v.link{font-family:"Archivo",sans-serif;font-size:.95rem;font-weight:600}
+  .kpi .note{font-size:.66rem;color:var(--ink-faint)}
+  .kpi .nota-pecas{display:block;margin-top:7px;font-size:.78rem;color:var(--ink-soft)}
+  .kpi .nota-pecas b.pecas{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.2rem;color:var(--ink);letter-spacing:-.02em;margin-right:6px}
+  .kpi.green{border-top-color:var(--green-edge)} .kpi.green .k{color:var(--green-ink)}
+  .kpi.amber{border-top-color:var(--amber-edge)} .kpi.amber .k{color:var(--amber-ink)} .kpi.amber .v{color:var(--amber-ink)}
+  .kpi.blue{border-top-color:var(--blue-edge)}   .kpi.blue .k{color:var(--blue-ink)}  .kpi.blue .v{color:var(--blue-ink)}
+  .kpi a{color:inherit;text-decoration:none}
+  .kpi .note .link a{color:var(--blue-ink);font-weight:600}
+  .kpi .note br{content:"";display:block;margin-top:2px}
+
+  /* agenda */
+  .agenda{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;background:var(--amber-bg);border:1px solid var(--amber-edge);border-left:4px solid var(--amber-edge);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow)}
+  .agenda .big{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:2.2rem;line-height:1;color:var(--amber-ink);font-variant-numeric:tabular-nums}
+  .agenda .txt strong{font-family:"Archivo",sans-serif;font-weight:600;display:block;font-size:.92rem}
+  .agenda .txt span{font-size:.77rem;color:var(--ink-soft)}
+  .agenda .over{color:var(--clay-ink);font-weight:600}
+  .agenda .lnk{font-size:.68rem;color:var(--blue-ink);font-weight:600;cursor:pointer;text-decoration:underline}
+
+  /* rows */
+  .rows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+  .row{display:grid;grid-template-columns:52px 1fr;align-items:start;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--hair);border-left-width:4px;background:var(--surface)}
+  /* cards de Missões e Radar: fundo branco, só a borda lateral colorida (quem leva tinta é o card de Atividades) */
+  .row.a{border-left-color:var(--amber-edge)}
+  .row.c{border-left-color:var(--clay-edge)}
+  .row.g{border-left-color:var(--green-edge)}
+  .row.s{background:var(--surface);border-left-color:var(--slate-edge)}
+  .row[data-goto],.kpi[data-goto],.hero-main[data-goto]{cursor:pointer}
+  .row[data-goto]:hover,.kpi[data-goto]:hover{filter:brightness(.97)}
+  .row .count{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.5rem;text-align:right;font-variant-numeric:tabular-nums}
+  .row.a .count{color:var(--amber-ink)} .row.c .count{color:var(--clay-ink)} .row.g .count{color:var(--green-ink)} .row.s .count{color:var(--ink-faint)}
+  .row .name{font-family:"Archivo",sans-serif;font-weight:600;font-size:.86rem}
+  .row .name small{display:block;font-family:"IBM Plex Sans",sans-serif;font-weight:400;font-size:.71rem;color:var(--ink-soft);margin-top:1px}
+  .row .name .lnk{font-size:.68rem;color:var(--blue-ink);font-weight:600;cursor:pointer;text-decoration:underline}
+
+  /* listas (impressão / rolar) */
+  .listbox{display:flex;flex-direction:column;gap:12px}
+  .listcard{border:1px solid var(--hair);border-radius:8px;overflow:hidden}
+  .lc-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;background:var(--slate-bg);font-family:"Archivo",sans-serif;font-weight:600;font-size:.8rem;border-left:4px solid var(--slate-edge)}
+  .lc-h-amber{background:var(--amber-bg);color:var(--amber-ink);border-left-color:var(--amber-edge)}
+  .lc-h-purple{background:var(--purple-bg);color:var(--purple-ink);border-left-color:var(--purple-edge)}
+  .lc-h-blue{background:var(--blue-bg);color:var(--blue-ink);border-left-color:var(--blue-edge)}
+  .lc-h-clay{background:var(--clay-bg);color:var(--clay-ink);border-left-color:var(--clay-edge)}
+  .lc-h-green{background:var(--green-bg);color:var(--green-ink);border-left-color:var(--green-edge)}
+  .lc-h-slate{background:var(--slate-bg);color:var(--slate-ink);border-left-color:var(--slate-edge)}
+  .lc-h[class*="lc-h-"] .n{color:inherit;opacity:.75}
+  .lc-h .n{font-family:"IBM Plex Mono",monospace;color:var(--ink-soft)}
+  .lc-wrap{overflow-x:auto}
+  table.lc{border-collapse:collapse;width:100%;font-size:.72rem}
+  table.lc th,table.lc td{text-align:left;padding:5px 10px;border-top:1px solid var(--hair);white-space:nowrap;color:var(--ink-soft)}
+  table.lc th{font-family:"Archivo",sans-serif;font-size:.64rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface);position:sticky;top:0;white-space:normal;line-height:1.25;max-width:110px}
+  table.lc th.sortable{cursor:pointer;user-select:none}
+  table.lc th.sortable:hover{color:var(--ink)}
+  table.lc th.sortable.active{color:var(--ink)}
+  table.lc th .arrow{display:inline-block;width:.8em;font-size:.7rem;opacity:.35}
+  table.lc th .arrow.active{opacity:1;color:var(--blue-ink)}
+  table.lc td:first-child,table.lc th:first-child{color:var(--ink);font-weight:500}
+  table.lc td:first-child{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  table.lc th:first-child{max-width:160px}
+  table.lc .col-marc{white-space:normal;max-width:190px;line-height:1.3}
+  .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
+  table.lc a.wa{color:#1fa855;display:inline-flex}
+  table.lc a.wa .ico{width:17px;height:17px}
+  table.lc .wa-num{display:none;font-variant-numeric:tabular-nums}
+  @media print{ table.lc a.wa{display:none} table.lc .wa-num{display:inline} }
+
+  .updated{margin-top:26px;text-align:right;font-size:.71rem;color:var(--ink-faint)}
+  /* ---- ações do Check-list de Atividades (Feito / Editar / Cancelar) ---- */
+  .lc-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--hair);background:var(--surface);font-size:.72rem;color:var(--ink-soft)}
+  .btn-ac{font:inherit;font-size:.68rem;font-weight:600;padding:3px 9px;border-radius:6px;border:1px solid var(--hair);background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn-ac:hover{filter:brightness(.95)}
+  .btn-ac.ok{border-color:var(--green-edge);color:var(--green-ink)}
+  .btn-ac.cancel{border-color:var(--clay-edge);color:var(--clay-ink)}
+  table.lc td.c-_acoes{white-space:nowrap}
+  table.lc td.c-_sel,table.lc th.c-_sel{width:28px;padding-right:0}
+  dialog.dlg{border:1px solid var(--hair);border-radius:12px;padding:16px 18px;width:min(440px,92vw);background:var(--surface);color:var(--ink)}
+  dialog.dlg::backdrop{background:rgba(0,0,0,.4)}
+  .dlg h3{margin:0 0 2px;font-family:"Archivo",sans-serif;font-size:1rem}
+  .dlg .dlg-desc{font-size:.76rem;color:var(--ink-soft);margin-bottom:4px}
+  .dlg label{display:block;font-size:.72rem;color:var(--ink-soft);margin:10px 0 3px}
+  .dlg label.chk{display:flex;align-items:center;gap:6px;color:var(--ink);font-weight:600}
+  .dlg textarea,.dlg input[type=text],.dlg input[type=date],.dlg select{width:100%;font:inherit;font-size:.8rem;padding:7px 9px;border:1px solid var(--hair);border-radius:7px;background:var(--surface);color:var(--ink)}
+  .dlg .dlg-acoes{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:9px 16px;border-radius:8px;font-size:.8rem;z-index:90;max-width:90vw}
+  .toast.erro{background:var(--clay-ink)}
+  .busca-cliente{font:inherit;font-size:.76rem;padding:6px 12px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);min-width:280px;flex:0 1 340px}
+  .busca-cliente:focus{outline:2px solid var(--blue-edge);outline-offset:1px}
+  .busca-cliente::placeholder{color:var(--ink-faint)}
+  .busca-resultado{margin-top:12px;padding:10px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg)}
+  .busca-resultado.atualizando{opacity:.4;transition:opacity .15s}
+  .busca-resultado.atualizando::before{content:"atualizando com a empresa escolhida…";display:block;font-size:.72rem;color:var(--ink-soft);margin-bottom:6px}
+  .busca-resultado .listbox{margin-top:8px}
+  .busca-resultado .listcard{background:var(--surface)}
+  .busca-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.8rem;color:var(--blue-ink)}
+  .busca-sub{font-size:.72rem;color:var(--ink-soft)}
+  .busca-head .btn{margin-left:auto}
+  .updated a.autor{color:inherit;font-weight:600;text-decoration:none}
+  .updated a.autor:hover{text-decoration:underline}
+  .login .autor-login{margin-top:6px;text-align:center;font-size:.7rem;color:var(--ink-faint)}
+  .loading{padding:40px 0;text-align:center;color:var(--ink-faint);font-size:.85rem}
+
+
+  @media (max-width:820px){
+    .hero{grid-template-columns:1fr}
+    .kpi-strip{grid-template-columns:1fr 1fr}
+    .rows{grid-template-columns:1fr}
+  }
+
+  @media print{
+    @page{
+      size:A4 portrait; margin:9mm;
+      @bottom-right{ content:"página " counter(page) " de " counter(pages); font-family:Arial,sans-serif; font-size:8px; color:#888; }
+    }
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+    :root{--shadow:none}
+    body{background:#fff;font-size:10.5px}
+    .wrap{max-width:100%;padding:0}
+    .statusbar,.topbar,.no-print,.login,#loading,.badge,.tagline,.lc-bar,.c-_sel,.c-_acoes,dialog.dlg,.toast{display:none!important}
+    /* cabeçalho impresso: título em negrito à esquerda; à direita selo colorido da empresa + data */
+    .masthead{align-items:center;border-bottom-width:4px;padding-bottom:6px}
+    .masthead h1{font-size:1.5rem;font-weight:800}
+    .masthead h1 span{color:inherit;font-weight:800}
+    .meta{gap:10px;font-size:.72rem;color:var(--ink-soft)}
+    #hoje{font-weight:400;font-size:.72rem;color:var(--ink-soft)}
+    .chip-co{font-size:.8rem;letter-spacing:.04em;padding:3px 12px;border:1px solid #211e18;border-radius:5px;background:#211e18;color:#fff}
+    .chip-co.bnz{background:var(--bnz-edge);border-color:var(--bnz-edge);color:#fff}
+    .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
+    .hero-main{padding:12px 14px}
+    .hero{grid-template-columns:1fr 1fr!important}
+    .kpi-strip{grid-template-columns:repeat(5,1fr)!important}
+    .rows{grid-template-columns:1fr 1fr 1fr!important}
+    .hero,.hero-main,.kpi,.agenda,.row{break-inside:avoid}
+    .listcard{break-inside:auto}
+    table.lc tr{break-inside:avoid}
+    .band-label{break-after:avoid}
+    section{margin-top:12px}
+    .hero-main .v{font-size:2.4rem}
+    .agenda .big{font-size:1.9rem}
+    .row{padding:8px 10px}
+    .row .count{font-size:1.2rem}
+    table.lc{table-layout:fixed;width:100%}
+    table.lc th,table.lc td{padding:3px 4px;font-size:.6rem;white-space:normal;word-break:break-word}
+    table.lc th{font-size:.55rem;letter-spacing:0}
+    table.lc th .arrow{display:none}
+    table.lc td.c-fantasia,table.lc td.c-zap,table.lc td.c-uf{white-space:nowrap}
+    /* larguras por coluna: UF estreita, datas curtas, e o que sobra vai pro nome do Cliente */
+    table.lc th.c-fantasia{width:9%} table.lc th.c-zap{width:11.5%} table.lc th.c-cidade{width:7%}
+    table.lc th.c-uf{width:3.5%} table.lc th.c-marcadores{width:11%} table.lc th.c-estagio{width:7%}
+    table.lc th.c-faturamento{width:9%} table.lc th.c-dias_desde_ultima_compra{width:7%} table.lc th.c-pedido{width:7%}
+    table.lc th.c-ultima_conversa_zap{width:8.5%} table.lc th.c-ultima_interacao{width:9.5%}
+    table.lc th.c-ultimo_pedido,
+    table.lc th.c-entrega_efetiva,table.lc th.c-data_pedido,table.lc th.c-vencimento{width:7.5%}
+    table.lc th.c-tipo{width:12%} table.lc th.c-estado{width:9%} table.lc th.c-responsavel{width:14%}
+    table.lc th.c-ativos,table.lc th.c-inativos{width:22%}
+    /* nomes de cliente e fantasia dividem o espaço nas listas curtas (poucas colunas) */
+    table.t-em_negociacao th.c-fantasia,table.t-curva_a th.c-fantasia,table.t-pedidos_sem_entrega th.c-fantasia{width:19%}
+    /* resumo por região: tabelinha compacta, números colados no nome da região */
+    #lista-por_regiao{width:fit-content;min-width:0;max-width:100%}
+    #lista-por_regiao table.lc{table-layout:auto;width:auto}
+    #lista-por_regiao table.lc th,#lista-por_regiao table.lc td{padding:3px 14px 3px 8px;white-space:nowrap}
+    #lista-por_regiao table.lc th{white-space:normal;max-width:90px}
+    #lista-por_regiao table.lc th.c-ativos,#lista-por_regiao table.lc th.c-inativos{width:auto}
+    #lista-por_regiao table.lc td:first-child{max-width:none}
+    .lc-wrap{overflow:visible}
+    .updated{display:none}  /* na impressão esse texto vai pro rodapé da página, junto do número (ver syncPrintPageStyle) */
+    section#listas{margin-top:14px}
+  }
+
+  /* ---- ícones ---- */
+  .ico{width:1em;height:1em;flex:none;vertical-align:-.12em}
+  .badge{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  .badge .ico{width:18px;height:18px}
+  .badge.blue{background:var(--blue-bg);color:var(--blue-ink)}
+  .badge.green{background:var(--green-bg);color:var(--green-ink)}
+  .badge.amber{background:var(--amber-bg);color:var(--amber-ink)}
+  .badge.purple{background:#efe6f7;color:#6b3fa0}
+  .badge.clay{background:var(--clay-bg);color:var(--clay-ink)}
+  .hero-main{position:relative}
+  .hero-main .badge{position:absolute;top:14px;right:14px}
+  .kpi .badge{width:26px;height:26px;align-self:flex-start;margin-bottom:2px}
+  .kpi .badge .ico{width:15px;height:15px}
+  .band-label .ico{width:14px;height:14px;color:var(--ink-soft)}
+  .band-label.missoes .ico{color:#6b3fa0}
+  .band-label.alerta .ico{color:var(--amber-ink)}
+
+  /* ---- tagline ---- */
+  .tagline{margin:6px 0 0;font-size:.78rem;color:var(--ink-soft);font-style:italic}
+
+  /* ---- legenda / callout ---- */
+  .hero-main .regiao-link{display:flex;flex-direction:column;gap:2px;margin-top:8px;cursor:pointer}
+  /* só ocupa o espaço que a tabelinha usa, em vez de esticar a página inteira */
+  #lista-por_regiao{width:fit-content;min-width:380px;max-width:100%}
+  #lista-por_regiao table.lc{width:100%}
+  table.lc tr.tot td{font-weight:700;color:var(--ink);border-top:2px solid var(--slate-edge)}
+  table.lc td.c-fantasia{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .legenda{display:block;margin-top:6px;font-size:.68rem;color:var(--ink-faint);font-style:normal;line-height:1.4}
+  .hero-main .breakdown b[data-goto]{cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
+  .callout{
+    margin:0 0 12px;font-size:.72rem;color:var(--ink-faint)
+  }
+  .callout b{font-weight:600;color:var(--ink-soft)}
+
+  /* ---- login ---- */
+  .login{position:fixed;inset:0;z-index:50;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:24px}
+  .login form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:11px}
+  .login h2{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.25rem;margin:0}
+  .login p{margin:0 0 6px;font-size:.8rem;color:var(--ink-soft)}
+  .login input{font:inherit;padding:11px 13px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink)}
+  .login input:focus{outline:2px solid var(--blue-edge);outline-offset:1px}
+  .login button{font:inherit;font-weight:700;font-family:"Archivo",sans-serif;padding:11px;border:0;border-radius:8px;background:var(--blue-ink);color:#fff;cursor:pointer}
+  .login button:active{transform:translateY(1px)}
+  .login .msg{font-size:.78rem;color:var(--clay-ink);min-height:1.1em}
+  .logout{background:none;border:0;color:var(--ink-faint);font:inherit;font-size:.7rem;cursor:pointer;text-decoration:underline;padding:0}
+
+  /* ---- só do Copiloto de Prospects ---- */
+  .filtro-regiao{font:inherit;font-size:.76rem;padding:6px 10px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);max-width:260px}
+  .filtro-regiao.on{border-color:var(--blue-edge);background:var(--blue-bg);color:var(--blue-ink);font-weight:600}
+  .filtro-aviso{margin-top:10px;padding:8px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg);font-size:.78rem;color:var(--blue-ink)}
+  .filtro-aviso button{margin-left:8px}
+  .aviso-erro{margin-top:10px;padding:8px 12px;border:1px solid var(--clay-edge);border-radius:var(--radius);background:var(--clay-bg);font-size:.76rem;color:var(--clay-ink)}
+  table.lc td.c-_agendar{white-space:nowrap}
+  table.lc td.c-estagio{white-space:nowrap}
+  .masthead h1 .tag-p{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:4px;background:var(--green-bg);color:var(--green-ink);font-size:.7em;vertical-align:middle}
+  @media (max-width:820px){ .filtro-regiao{max-width:100%;flex:1 1 100%} .busca-cliente{min-width:0;flex:1 1 100%} }
+  @media print{
+    .c-_agendar,.filtro-regiao{display:none!important}
+    .filtro-aviso{border:0;background:none;padding:0;color:#211e18;font-weight:700}
+    .filtro-aviso button{display:none}
+    table.lc th.c-regiao{width:10%} table.lc th.c-empresa{width:7%} table.lc th.c-dias_sem_contato{width:6%}
+    table.lc th.c-prox_atividade,table.lc th.c-criado_em{width:7%}
+    table.lc th.c-prospects,table.lc th.c-com_zap,table.lc th.c-cotacao{width:auto}
+    #lista-por_regiao table.lc,#lista-por_estagio table.lc{table-layout:auto;width:auto}
+    #lista-por_estagio{width:fit-content;max-width:100%}
+  }
+</style>
+</head>
+<body>
+<!-- Copiloto de Prospects — v1.0 (nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-pessoas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 6.5a3 3 0 0 1 0 6"/><path d="M15.5 14.2c2.6.3 4.5 2.3 4.5 4.8"/></symbol>
+  <symbol id="i-dinheiro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8.5h4a2 2 0 0 1 0 4H9.5m0 0H13a2 2 0 0 1 0 4H9M11 6v2m0 8v2"/></symbol>
+  <symbol id="i-agenda" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14.5h3M8 17.5h6"/></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 12 19 5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><path d="M12 7a5 5 0 0 1 5 5"/></symbol>
+  <symbol id="i-whats" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm0 1.8a8.2 8.2 0 0 1 6.9 12.6 8.2 8.2 0 0 1-10.4 3l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 0 1 12 3.8Zm-3 3.4c-.2 0-.5 0-.7.4-.3.4-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 5 4.3 2.4 1 2.9.8 3.5.8.5-.1 1.6-.7 1.9-1.4.2-.6.2-1.2.1-1.3l-.5-.3c-.4-.2-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.2 0-.4.1-.5l.4-.4.3-.5c.1-.2 0-.3 0-.5l-.9-2c-.2-.5-.4-.5-.6-.5h-.3Z"/></symbol>
+  <symbol id="i-caixa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v10l8 4 8-4V7Z"/><path d="M4 7l8 4 8-4M12 11v10"/></symbol>
+</svg>
+
+<div class="login" id="login">
+  <form id="login-form" autocomplete="on">
+    <h2>Copiloto de Prospects</h2>
+    <p>Quem ainda não é cliente — e vai ser. <br>Acesso restrito — contém dados de clientes.</p>
+    <input id="login-user" name="username" type="text" placeholder="usuário" autocapitalize="none" autocomplete="username" required>
+    <input id="login-pass" name="password" type="password" placeholder="senha" autocomplete="current-password" required>
+    <button type="submit">Entrar</button>
+    <span class="msg" id="login-msg"></span>
+    <span class="autor-login">por @pessoaco</span>
+  </form>
+</div>
+
+<style id="print-page-style"></style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <h1>Copiloto de Prospects <span>— Caça</span></h1>
+    <div class="meta">
+      <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
+      <span id="hoje">—</span>
+      <div class="statusbar" id="statusbar">
+        <span><span class="dot"></span><span id="status-text">carregando…</span></span>
+        <button class="btn no-print" id="btn-refresh">Atualizar</button>
+        <button class="logout no-print" id="btn-logout">sair</button>
+      </div>
+    </div>
+  </header>
+  <p class="tagline">Quem ainda não é cliente — e vai ser · a bola na frente do jogador</p>
+
+  <div class="topbar">
+    <div class="seg no-print" id="seg">
+      <button data-emp="" class="on">Total</button>
+      <button data-emp="BNZ">BNZ</button>
+      <button data-emp="CIAPLAC">CIAPLAC</button>
+    </div>
+    <select id="filtro-regiao" class="filtro-regiao no-print" title="Mostrar só uma região (pra planejar visita)">
+      <option value="">📍 Todas as regiões</option>
+    </select>
+    <input type="search" id="busca-cliente" class="busca-cliente no-print" placeholder="🔎 Buscar prospect… (separe por vírgula p/ vários)" autocomplete="off">
+  </div>
+
+  <div id="content" hidden>
+
+    <div id="aviso-erro" class="aviso-erro" hidden></div>
+    <div id="filtro-aviso" class="filtro-aviso" hidden></div>
+    <section id="busca-resultado" class="busca-resultado" hidden></section>
+
+    <div class="hero">
+      <div class="hero-main amber" data-goto="leads_qualificados" style="cursor:pointer">
+        <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
+        <span class="k">▸ 1º &nbsp; Leads Qualificados</span>
+        <span class="v" data-k="leads_qualificados">–</span>
+        <span class="sub">Já mostraram interesse · comece por aqui!</span>
+        <span class="lnk">↗ abrir lista</span>
+      </div>
+      <div class="hero-main blue">
+        <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
+        <span class="k">Minha carteira de prospects</span>
+        <span class="v" data-k="total">–</span>
+        <span class="sub">Quem ainda não comprou</span>
+        <span class="breakdown">
+          <b data-k="e_lead" data-goto="leads_qualificados">–</b> leads qualificados &nbsp;·&nbsp;
+          <b data-k="e_carteira" data-goto="carteira">–</b> carteira prospect &nbsp;·&nbsp;
+          <b data-k="e_regionais" data-goto="por_estagio">–</b> nas colunas por DDD/região
+        </span>
+        <div class="regiao-link" data-goto="por_regiao">
+          <span class="sub">Prospects por região · por estágio</span>
+          <span class="lnk">↗ abrir lista</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi green" data-goto="pediram_cotacao" style="cursor:pointer">
+        <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
+        <span class="k">Pediram cotação</span>
+        <span class="v" data-k="pediram_cotacao">–</span>
+        <span class="note">Marcador COTAÇÃO · estão perto de comprar<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
+      </div>
+      <div class="kpi amber" data-goto="novos_mes" style="cursor:pointer">
+        <span class="badge amber"><svg class="ico"><use href="#i-pessoas"/></svg></span>
+        <span class="k">Novos este mês</span>
+        <span class="v" data-k="novos_mes">–</span>
+        <span class="note">Cadastrados no mês · fazer o 1º contato<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
+      </div>
+      <div class="kpi amber" data-goto="sem_contato_60" style="cursor:pointer">
+        <span class="badge amber"><svg class="ico"><use href="#i-whats"/></svg></span>
+        <span class="k">Esfriando</span>
+        <span class="v" data-k="sem_contato_60">–</span>
+        <span class="note">Já conversou, mas faz +60 dias<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
+      </div>
+      <div class="kpi blue" data-goto="nunca_contatados" style="cursor:pointer">
+        <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
+        <span class="k">Nunca contatados</span>
+        <span class="v" data-k="nunca_contatados">–</span>
+        <span class="note">Sem interação nem conversa no Zap<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
+      </div>
+      <div class="kpi blue">
+        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
+        <span class="k">Clientes</span>
+        <span class="note">Carteira de quem já compra<br><span class="link"><a id="link-clientes" href="../">Copiloto de Vendas ↗</a></span></span>
+      </div>
+    </div>
+
+    <section>
+      <p class="band-label"><svg class="ico"><use href="#i-agenda"/></svg> Check-list de Atividades — prospects</p>
+      <p class="band-hint">As atividades de quem <b>ainda não é cliente</b> (as de cliente ficam no Copiloto de Vendas). Dê baixa aqui mesmo: <b>Feito</b>, <b>Editar</b> ou <b>Cancelar</b>.</p>
+      <div class="agenda" data-goto="atividades" style="cursor:pointer">
+        <span class="big" data-k="atividades">–</span>
+        <span class="txt">
+          <strong>Atividades programadas</strong>
+          <span>ligações, visitas com amostra, tabela de preço, apresentação · <span class="over"><span data-k="atividades_atrasadas">–</span> atrasadas</span> &nbsp;·&nbsp; <span class="lnk">↗ abrir lista</span></span>
+        </span>
+      </div>
+    </section>
+
+    <section>
+      <p class="band-label alerta"><svg class="ico"><use href="#i-radar"/></svg> Radar — não deixe escapar</p>
+      <p class="band-hint">Em qualquer lista, o botão <b>＋ Agendar</b> cria a próxima atividade no Odoo pra aquele prospect.</p>
+      <div class="rows">
+        <div class="row a" data-goto="cotacao_sem_passo">
+          <span class="count" data-k="cotacao_sem_passo">–</span>
+          <span class="name">Pediram cotação e estão sem próximo passo<small>nenhuma atividade agendada — agende o retorno antes que esfrie</small><span class="lnk">↗ abrir lista</span></span>
+        </div>
+        <div class="row c" data-goto="sem_zap">
+          <span class="count" data-k="sem_zap">–</span>
+          <span class="name">Sem Zap nem telefone<small>não dá pra chamar — pedir pro escritório completar o cadastro</small><span class="lnk">↗ abrir lista</span></span>
+        </div>
+        <div class="row s" data-goto="sem_cidade">
+          <span class="count" data-k="sem_cidade">–</span>
+          <span class="name">Sem cidade no cadastro<small>ficam fora do filtro por região e da rota de visitas</small><span class="lnk">↗ abrir lista</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="listas">
+      <p class="band-label">Minha Carteira de Prospects — listas dos números acima</p>
+      <div class="listbox" id="listbox"></div>
+    </section>
+
+    <p class="updated">Copiloto de Prospects v1.0 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+  </div>
+
+  <div class="loading" id="loading" hidden>carregando o painel…</div>
+
+</div>
+
+<dialog class="dlg" id="dlg-acao">
+  <form id="dlg-form" method="dialog">
+    <h3 id="dlg-titulo">—</h3>
+    <div class="dlg-desc" id="dlg-desc"></div>
+    <label for="dlg-nota" id="dlg-nota-label">Observação (opcional)</label>
+    <textarea id="dlg-nota" rows="3" maxlength="400" placeholder="Ex.: falei com o comprador, pediu tabela nova…"></textarea>
+    <div id="dlg-edit" hidden>
+      <label for="dlg-resumo">Resumo</label><input type="text" id="dlg-resumo" maxlength="120">
+      <label for="dlg-data">Vencimento</label><input type="date" id="dlg-data">
+    </div>
+    <div id="dlg-prox-box" hidden>
+      <label class="chk"><input type="checkbox" id="dlg-prox"> Agendar a próxima atividade</label>
+      <div id="dlg-prox-campos" hidden>
+        <label for="dlg-tipo">Tipo</label><select id="dlg-tipo"></select>
+        <label for="dlg-prox-resumo">Resumo</label><input type="text" id="dlg-prox-resumo" maxlength="120" placeholder="Ex.: voltar na semana que vem">
+        <label for="dlg-prox-data">Para quando</label><input type="date" id="dlg-prox-data">
+      </div>
+    </div>
+    <div class="dlg-acoes">
+      <button type="button" class="btn" id="dlg-voltar">Voltar</button>
+      <button type="submit" class="btn" id="dlg-ok">Confirmar</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+/* ============================================================================
+   CONFIGURAÇÃO — troque a URL abaixo pela do seu webhook no n8n
+   ex: https://SEU-N8N/webhook/painel-vendedor
+   ============================================================================ */
+const WEBHOOK_URL   = "https://auto.ialink.com.br/webhook/painel-prospects";
+const REFRESH_MIN   = 5;      // re-busca sozinho a cada X minutos
+const LINK_CLIENTES = "../";  // Copiloto de Vendas (clientes) — esta página fica na pasta /prospects/ do mesmo site
+
+/* ---- definição das listas que aparecem embaixo ---- */
+const LISTAS = [
+  {k:"leads_qualificados",  titulo:"Leads Qualificados (coluna LEAD do funil)",                             cor:"amber"},
+  {k:"atividades",          titulo:"Check-list de Atividades — prospects",                                   cor:"amber"},
+  {k:"pediram_cotacao",     titulo:"Pediram cotação (marcador COTAÇÃO)",                                     cor:"green"},
+  {k:"cotacao_sem_passo",   titulo:"Radar · Pediram cotação e estão sem próximo passo",                      cor:"clay"},
+  {k:"novos_mes",           titulo:"Novos este mês — fazer o 1º contato",                                    cor:"amber"},
+  {k:"sem_contato_60",      titulo:"Esfriando · já conversou, mas faz +60 dias",                             cor:"clay"},
+  {k:"sem_zap",             titulo:"Radar · Sem Zap nem telefone (completar cadastro)",                      cor:"clay"},
+  {k:"sem_cidade",          titulo:"Radar · Sem cidade no cadastro",                                         cor:"slate"},
+  {k:"por_regiao",          titulo:"Prospects por Região",                                                   cor:"blue"},
+  {k:"por_estagio",         titulo:"Prospects por Estágio do funil",                                         cor:"blue"},
+  {k:"nunca_contatados",    titulo:"Nunca contatados",                                                       cor:"blue"},
+  {k:"carteira",            titulo:"Carteira completa de prospects (por estágio)",                           cor:"slate"}
+];
+const COLS = {
+  padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  atividades: [["cliente","Prospect"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["cidade","Cidade"],["estagio","Estágio"],["responsavel","Responsável"]],
+  novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["prox_atividade","Próx. atividade"]],
+  sem_contato_60: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  nunca_contatados: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"]],
+  por_regiao: [["regiao","Região"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]],
+  por_estagio:[["estagio","Estágio"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]]
+};
+// listas de prospect (uma linha = uma oportunidade) ganham o botão "＋ Agendar"
+const LISTAS_RESUMO = new Set(["por_regiao","por_estagio","atividades"]);
+
+/* ---- helpers ---- */
+const $  = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const fmtInt = n => (n==null||isNaN(n)) ? "–" : Number(n).toLocaleString("pt-BR");
+const fmtBRL = n => (n==null||isNaN(n)) ? "R$ –" : Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const fmtDateTime = iso => { try{ return new Date(iso).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}catch(e){return iso||"—";} };
+const DATE_COLS = new Set(["ultima_interacao","vencimento","ultima_conversa_zap","prox_atividade","criado_em"]);
+const fmtDateBR = v => { const m = String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? (m[3]+"/"+m[2]+"/"+m[1].slice(2)) : (v || ""); };
+
+function setStatus(state, text){
+  const sb = $("#statusbar");
+  sb.classList.remove("stale","err");
+  if(state) sb.classList.add(state);
+  // enquanto recarrega (ex.: trocou Total/BNZ/CIAPLAC) o resultado da busca fica apagado, pra não parecer atual
+  $("#busca-resultado")?.classList.toggle("atualizando", String(text).startsWith("atualizando"));
+  $("#status-text").textContent = text;
+}
+
+let ULTIMA_DATA = null;
+function fill(data){
+  ULTIMA_DATA = data;
+  $("#updated-at").textContent = fmtDateTime(data.atualizado_em);
+  $("#hoje").textContent = new Date(data.atualizado_em||Date.now()).toLocaleDateString("pt-BR");
+  // o fluxo avisa quando alguma busca no Odoo falhou (o alerta técnico também vai pro WhatsApp)
+  const av = $("#aviso-erro");
+  if(av){
+    const er = data.erros || [];
+    av.hidden = !er.length;
+    av.textContent = er.length ? "⚠ Alguns dados não vieram do Odoo agora — os números podem estar incompletos. Clique em Atualizar daqui a pouco." : "";
+  }
+  TIPOS = data.tipos_atividade || [];
+  montaOpcoesRegiao(data.listas || {});
+  renderListas(data.listas || {});
+}
+
+/* ---- filtro por região (pra planejar visita: "vou pra Campinas, quem está lá?") ---- */
+let regiaoSel = "";
+try { regiaoSel = localStorage.getItem("pp_regiao") || ""; } catch(e){}
+function montaOpcoesRegiao(listas){
+  const sel = $("#filtro-regiao"); if(!sel) return;
+  const regs = (listas.por_regiao || []).filter(r => r.regiao).map(r => r.regiao).sort((a,b) => a.localeCompare(b,"pt-BR"));
+  if(regiaoSel && !regs.includes(regiaoSel)) regs.unshift(regiaoSel);
+  sel.innerHTML = '<option value="">📍 Todas as regiões</option>' +
+    regs.map(r => {
+      const n = ((listas.por_regiao || []).find(x => x.regiao === r) || {}).prospects || 0;
+      return '<option value="'+esc(r)+'"'+(r === regiaoSel ? " selected" : "")+'>'+esc(r)+' ('+n+')</option>';
+    }).join("");
+  sel.classList.toggle("on", !!regiaoSel);
+}
+const temCot = r => /\bCOT(AÇÃO|ACAO)?\b/i.test(r.marcadores || "");
+// recorte das listas pela região escolhida (o resumo "por região" continua inteiro, pra comparar)
+function listasFiltradas(listas){
+  if(!regiaoSel) return listas;
+  const out = {};
+  for(const k of Object.keys(listas)){
+    out[k] = (k === "por_regiao") ? listas[k] : (listas[k] || []).filter(r => r.regiao === regiaoSel);
+  }
+  const c = {};
+  (out.carteira || []).forEach(r => { const e = r.estagio || ""; c[e] = c[e] || {estagio:e, prospects:0, com_zap:0, cotacao:0}; c[e].prospects++; if(r.zap) c[e].com_zap++; if(temCot(r)) c[e].cotacao++; });
+  out.por_estagio = Object.values(c).sort((a,b) => b.prospects - a.prospects);
+  return out;
+}
+
+let ULTIMA_LISTAS = {};   // listas JÁ recortadas pela região (o que está na tela)
+let LISTAS_BRUTAS = {};   // como vieram do n8n
+const sortState = {};
+const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
+let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
+const NUM_COLS_COPILOTO = new Set(["dias_sem_contato","prospects","com_zap","cotacao"]);
+function ordenarLinhasCopiloto(rows, col, dir){
+  return [...rows].sort((a,b) => {
+    if(NUM_COLS_COPILOTO.has(col)){
+      return ((a[col] ?? -Infinity) - (b[col] ?? -Infinity)) * dir;
+    }
+    return String(a[col] ?? "").localeCompare(String(b[col] ?? ""), "pt-BR") * dir;
+  });
+}
+function renderListas(listas){
+  LISTAS_BRUTAS = listas;
+  const L = listasFiltradas(listas);
+  ULTIMA_LISTAS = L;
+  // números de cima saem das próprias listas: assim batem com a região escolhida
+  const n = k => (L[k] || []).length;
+  const cart = L.carteira || [];
+  const qLead = cart.filter(r => r.estagio === "LEAD").length;
+  const qCart = cart.filter(r => r.estagio === "Carteira Prospect").length;
+  const map = {
+    total: cart.length, leads_qualificados: n("leads_qualificados"),
+    e_lead: qLead, e_carteira: qCart, e_regionais: cart.length - qLead - qCart,
+    pediram_cotacao: n("pediram_cotacao"), novos_mes: n("novos_mes"), sem_contato_60: n("sem_contato_60"),
+    nunca_contatados: n("nunca_contatados"), cotacao_sem_passo: n("cotacao_sem_passo"), sem_zap: n("sem_zap"), sem_cidade: n("sem_cidade"),
+    atividades: n("atividades"), atividades_atrasadas: (L.atividades || []).filter(a => a.estado === "atrasada").length
+  };
+  for(const [k,v] of Object.entries(map)){
+    $$('[data-k="'+k+'"]').forEach(el => el.textContent = fmtInt(v));
+  }
+  const fa = $("#filtro-aviso");
+  if(fa){
+    fa.hidden = !regiaoSel;
+    fa.innerHTML = regiaoSel ? '📍 Mostrando só a região <b>'+esc(regiaoSel)+'</b> — '+cart.length+' prospects, '+n("atividades")+' atividades. <button class="btn no-print" id="filtro-limpar">✕ ver todas</button>' : "";
+  }
+  syncPrintPageStyle();
+  const box = $("#listbox"); box.innerHTML = "";
+  for(const {k,titulo,cor} of LISTAS){
+    let rows = L[k] || [];
+    const st = sortState[k];
+    if(st && st.col) rows = ordenarLinhasCopiloto(rows, st.col, st.dir);
+    box.appendChild(montarCard(k, titulo, cor, rows, "lista-", true));
+  }
+  renderBusca();
+}
+
+/* monta o card de uma lista (usado nas listas de baixo e no resultado da busca por cliente) */
+function montarCard(k, titulo, cor, rows, pre, sortavel){
+  {
+    // Check-list de Atividades ganha caixinha de seleção + botões de ação (só quando o backend manda o id da atividade)
+    const comAcoes = k === "atividades" && rows.some(r => r.id);
+    let cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || COLS.padrao);
+    // no Total, mostra de qual empresa é cada linha (o mesmo prospect pode estar nas duas)
+    if(!empresa && k !== "por_regiao" && k !== "por_estagio"){
+      const i = cols.findIndex(c => c[0] === "cliente");
+      cols = cols.slice(0, i+1).concat([["empresa","Empresa"]], cols.slice(i+1));
+    }
+    if(!LISTAS_RESUMO.has(k)) cols = cols.concat([["_agendar",""]]);
+    const st = sortavel ? sortState[k] : null;
+    const card = document.createElement("div"); card.className = "listcard"; card.id = pre+k;
+    const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
+    h.innerHTML = '<span>'+titulo+'</span><span class="n">'+rows.length+'</span>';
+    card.appendChild(h);
+    if(comAcoes && sortavel){
+      const bar = document.createElement("div"); bar.className = "lc-bar no-print";
+      bar.innerHTML = '<span>Selecionadas: <b id="sel-n">'+selAtiv.size+'</b></span>'+
+        '<button class="btn-ac ok" data-ac="feito-sel">✔ Feito nas selecionadas</button>'+
+        '<button class="btn-ac cancel" data-ac="cancelar-sel">✕ Cancelar selecionadas</button>';
+      card.appendChild(bar);
+    }
+    if(!rows.length){
+      const e = document.createElement("div"); e.className="lc-empty"; e.textContent="— nada nesta lista agora —";
+      card.appendChild(e);
+    } else {
+      const wrap = document.createElement("div"); wrap.className="lc-wrap";
+      const t = document.createElement("table"); t.className="lc t-"+k;
+      t.innerHTML = "<thead><tr>"+cols.map(c=>{
+        const active = st && st.col===c[0];
+        const arrow = active ? (st.dir===1?"▲":"▼") : "⇅";
+        const marc = c[0]==="marcadores" ? " col-marc" : "";
+        if(c[0]==="_sel") return "<th class=\"c-_sel\">"+(sortavel?'<input type="checkbox" class="sel-todas" title="selecionar todas">':"")+"</th>";
+        if(!sortavel || c[0][0]==="_") return "<th class=\"c-"+c[0]+marc+"\">"+c[1]+"</th>";
+        return "<th class=\"sortable c-"+c[0]+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
+      }).join("")+"</tr></thead>";
+      const tb = document.createElement("tbody");
+      // monta o HTML todo e grava uma vez só (a carteira tem 600+ linhas; += linha a linha travava o celular)
+      let html = "";
+      for(const r of rows){
+        html += "<tr>"+cols.map(c=>{
+          let v = r[c[0]] ?? "";
+          if(DATE_COLS.has(c[0])) v = fmtDateBR(v);
+          if(c[0]==="dias_sem_contato") v = (v===""||v==null) ? "–" : v+"d";
+          if(c[0]==="empresa") v = v === "BNZ METAIS" ? "BNZ" : v;
+          if(c[0]==="_agendar") v = r.lead ? '<button class="btn-ac" data-ac="agendar" data-lead="'+r.lead+'">＋ Agendar</button>' : "";
+          if(c[0]==="estagio" && !v) v = "–";
+          if(typeof v === "string" && !/^</.test(v)) v = esc(v);
+          if(c[0]==="zap" && /^https?:\/\//.test(v)){
+            const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
+            v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
+          }
+          if(c[0]==="regiao" && !v && k==="por_regiao") v = "(sem região)";
+          if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
+          if(c[0]==="_acoes") v = r.id
+            ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'">✎ Editar</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'">✕ Cancelar</button>'
+            : "";
+          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+"\">"+v+"</td>";
+        }).join("")+"</tr>";
+      }
+      if(k==="por_regiao" || k==="por_estagio"){
+        // linha de total: a soma tem que bater com o número grande da carteira de prospects
+        const soma = c => rows.reduce((s,r)=> s + (Number(r[c])||0), 0);
+        html += '<tr class="tot">'+cols.map(c => '<td class="c-'+c[0]+'">'+((c[0]==="regiao"||c[0]==="estagio") ? "Total" : soma(c[0]))+'</td>').join("")+'</tr>';
+      }
+      tb.innerHTML = html;
+      t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
+    }
+    return card;
+  }
+}
+
+/* ---- busca por cliente: mostra TODAS as listas em que o cliente aparece ---- */
+let buscaCliente = "";
+const semAcento = s => String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+// separado por vírgula = mais de um cliente na mesma busca
+const termosBusca = txt => String(txt||"").split(",").map(semAcento).map(t=>t.trim()).filter(t=>t.length>=2);
+function renderBusca(){
+  const box = $("#busca-resultado"); if(!box) return;
+  const termos = termosBusca(buscaCliente);
+  if(!termos.length){ box.hidden = true; box.innerHTML = ""; return; }
+  const casa = r => { const alvo = semAcento((r.cliente||"")+" "+(r.fantasia||"")); return termos.some(t => alvo.includes(t)); };
+  const achados = [];
+  for(const {k,titulo,cor} of LISTAS){
+    if(k==="por_regiao" || k==="por_estagio") continue;
+    const rows = (ULTIMA_LISTAS[k]||[]).filter(casa);
+    if(rows.length) achados.push({k,titulo,cor,rows});
+  }
+  box.hidden = false; box.innerHTML = "";
+  const h = document.createElement("div"); h.className = "busca-head";
+  const nomes = buscaCliente.split(",").map(s=>s.trim()).filter(Boolean).join(", ");
+  h.innerHTML = '<b>Onde aparece: '+nomes.replace(/</g,"&lt;")+'</b> <span class="busca-sub">'+
+    (achados.length ? achados.length+(achados.length===1?" lista":" listas") : "nenhuma lista")+
+    '</span> <button class="btn no-print" id="busca-limpar">✕ limpar</button>';
+  box.appendChild(h);
+  if(!achados.length){
+    const e = document.createElement("div"); e.className = "lc-empty";
+    e.textContent = "Nenhum prospect encontrado com esse nome" + (regiaoSel ? " na região " + regiaoSel + " (tire o filtro de região pra procurar em todas)" : "") + ". Quem já é cliente fica no Copiloto de Vendas; quem tem marcador “não fazer” não aparece.";
+    box.appendChild(e);
+  } else {
+    const lb = document.createElement("div"); lb.className = "listbox";
+    for(const a of achados) lb.appendChild(montarCard(a.k, a.titulo, a.cor, a.rows, "busca-", false));
+    box.appendChild(lb);
+  }
+  $("#busca-limpar")?.addEventListener("click", ()=>{ buscaCliente = ""; const i = $("#busca-cliente"); if(i) i.value = ""; renderBusca(); });
+}
+
+/* ---- ações nas atividades: Feito / Editar / Cancelar (+ agendar a próxima) ---- */
+// o fluxo de ações é outro webhook do n8n (mesmo servidor, mesmo login do Copiloto)
+const WEBHOOK_ACAO = WEBHOOK_URL.replace(/\/[^\/?]*$/, "/painel-vendedor-acao");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let acaoAtual = null;
+function toast(msg, erro){
+  const t = document.createElement("div"); t.className = "toast" + (erro ? " erro" : ""); t.textContent = msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(), erro ? 6000 : 3500);
+}
+const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id));
+function atualizaSel(){ $$("#sel-n").forEach(n => n.textContent = selAtiv.size); }
+function abrirDialogo(acao, ids){
+  const acts = ids.map(atividadePorId).filter(Boolean);
+  if(!acts.length){ toast("Não achei essa atividade — atualize a página.", true); return; }
+  acaoAtual = {acao, ids: acts.map(a => a.id), acts};
+  $("#dlg-nota").hidden = false; $("#dlg-nota-label").hidden = false; $("#dlg-prox").parentElement.hidden = false;
+  const plural = acts.length > 1 ? "s" : "";
+  $("#dlg-titulo").textContent = acao === "feito" ? "Concluir atividade"+plural : (acao === "editar" ? "Editar atividade" : "Cancelar atividade"+plural);
+  $("#dlg-desc").innerHTML = acts.slice(0,5).map(a => "<b>"+esc(a.cliente)+"</b> — "+esc(a.tipo)+(a.resumo ? " · "+esc(a.resumo) : "")).join("<br>")
+    + (acts.length > 5 ? "<br>… e mais "+(acts.length-5) : "");
+  $("#dlg-nota").value = "";
+  $("#dlg-nota-label").textContent = acao === "cancelar" ? "Motivo (opcional)" : "Observação (opcional)";
+  $("#dlg-edit").hidden = acao !== "editar";
+  if(acao === "editar"){ $("#dlg-resumo").value = acts[0].resumo || ""; $("#dlg-data").value = acts[0].vencimento || ""; }
+  const mostraProx = acao === "feito" && acts.length === 1 && TIPOS.length > 0;
+  $("#dlg-prox-box").hidden = !mostraProx; $("#dlg-prox").checked = false; $("#dlg-prox-campos").hidden = true;
+  if(mostraProx){
+    $("#dlg-tipo").innerHTML = TIPOS.map(t => '<option value="'+t.id+'"'+(t.id === acts[0].tipo_id ? " selected" : "")+'>'+esc(t.nome)+'</option>').join("");
+    $("#dlg-prox-resumo").value = ""; $("#dlg-prox-data").value = "";
+  }
+  $("#dlg-ok").textContent = acao === "cancelar" ? "Cancelar atividade" : (acao === "editar" ? "Salvar" : "Confirmar");
+  $("#dlg-acao").showModal();
+}
+/* "＋ Agendar": cria uma atividade nova na oportunidade do prospect (ação "nova" do mesmo fluxo de ações) */
+const prospectPorLead = lead => {
+  for(const k of ["carteira","leads_qualificados","pediram_cotacao","novos_mes","sem_contato_60","nunca_contatados","sem_zap","sem_cidade","cotacao_sem_passo"]){
+    const r = (LISTAS_BRUTAS[k] || []).find(x => String(x.lead) === String(lead)); if(r) return r;
+  }
+  return null;
+};
+function abrirAgendar(lead){
+  const r = prospectPorLead(lead);
+  if(!r){ toast("Não achei esse prospect — atualize a página.", true); return; }
+  if(!TIPOS.length){ toast("Tipos de atividade não carregaram — clique em Atualizar.", true); return; }
+  acaoAtual = {acao: "agendar", lead: r.lead, ids: [], acts: []};
+  $("#dlg-titulo").textContent = "Agendar atividade";
+  $("#dlg-desc").innerHTML = "<b>"+esc(r.cliente)+"</b>"+(r.cidade ? " — "+esc(r.cidade) : "")+(r.prox_atividade ? "<br>já tem atividade para "+fmtDateBR(r.prox_atividade) : "");
+  $("#dlg-nota").hidden = true; $("#dlg-nota-label").hidden = true; $("#dlg-edit").hidden = true;
+  $("#dlg-prox-box").hidden = false; $("#dlg-prox").checked = true; $("#dlg-prox").parentElement.hidden = true; $("#dlg-prox-campos").hidden = false;
+  const padrao = (TIPOS.find(t => /liga/i.test(t.nome)) || TIPOS[0]).id;
+  $("#dlg-tipo").innerHTML = TIPOS.map(t => '<option value="'+t.id+'"'+(t.id === padrao ? " selected" : "")+'>'+esc(t.nome)+'</option>').join("");
+  $("#dlg-prox-resumo").value = ""; $("#dlg-prox-data").value = "";
+  $("#dlg-ok").textContent = "Agendar";
+  $("#dlg-acao").showModal();
+}
+async function chamarAcao(p){
+  if(WEBHOOK_URL.startsWith("COLE_AQUI")) return {ok:true};
+  if(!creds || !creds.user) return {ok:false, erro:"entre de novo no Copiloto"};
+  const q = new URLSearchParams(Object.assign({user: creds.user, pass: creds.pass, t: Date.now()}, p));
+  const ctrl = new AbortController(); const to = setTimeout(()=>ctrl.abort(), 45000);
+  try{
+    const r = await fetch(WEBHOOK_ACAO + "?" + q.toString(), {cache:"no-store", signal: ctrl.signal});
+    clearTimeout(to);
+    if(!r.ok) return {ok:false, erro:"o servidor respondeu "+r.status+" — o fluxo de ações está ativo no n8n?"};
+    return await r.json();
+  }catch(err){
+    clearTimeout(to);
+    return {ok:false, erro: err.name === "AbortError" ? "demorou demais — confira no Odoo antes de repetir" : "sem conexão"};
+  }
+}
+function posAcao(A, p, r){
+  if(A.acao === "agendar"){
+    toast(r.aviso || "Atividade agendada ✔");
+    setTimeout(load, 1500);
+    return;
+  }
+  if(A.acao === "feito" || A.acao === "cancelar"){
+    const set = new Set(A.ids.map(String));
+    LISTAS_BRUTAS.atividades = (LISTAS_BRUTAS.atividades || []).filter(a => !set.has(String(a.id)));
+    A.ids.forEach(i => selAtiv.delete(String(i)));
+  } else if(A.acao === "editar"){
+    const a = atividadePorId(A.ids[0]);
+    if(a){ if(p.resumo) a.resumo = p.resumo; if(p.data) a.vencimento = p.data; }
+  }
+  renderListas(LISTAS_BRUTAS);
+  toast(r.aviso || (A.acao === "feito" ? "Atividade concluída ✔" : A.acao === "cancelar" ? "Atividade cancelada" : "Atividade atualizada"));
+  setTimeout(load, 1500);   // puxa os números certos do Odoo
+}
+$("#dlg-prox").addEventListener("change", e => { $("#dlg-prox-campos").hidden = !e.target.checked; });
+$("#dlg-voltar").addEventListener("click", () => $("#dlg-acao").close());
+$("#dlg-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const A = acaoAtual; if(!A) return;
+  let p = {acao: A.acao, ids: A.ids.join(","), nota: $("#dlg-nota").value.trim()};
+  if(A.acao === "agendar"){
+    const data = $("#dlg-prox-data").value;
+    if(!data){ toast("Escolha para quando é a atividade.", true); return; }
+    p = {acao: "nova", lead: A.lead, p_tipo: $("#dlg-tipo").value, p_data: data,
+         p_resumo: $("#dlg-prox-resumo").value.trim() || $("#dlg-tipo").selectedOptions[0].textContent};
+  }
+  if(A.acao === "editar"){ p.resumo = $("#dlg-resumo").value.trim(); p.data = $("#dlg-data").value; }
+  if(A.acao === "feito" && $("#dlg-prox").checked){
+    const data = $("#dlg-prox-data").value;
+    if(!data){ toast("Escolha para quando é a próxima atividade.", true); return; }
+    p.p_tipo = $("#dlg-tipo").value; p.p_data = data;
+    p.p_resumo = $("#dlg-prox-resumo").value.trim() || $("#dlg-tipo").selectedOptions[0].textContent;
+  }
+  $("#dlg-ok").disabled = true;
+  const r = await chamarAcao(p);
+  $("#dlg-ok").disabled = false;
+  if(r && r.ok){ $("#dlg-acao").close(); posAcao(A, p, r); }
+  else toast((r && r.erro) || "Não consegui concluir.", true);
+});
+document.addEventListener("change", e => {
+  const c = e.target;
+  if(c.classList && c.classList.contains("sel-ativ")){ c.checked ? selAtiv.add(c.dataset.id) : selAtiv.delete(c.dataset.id); atualizaSel(); }
+  else if(c.classList && c.classList.contains("sel-todas")){
+    $$("#lista-atividades .sel-ativ").forEach(x => { x.checked = c.checked; c.checked ? selAtiv.add(x.dataset.id) : selAtiv.delete(x.dataset.id); });
+    atualizaSel();
+  }
+});
+
+/* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
+document.addEventListener("click", e=>{
+  const bt = e.target.closest("button[data-ac]");
+  if(bt){
+    const ac = bt.dataset.ac;
+    if(ac === "agendar"){ abrirAgendar(bt.dataset.lead); return; }
+    if(ac === "feito-sel" || ac === "cancelar-sel"){
+      const ids = [...selAtiv];
+      if(!ids.length){ toast("Marque pelo menos uma atividade.", true); return; }
+      abrirDialogo(ac === "feito-sel" ? "feito" : "cancelar", ids);
+    } else abrirDialogo(ac, [bt.dataset.id]);
+    return;
+  }
+  const th = e.target.closest("table.lc th[data-col]");
+  if(th){
+    const card = th.closest(".listcard");
+    const k = card.id.replace(/^lista-/, "");
+    const col = th.dataset.col;
+    const st = sortState[k] || {col:null, dir:1};
+    if(st.col === col) st.dir *= -1; else { st.col = col; st.dir = 1; }
+    sortState[k] = st;
+    renderListas(LISTAS_BRUTAS);
+    return;
+  }
+  const g = e.target.closest("[data-goto]");
+  if(g){ const el = $("#lista-"+g.dataset.goto); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); }
+});
+
+const DEMO = (function(){
+  const p = (lead, cliente, cidade, regiao, estagio, extra) => Object.assign({lead, empresa:"BNZ METAIS", cliente, fantasia:"", zap:"https://wa.me/5511999990000", cidade, uf:regiao.slice(0,2), regiao, estagio, marcadores:"DRY PROSPECT AÇO", ultima_interacao:"", ultima_conversa_zap:"", dias_sem_contato:null, prox_atividade:"", criado_em:"2026-09-01"}, extra||{});
+  const carteira = [
+    p(1,"(exemplo) GESSO CAMPINAS","CAMPINAS","SP - Campinas","LEAD",{marcadores:"DRY LEAD AÇO QUALIFICADO, COTAÇÃO",ultima_interacao:"2026-06-01",dias_sem_contato:123}),
+    p(2,"(exemplo) DRYWALL ZONA LESTE","SÃO PAULO","SP - São Paulo","Prospect DDD 11"),
+    p(3,"(exemplo) FORROS RIO","DUQUE DE CAXIAS","RJ - Baixada Fluminense","Prospect RJ",{empresa:"CIAPLAC",marcadores:"PVC PROSPECT RJ",zap:""})
+  ];
+  return {
+    atualizado_em: new Date().toISOString(), erros: [],
+    tipos_atividade: [{id:2,nome:"Ligação (Recorrente Semanal)"},{id:15,nome:"Visita com Amostra"}],
+    listas: {
+      carteira, leads_qualificados:[carteira[0]], pediram_cotacao:[carteira[0]], cotacao_sem_passo:[carteira[0]],
+      novos_mes:[], sem_contato_60:[carteira[0]], nunca_contatados:[carteira[1],carteira[2]], sem_zap:[carteira[2]], sem_cidade:[],
+      por_regiao:[{regiao:"SP - Campinas",prospects:1,com_zap:1,cotacao:1},{regiao:"SP - São Paulo",prospects:1,com_zap:1,cotacao:0},{regiao:"RJ - Baixada Fluminense",prospects:1,com_zap:0,cotacao:0}],
+      por_estagio:[{estagio:"LEAD",prospects:1,com_zap:1,cotacao:1},{estagio:"Prospect DDD 11",prospects:1,com_zap:1,cotacao:0},{estagio:"Prospect RJ",prospects:1,com_zap:0,cotacao:0}],
+      atividades:[{id:1,lead:2,tipo_id:15,empresa:"BNZ METAIS",cliente:"(exemplo) DRYWALL ZONA LESTE",tipo:"Visita com Amostra",resumo:"levar amostra",vencimento:"2026-09-20",estado:"atrasada",responsavel:"Daniel Medeiros",estagio:"Prospect DDD 11",cidade:"SÃO PAULO",regiao:"SP - São Paulo"}]
+    }
+  };
+})();
+
+/* ---- empresa selecionada (Total / BNZ / CIAPLAC) ---- */
+let empresa = "";
+try { empresa = localStorage.getItem("pv_empresa") || ""; } catch(e){}
+function applyEmpresaUI(){
+  $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
+  const chip = $("#chip-co");
+  chip.textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
+  chip.classList.toggle("bnz", empresa === "BNZ");
+  chip.classList.toggle("ciaplac", empresa === "CIAPLAC");
+  document.body.setAttribute("data-empresa", empresa || "");
+  syncPrintPageStyle();
+}
+/* injeta o texto (empresa + data) direto na margem nativa da página impressa —
+   position:fixed não repete de forma confiável no motor de PDF do Chrome, mas @page sim */
+function syncPrintPageStyle(){
+  const chipTxt = ($("#chip-co")?.textContent || "").trim();
+  const dataTxt = $("#hoje")?.textContent || "";
+  const texto = ("Copiloto de Prospects — Caça · " + (regiaoSel ? regiaoSel + " · " : "") + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
+  const rodape = ($(".updated")?.textContent || "").trim().replace(/"/g,'\\"');
+  const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : "#555");
+  const el = $("#print-page-style");
+  // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
+  if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
+}
+window.addEventListener("beforeprint", syncPrintPageStyle);
+// Abrir o diálogo de impressão (ou "Salvar como PDF") dispara visibilitychange no Chrome, que sem essa
+// trava recarregava os dados NA HORA do print — às vezes capturando o PDF bem no meio do "atualizando…"
+// em vez do "ao vivo". imprimindo trava esse recarregamento enquanto o diálogo está aberto.
+let imprimindo = false;
+window.addEventListener("beforeprint", ()=>{ imprimindo = true; });
+window.addEventListener("afterprint", ()=>{ imprimindo = false; });
+function setEmpresa(v){
+  empresa = v || "";
+  try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
+  applyEmpresaUI();
+  load();
+}
+
+/* ---- login ---- */
+let creds = null;
+try { creds = JSON.parse(localStorage.getItem("pv_auth") || "null"); } catch(e){}
+let tentando = false;
+
+function showLogin(msg){
+  $("#login").hidden = false;
+  $("#content").hidden = true;
+  $("#loading").hidden = true;
+  $("#login-msg").textContent = msg || "";
+  const u = $("#login-user"); if(u && !u.value) u.focus();
+}
+function logout(){
+  try { localStorage.removeItem("pv_auth"); } catch(e){}
+  creds = null;
+  $("#login-pass").value = "";
+  showLogin("");
+}
+
+async function load(){
+  if(WEBHOOK_URL.startsWith("COLE_AQUI")){
+    setStatus("stale","DEMONSTRAÇÃO — configure WEBHOOK_URL no arquivo pra ligar no Odoo");
+    fill(DEMO); $("#loading").hidden = true; $("#content").hidden = false; return;
+  }
+  if(!creds || !creds.user){ showLogin(); return; }
+  $("#login").hidden = true;
+  if($("#content").hidden){ $("#loading").hidden = false; $("#loading").textContent = "carregando o painel… (pode levar até 30s)"; }
+  const ctrl = new AbortController();
+  const to = setTimeout(()=>ctrl.abort(), 45000);
+  try{
+    setStatus(null,"atualizando…");
+    let url = WEBHOOK_URL + (WEBHOOK_URL.includes("?") ? "&" : "?")
+      + "user=" + encodeURIComponent(creds.user) + "&pass=" + encodeURIComponent(creds.pass);
+    if(empresa) url += "&empresa=" + empresa;
+    const r = await fetch(url, {cache:"no-store", signal:ctrl.signal});
+    clearTimeout(to);
+    if(r.status === 401 || r.status === 403){ logout(); showLogin("Usuário ou senha errado."); return; }
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const data = await r.json();
+    if(data && data.erro){ logout(); showLogin("Usuário ou senha errado."); return; }
+    // mostra o painel PRIMEIRO — se fill() quebrar, pelo menos aparece
+    $("#login").hidden = true;
+    $("#loading").hidden = true;
+    $("#content").hidden = false;
+    try { fill(data); }
+    catch(e){ setStatus("err","erro ao desenhar: " + (e && e.message || e)); }
+    const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
+    // data e empresa já aparecem ao lado (selo + data do cabeçalho): aqui só a hora da atualização
+    const hora = new Date(data.atualizado_em||Date.now()).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+    setStatus(age>20 ? "stale" : null, "ao vivo · " + hora);
+  }catch(err){
+    clearTimeout(to);
+    const demorou = err.name === "AbortError";
+    // fetch() sozinho (sem resposta nenhuma do servidor) lança TypeError quando não tem internet,
+    // DNS falha, etc — diferente de um erro HTTP (que já tem resposta e cai no throw lá em cima.
+    // Isso evita o bug de dizer "senha errada" quando o problema real é falta de conexão.
+    const semNet = err instanceof TypeError;
+    if($("#content").hidden){
+      $("#loading").hidden = false;
+      $("#loading").innerHTML = (semNet ? "📡 Sem internet. Este painel é só online — verifique sua conexão." :
+        demorou ? "Demorou demais pra responder." : "Não consegui carregar.") +
+        '<br><button class="btn" style="margin-top:10px" onclick="load()">Tentar de novo</button>';
+      setStatus("err", semNet ? "sem internet" : demorou ? "sem resposta (timeout)" : "erro ao carregar");
+      return;
+    }
+    setStatus("err", semNet ? "📡 sem internet — este painel é só online" : "erro ao atualizar — tentando de novo em 1 min");
+    setTimeout(load, 60000);
+  }
+}
+
+$("#login-form").addEventListener("submit", e => {
+  e.preventDefault();
+  creds = { user: $("#login-user").value.trim(), pass: $("#login-pass").value };
+  try { localStorage.setItem("pv_auth", JSON.stringify(creds)); } catch(e){}
+  $("#login").hidden = true;
+  $("#loading").hidden = false;
+  $("#loading").textContent = "entrando…";
+  load();
+});
+
+if(LINK_CLIENTES) { $("#link-clientes").href = LINK_CLIENTES; }
+$("#filtro-regiao").addEventListener("change", e => {
+  regiaoSel = e.target.value || "";
+  try { localStorage.setItem("pp_regiao", regiaoSel); } catch(err){}
+  e.target.classList.toggle("on", !!regiaoSel);
+  selAtiv.clear();
+  renderListas(LISTAS_BRUTAS);
+});
+document.addEventListener("click", e => {
+  if(!e.target.closest("#filtro-limpar")) return;
+  regiaoSel = ""; try { localStorage.setItem("pp_regiao", ""); } catch(err){}
+  const s = $("#filtro-regiao"); if(s){ s.value = ""; s.classList.remove("on"); }
+  selAtiv.clear();
+  renderListas(LISTAS_BRUTAS);
+});
+$("#busca-cliente").addEventListener("input", e => { buscaCliente = e.target.value; renderBusca(); });
+$("#btn-refresh").addEventListener("click", load);
+$("#btn-logout").addEventListener("click", logout);
+$("#seg").addEventListener("click", e => { const b = e.target.closest("button[data-emp]"); if(b) setEmpresa(b.dataset.emp); });
+applyEmpresaUI();
+
+if(creds && creds.user){ load(); } else { showLogin(); }
+setInterval(()=>{ if(creds && creds.user) load(); }, REFRESH_MIN*60000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && !imprimindo && creds && creds.user) load(); });
+</script>
+</body>
+</html>
