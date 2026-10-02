@@ -100,7 +100,13 @@
   .band-hint b{color:var(--ink);font-weight:600}
 
   /* hero */
-  .hero{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hero{margin-top:12px;display:grid;grid-template-columns:.8fr 1.3fr 1fr;gap:10px}
+  .hero-main.plain{background:var(--surface);border-color:var(--hair);border-top:3px solid var(--blue-edge)}
+  .hero-main.plain .k{color:var(--blue-ink)}
+  .hero-main.plain .v{color:var(--blue-ink);font-size:clamp(2rem,6vw,2.6rem)}
+  .hero-main .valor-ped{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.15rem;color:var(--ink);letter-spacing:-.02em;margin:2px 0 4px}
+  .hero-main .nota-pecas{display:block;margin-top:6px;font-size:.78rem;color:var(--ink-soft)}
+  .hero-main .nota-pecas b.pecas{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.05rem;color:var(--ink);letter-spacing:-.02em;margin-right:6px}
   .hero-main{border:1px solid;border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
   .hero-main.blue{background:var(--blue-bg);border-color:var(--blue-edge)}
   .hero-main.amber{background:var(--amber-bg);border-color:var(--amber-edge)}
@@ -114,7 +120,7 @@
   .hero-main .breakdown b{color:var(--ink);font-family:"IBM Plex Mono",monospace;font-weight:600}
   .hero-main .breakdown .off{color:var(--ink-faint)}
 
-  .kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:10px}
+  .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
   .kpi{background:var(--surface);border:1px solid var(--hair);border-top:3px solid var(--slate-edge);border-radius:var(--radius);padding:11px 12px;display:flex;flex-direction:column;gap:3px}
   .kpi .k{font-family:"Archivo",sans-serif;font-weight:600;font-size:.63rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
   .kpi .v{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.5rem;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
@@ -246,8 +252,8 @@
     .chip-co.bnz{background:var(--bnz-edge);border-color:var(--bnz-edge);color:#fff}
     .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
     .hero-main{padding:12px 14px}
-    .hero{grid-template-columns:1fr 1fr!important}
-    .kpi-strip{grid-template-columns:repeat(5,1fr)!important}
+    .hero{grid-template-columns:.8fr 1.3fr 1fr!important}
+    .kpi-strip{grid-template-columns:repeat(4,1fr)!important}
     .rows{grid-template-columns:1fr 1fr 1fr!important}
     .hero,.hero-main,.kpi,.agenda,.row{break-inside:avoid}
     .listcard{break-inside:auto}
@@ -413,6 +419,17 @@
           <span class="lnk">↗ abrir lista</span>
         </div>
       </div>
+      <div class="hero-main plain" data-goto="pedidos_sem_entrega" style="cursor:pointer">
+        <span class="badge blue"><svg class="ico"><use href="#i-caixa"/></svg></span>
+        <span class="k">Pedidos a entregar</span>
+        <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
+        <span class="valor-ped" data-k="pedidos_valor" hidden>–</span>
+        <span class="sub">Confirmados, ainda sem data de entrega</span>
+        <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
+        <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
+        <span class="nota-pecas" id="ped-unid" hidden><b class="pecas" data-k="pedidos_unidades">–</b> un. de Acabamento/Acessório a entregar</span>
+        <span class="lnk">↗ abrir lista</span>
+      </div>
     </div>
 
     <div class="kpi-strip">
@@ -436,15 +453,6 @@
         <span class="k">Principais Clientes</span>
         <span class="v" data-k="curva_a_qtd">–</span>
         <span class="note">Curva A · top 20% dos clientes (12m)<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
-      </div>
-      <div class="kpi blue" data-goto="pedidos_sem_entrega" style="cursor:pointer">
-        <span class="badge blue"><svg class="ico"><use href="#i-caixa"/></svg></span>
-        <span class="k">Pedidos a Entregar</span>
-        <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
-        <span class="note">Confirmados, ainda sem data de entrega<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
-        <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
-        <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
-        <span class="nota-pecas" id="ped-unid" hidden><b class="pecas" data-k="pedidos_unidades">–</b> un. de Acabamento/Acessório a entregar</span>
       </div>
       <div class="kpi blue">
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
@@ -645,6 +653,8 @@ function fill(data){
   if(pedPecas) pedPecas.hidden = !temQtdPed || empresa === "CIAPLAC";
   if(pedMetros) pedMetros.hidden = !temQtdPed || empresa === "BNZ";
   if(pedUnid) pedUnid.hidden = !temQtdPed || empresa === "BNZ";
+  const pedValor = document.querySelector('[data-k="pedidos_valor"]');
+  if(pedValor){ pedValor.hidden = kpi.pedidos_valor == null; if(kpi.pedidos_valor != null) pedValor.textContent = fmtBRL(kpi.pedidos_valor); }
   if(temQtdPed){
     for(const [k,v] of [["pedidos_pecas",kpi.pedidos_pecas],["pedidos_metros",kpi.pedidos_metros],["pedidos_unidades",kpi.pedidos_unidades]]){
       const el = document.querySelector('[data-k="'+k+'"]'); if(el) el.textContent = fmtInt(v);
