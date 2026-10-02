@@ -139,10 +139,11 @@
 
   /* rows */
   .rows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
-  .row{display:grid;grid-template-columns:52px 1fr;align-items:start;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--hair);border-left-width:3px;background:var(--surface)}
-  .row.a{background:var(--amber-bg);border-left-color:var(--amber-edge)}
-  .row.c{background:var(--clay-bg);border-left-color:var(--clay-edge)}
-  .row.g{background:var(--green-bg);border-left-color:var(--green-edge)}
+  .row{display:grid;grid-template-columns:52px 1fr;align-items:start;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--hair);border-left-width:4px;background:var(--surface)}
+  /* cards de Missões e Radar: fundo branco, só a borda lateral colorida (quem leva tinta é o card de Atividades) */
+  .row.a{border-left-color:var(--amber-edge)}
+  .row.c{border-left-color:var(--clay-edge)}
+  .row.g{border-left-color:var(--green-edge)}
   .row.s{background:var(--surface);border-left-color:var(--slate-edge)}
   .row[data-goto],.kpi[data-goto],.hero-main[data-goto]{cursor:pointer}
   .row[data-goto]:hover,.kpi[data-goto]:hover{filter:brightness(.97)}
@@ -421,15 +422,15 @@
       <p class="band-label missoes"><svg class="ico"><use href="#i-alvo"/></svg> Missões — atividades da inteligência comercial</p>
       <p class="callout">Conta <b>só quem ainda não teve contato feito</b> — é o que <b>o vendedor precisa fazer</b>.</p>
       <div class="rows">
-        <div class="row s" data-goto="contato_preventivo">
+        <div class="row a" data-goto="contato_preventivo">
           <span class="count" data-k="contato_preventivo">–</span>
           <span class="name">Contato Preventivo<small>entrou no período de nova compra — ativar antes do cliente enviar mensagem</small><span class="lnk">↗ abrir lista</span></span>
         </div>
-        <div class="row g" data-goto="recuperacao">
+        <div class="row c" data-goto="recuperacao">
           <span class="count" data-k="recuperacao">–</span>
           <span class="name">Recuperação<small>passou da previsão de recompra — resgatar</small><span class="lnk">↗ abrir lista</span></span>
         </div>
-        <div class="row s" data-goto="em_formacao">
+        <div class="row a" data-goto="em_formacao">
           <span class="count" data-k="em_formacao">–</span>
           <span class="name">Em Formação<small>Ainda sem histórico para calcular o período da recompra. Mantenha contato ativo: fique de olho nesses clientes.</small><span class="lnk">↗ abrir lista</span></span>
         </div>
