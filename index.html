@@ -30,8 +30,8 @@
     --clay-bg:#f8e9e3;  --clay-ink:#93402f;  --clay-edge:#c47e69;
     --blue-bg:#e9f0f3;  --blue-ink:#2b5f73;  --blue-edge:#71a2b3;
     --slate-bg:#f0ede4; --slate-ink:#66604f; --slate-edge:#b2ab99;
-    --bnz-bg:#f7e9da; --bnz-ink:#8a4b23; --bnz-edge:#c98f52;
-    --ciaplac-bg:#e3f0ef; --ciaplac-ink:#1f6f6f; --ciaplac-edge:#4fa39c;
+    --bnz-bg:#e3edf7; --bnz-ink:#1f4e8a; --bnz-edge:#2a78d6;
+    --ciaplac-bg:#fbe9de; --ciaplac-ink:#8a3f1f; --ciaplac-edge:#eb6834;
     --purple-bg:#efe6f7; --purple-ink:#6b3fa0; --purple-edge:#a780c9;
     --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
     --radius:9px;
@@ -43,8 +43,8 @@
     --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
     --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
     --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
-    --bnz-bg:#2a1c0f; --bnz-ink:#e3ab6c; --bnz-edge:#8a5a2c;
-    --ciaplac-bg:#0f2220; --ciaplac-ink:#7cc9c2; --ciaplac-edge:#2f6b64;
+    --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
+    --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
     --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }}
@@ -55,8 +55,8 @@
     --clay-bg:#251710;  --clay-ink:#e2937d;  --clay-edge:#6f4030;
     --blue-bg:#13232a;  --blue-ink:#85b9cb;  --blue-edge:#37606f;
     --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
-    --bnz-bg:#2a1c0f; --bnz-ink:#e3ab6c; --bnz-edge:#8a5a2c;
-    --ciaplac-bg:#0f2220; --ciaplac-ink:#7cc9c2; --ciaplac-edge:#2f6b64;
+    --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
+    --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
     --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }
@@ -72,7 +72,8 @@
   body[data-empresa="CIAPLAC"] .masthead{border-bottom-color:var(--ciaplac-edge)}
   .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:-.01em;margin:0}
   .masthead h1 span{color:var(--ink-soft);font-weight:600}
-  .meta{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--ink-soft)}
+  .meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 10px;font-size:.72rem;color:var(--ink-soft)}
+  .meta .statusbar{margin-left:4px}
   .chip-co{font-family:"Archivo",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.03em;padding:3px 10px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
   .chip-co.bnz{background:var(--bnz-bg);color:var(--bnz-ink);border-color:var(--bnz-edge)}
   .chip-co.ciaplac{background:var(--ciaplac-bg);color:var(--ciaplac-ink);border-color:var(--ciaplac-edge)}
@@ -200,7 +201,16 @@
     :root{--shadow:none}
     body{background:#fff;font-size:10.5px}
     .wrap{max-width:100%;padding:0}
-    .statusbar .btn,.no-print,.login,#loading,.badge,.tagline,.chip-co{display:none!important}
+    .statusbar,.topbar,.no-print,.login,#loading,.badge,.tagline{display:none!important}
+    /* cabeçalho impresso: título em negrito à esquerda; à direita selo colorido da empresa + data */
+    .masthead{align-items:center;border-bottom-width:4px;padding-bottom:6px}
+    .masthead h1{font-size:1.5rem;font-weight:800}
+    .masthead h1 span{color:inherit;font-weight:800}
+    .meta{gap:12px;font-size:1rem;color:#211e18}
+    #hoje{font-weight:700;font-size:1.05rem;color:#211e18}
+    .chip-co{font-size:1.15rem;letter-spacing:.05em;padding:5px 20px;border:2px solid #211e18;border-radius:6px;background:#211e18;color:#fff}
+    .chip-co.bnz{background:var(--bnz-edge);border-color:var(--bnz-edge);color:#fff}
+    .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
     .hero-main{padding:12px 14px}
     .hero{grid-template-columns:1fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(5,1fr)!important}
@@ -215,7 +225,21 @@
     .row{padding:8px 10px}
     .row .count{font-size:1.2rem}
     table.lc{table-layout:fixed;width:100%}
-    table.lc th,table.lc td{padding:3px 7px;font-size:.66rem;white-space:normal;word-break:break-word}
+    table.lc th,table.lc td{padding:3px 4px;font-size:.6rem;white-space:normal;word-break:break-word}
+    table.lc th{font-size:.55rem;letter-spacing:0}
+    table.lc th .arrow{display:none}
+    table.lc td.c-fantasia,table.lc td.c-zap,table.lc td.c-uf{white-space:nowrap}
+    /* larguras por coluna: UF estreita, datas curtas, e o que sobra vai pro nome do Cliente */
+    table.lc th.c-fantasia{width:9%} table.lc th.c-zap{width:11.5%} table.lc th.c-cidade{width:7%}
+    table.lc th.c-uf{width:3.5%} table.lc th.c-marcadores{width:11%} table.lc th.c-estagio{width:7%}
+    table.lc th.c-faturamento{width:9%} table.lc th.c-dias_desde_ultima_compra{width:7%} table.lc th.c-pedido{width:7%}
+    table.lc th.c-ultima_conversa_zap{width:8.5%} table.lc th.c-ultima_interacao{width:9.5%}
+    table.lc th.c-ultimo_pedido,
+    table.lc th.c-entrega_efetiva,table.lc th.c-data_pedido,table.lc th.c-vencimento{width:7.5%}
+    table.lc th.c-tipo{width:12%} table.lc th.c-estado{width:9%} table.lc th.c-responsavel{width:14%}
+    table.lc th.c-ativos,table.lc th.c-inativos{width:22%}
+    #lista-por_regiao table.lc{width:60%;min-width:0}
+    .regiao-link{display:none!important}
     .lc-wrap{overflow:visible}
     .updated{margin-top:8px}
     section#listas{margin-top:14px}
@@ -242,6 +266,9 @@
   .tagline{margin:6px 0 0;font-size:.78rem;color:var(--ink-soft);font-style:italic}
 
   /* ---- legenda / callout ---- */
+  .hero-main .regiao-link{display:block;margin-top:8px;font-size:.74rem;font-weight:600;color:var(--blue-ink);cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
+  #lista-por_regiao table.lc{width:auto;min-width:420px}
+  table.lc td.c-fantasia{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .legenda{display:block;margin-top:6px;font-size:.68rem;color:var(--ink-faint);font-style:normal;line-height:1.4}
   .hero-main .breakdown b[data-goto]{cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
   .callout{
@@ -263,7 +290,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.20 (novo card Pedidos a Entregar, sem data de entrega ainda) -->
+<!-- Copiloto de Vendas — v2.21 (ajustes de impressão/cabeçalho, resumo por região, colunas das listas) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -295,6 +322,11 @@
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
+      <div class="statusbar" id="statusbar">
+        <span><span class="dot"></span><span id="status-text">carregando…</span></span>
+        <button class="btn no-print" id="btn-refresh">Atualizar</button>
+        <button class="logout no-print" id="btn-logout">sair</button>
+      </div>
     </div>
   </header>
   <p class="tagline">Um Guia Comercial Inteligente · a bola na frente do jogador</p>
@@ -304,11 +336,6 @@
       <button data-emp="" class="on">Total</button>
       <button data-emp="BNZ">BNZ</button>
       <button data-emp="CIAPLAC">CIAPLAC</button>
-    </div>
-    <div class="statusbar" id="statusbar">
-      <span><span class="dot"></span><span id="status-text">carregando…</span></span>
-      <button class="btn no-print" id="btn-refresh">Atualizar</button>
-      <button class="logout no-print" id="btn-logout">sair</button>
     </div>
   </div>
 
@@ -326,14 +353,14 @@
         <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
         <span class="k">Minha carteira ativa</span>
         <span class="v" data-k="carteira_ativa">–</span>
-        <span class="sub">é o meu placar — em prospecção tem muito mais pra puxar</span>
+        <span class="sub">Placar de clientes</span>
         <span class="breakdown">
           <b data-k="c_ativos" data-goto="carteira_ativos">–</b> ativos &nbsp;·&nbsp;
           <b data-k="c_negociacao" data-goto="carteira_negociacao">–</b> em negociação &nbsp;·&nbsp;
           <b data-k="c_semmov" data-goto="carteira_semmov">–</b> sem movimentação
           &nbsp;|&nbsp; <span class="off"><b data-k="c_inativos" data-goto="carteira_inativos">–</b> inativos (fora do placar)</span>
-          <span class="legenda">sem movimentação = 30 dias sem cotação nem pedido · inativo = 60 dias · toque num número pra ver a lista</span>
         </span>
+        <span class="regiao-link" data-goto="por_regiao">por região — clique para ver ↗ abrir lista</span>
       </div>
     </div>
 
@@ -359,22 +386,22 @@
         <span class="v" data-k="curva_a_qtd">–</span>
         <span class="note">Curva A · top 20% dos clientes (12m)<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
       </div>
-      <div class="kpi blue">
-        <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
-        <span class="k">Prospecção</span>
-        <span class="note">Buscar novos clientes<br><span class="link"><a id="link-prospeccao" href="#">Ver painel ↗</a></span></span>
-      </div>
       <div class="kpi blue" data-goto="pedidos_sem_entrega" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-caixa"/></svg></span>
         <span class="k">Pedidos a Entregar</span>
         <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
         <span class="note">Confirmados, ainda sem data de entrega<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
       </div>
+      <div class="kpi blue">
+        <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
+        <span class="k">Prospecção</span>
+        <span class="note">Buscar novos clientes<br><span class="link"><a id="link-prospeccao" href="#">Ver painel ↗</a></span></span>
+      </div>
     </div>
 
     <section>
-      <p class="band-label missoes"><svg class="ico"><use href="#i-alvo"/></svg> Missões — disparos da cadência</p>
-      <p class="callout">Conta <b>só quem ainda não teve contato feito</b> — não bate com o placar da carteira <b>de propósito</b>: lá é o total, aqui é o que <b>falta fazer</b>.</p>
+      <p class="band-label missoes"><svg class="ico"><use href="#i-alvo"/></svg> Missões — atividades da inteligência comercial</p>
+      <p class="callout">Conta <b>só quem ainda não teve contato feito</b> — não bate com o placar da carteira <b>de propósito</b>: lá é o total, aqui é o que <b>o vendedor precisa fazer</b>.</p>
       <div class="rows">
         <div class="row s" data-goto="contato_preventivo">
           <span class="count" data-k="contato_preventivo">–</span>
@@ -386,14 +413,14 @@
         </div>
         <div class="row s" data-goto="em_formacao">
           <span class="count" data-k="em_formacao">–</span>
-          <span class="name">Em Formação<small>cliente novo — ainda sem histórico pra calcular quando recompra</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Em Formação<small>Ainda sem histórico para calcular o período da recompra. Mantenha contato ativo: fique de olho nesses clientes.</small><span class="lnk">↗ abrir lista</span></span>
         </div>
       </div>
     </section>
 
     <section>
       <p class="band-label"><svg class="ico"><use href="#i-agenda"/></svg> Check-list de Atividades</p>
-      <p class="band-hint">As atividades programadas e da cadência de relacionamento.</p>
+      <p class="band-hint">As atividades programadas, da inteligência comercial e da cadência de relacionamento.</p>
       <div class="agenda" data-goto="atividades" style="cursor:pointer">
         <span class="big" data-k="atividades">–</span>
         <span class="txt">
@@ -405,7 +432,7 @@
 
     <section>
       <p class="band-label alerta"><svg class="ico"><use href="#i-radar"/></svg> Radar Inteligente — Sinal Amarelo</p>
-      <p class="band-hint"><b>Hora de agir</b> — um contato agora evita a perda.</p>
+      <p class="band-hint"><b>Hora de agir</b> — um contato agora evita a perda. Confira também a coluna <b>Dias desde Última Compra</b> em cada lista.</p>
       <div class="rows">
         <div class="row a" data-goto="conversa_zap">
           <span class="count" data-k="sem_conversa_zap">–</span>
@@ -428,7 +455,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.20 · atualizado em <span id="updated-at">—</span></p>
+    <p class="updated">Copiloto de Vendas v2.21 · atualizado em <span id="updated-at">—</span></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -451,26 +478,28 @@ const LISTAS = [
   {k:"recuperacao",         titulo:"Missão · Recuperação",                                                  cor:"purple"},
   {k:"em_formacao",         titulo:"Missão · Em Formação",                                                  cor:"purple"},
   {k:"atividades",          titulo:"Check-list de Atividades",                                              cor:"amber"},
+  {k:"alvos",               titulo:"Não compraram este mês (Alvos)",                                        cor:"amber"},
   {k:"conversa_zap",        titulo:"Alerta · Sem conversa no Zap +20 dias",                                 cor:"clay"},
   {k:"sem_movimentacao",    titulo:"Alerta · Sem Movimentação +30 dias",                                    cor:"clay"},
   {k:"inativos",            titulo:"Alerta · Inativos",                                                     cor:"clay"},
-  {k:"alvos",               titulo:"Não compraram este mês (Alvos)",                                        cor:"amber"},
   {k:"curva_a",             titulo:"Curva A · Principais Clientes (top 20% por faturamento acumulado nos últimos 12 meses)", cor:"blue"},
   {k:"carteira_ativos",     titulo:"Carteira · Ativos",                                                     cor:"green"},
   {k:"carteira_negociacao", titulo:"Carteira · Em Negociação",                                               cor:"amber"},
   {k:"carteira_semmov",     titulo:"Carteira · Sem Movimentação",                                            cor:"clay"},
   {k:"carteira_inativos",   titulo:"Carteira · Inativos (fora do placar)",                                  cor:"slate"},
+  {k:"por_regiao",          titulo:"Clientes por Região",                                                   cor:"blue"},
   {k:"pedidos_sem_entrega", titulo:"Pedidos a Entregar (sem data de entrega ainda)",                        cor:"blue"}
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["cidade","Cidade"],["uf","UF"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
-  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["faturamento","Faturamento Acum. 12m"]],
+  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["marcadores","Marcadores"]],
-  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
-  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
-  pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["pedido","Pedido"],["data_pedido","Data Emissão"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"]]
+  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
+  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
+  por_regiao: [["regiao","Região"],["ativos","Clientes ativos (placar)"],["inativos","Inativos"]],
+  pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["data_pedido","Data Emissão"],["pedido","Pedido"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.carteira;
 COLS.contato_preventivo = COLS.recuperacao = COLS.em_formacao = COLS.missao;
@@ -536,7 +565,7 @@ function fill(data){
 
 let ULTIMA_LISTAS = {};
 const sortState = {};
-const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra"]);
+const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra","ativos","inativos"]);
 function ordenarLinhasCopiloto(rows, col, dir){
   return [...rows].sort((a,b) => {
     if(NUM_COLS_COPILOTO.has(col)){
@@ -567,7 +596,7 @@ function renderListas(listas){
         const active = st && st.col===c[0];
         const arrow = active ? (st.dir===1?"▲":"▼") : "⇅";
         const marc = c[0]==="marcadores" ? " col-marc" : "";
-        return "<th class=\"sortable"+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
+        return "<th class=\"sortable c-"+c[0]+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
       }).join("")+"</tr></thead>";
       const tb = document.createElement("tbody");
       for(const r of rows){
@@ -579,7 +608,8 @@ function renderListas(listas){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
-          return "<td"+(c[0]==="marcadores"?' class="col-marc"':"")+">"+v+"</td>";
+          if(c[0]==="regiao" && !v) v = "(sem região)";
+          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+"\">"+v+"</td>";
         }).join("")+"</tr>";
       }
       t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
@@ -636,10 +666,12 @@ function applyEmpresaUI(){
    position:fixed não repete de forma confiável no motor de PDF do Chrome, mas @page sim */
 function syncPrintPageStyle(){
   const chipTxt = ($("#chip-co")?.textContent || "").trim();
-  const dataTxt = $("#updated-at")?.textContent || "";
-  const texto = ("Copiloto de Vendas · " + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
+  const dataTxt = $("#hoje")?.textContent || "";
+  const texto = ("Copiloto de Vendas — Missões · " + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
+  const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : "#555");
   const el = $("#print-page-style");
-  if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
+  // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
+  if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } }';
 }
 window.addEventListener("beforeprint", syncPrintPageStyle);
 // Abrir o diálogo de impressão (ou "Salvar como PDF") dispara visibilitychange no Chrome, que sem essa
@@ -702,8 +734,9 @@ async function load(){
     try { fill(data); }
     catch(e){ setStatus("err","erro ao desenhar: " + (e && e.message || e)); }
     const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
-    const rot = empresa ? " · " + (empresa === "BNZ" ? "BNZ" : "CIAPLAC") : " · Total";
-    setStatus(age>20 ? "stale" : null, "ao vivo" + rot + " · " + fmtDateTime(data.atualizado_em));
+    // data e empresa já aparecem ao lado (selo + data do cabeçalho): aqui só a hora da atualização
+    const hora = new Date(data.atualizado_em||Date.now()).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+    setStatus(age>20 ? "stale" : null, "ao vivo · " + hora);
   }catch(err){
     clearTimeout(to);
     const demorou = err.name === "AbortError";
