@@ -139,7 +139,7 @@
 
   /* rows */
   .rows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
-  .row{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--hair);border-left-width:3px;background:var(--surface)}
+  .row{display:grid;grid-template-columns:52px 1fr;align-items:start;gap:12px;padding:11px 14px;border-radius:8px;border:1px solid var(--hair);border-left-width:3px;background:var(--surface)}
   .row.a{background:var(--amber-bg);border-left-color:var(--amber-edge)}
   .row.c{background:var(--clay-bg);border-left-color:var(--clay-edge)}
   .row.g{background:var(--green-bg);border-left-color:var(--green-edge)}
@@ -210,9 +210,9 @@
     .masthead{align-items:center;border-bottom-width:4px;padding-bottom:6px}
     .masthead h1{font-size:1.5rem;font-weight:800}
     .masthead h1 span{color:inherit;font-weight:800}
-    .meta{gap:12px;font-size:1rem;color:#211e18}
-    #hoje{font-weight:700;font-size:1.05rem;color:#211e18}
-    .chip-co{font-size:1.15rem;letter-spacing:.05em;padding:5px 20px;border:2px solid #211e18;border-radius:6px;background:#211e18;color:#fff}
+    .meta{gap:10px;font-size:.72rem;color:var(--ink-soft)}
+    #hoje{font-weight:400;font-size:.72rem;color:var(--ink-soft)}
+    .chip-co{font-size:.8rem;letter-spacing:.04em;padding:3px 12px;border:1px solid #211e18;border-radius:5px;background:#211e18;color:#fff}
     .chip-co.bnz{background:var(--bnz-edge);border-color:var(--bnz-edge);color:#fff}
     .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
     .hero-main{padding:12px 14px}
@@ -242,8 +242,15 @@
     table.lc th.c-entrega_efetiva,table.lc th.c-data_pedido,table.lc th.c-vencimento{width:7.5%}
     table.lc th.c-tipo{width:12%} table.lc th.c-estado{width:9%} table.lc th.c-responsavel{width:14%}
     table.lc th.c-ativos,table.lc th.c-inativos{width:22%}
-    #lista-por_regiao{width:60%;min-width:0}
-    .regiao-link{display:none!important}
+    /* nomes de cliente e fantasia dividem o espaço nas listas curtas (poucas colunas) */
+    table.t-em_negociacao th.c-fantasia,table.t-curva_a th.c-fantasia,table.t-pedidos_sem_entrega th.c-fantasia{width:19%}
+    /* resumo por região: tabelinha compacta, números colados no nome da região */
+    #lista-por_regiao{width:fit-content;min-width:0;max-width:100%}
+    #lista-por_regiao table.lc{table-layout:auto;width:auto}
+    #lista-por_regiao table.lc th,#lista-por_regiao table.lc td{padding:3px 14px 3px 8px;white-space:nowrap}
+    #lista-por_regiao table.lc th{white-space:normal;max-width:90px}
+    #lista-por_regiao table.lc th.c-ativos,#lista-por_regiao table.lc th.c-inativos{width:auto}
+    #lista-por_regiao table.lc td:first-child{max-width:none}
     .lc-wrap{overflow:visible}
     .updated{display:none}  /* na impressão esse texto vai pro rodapé da página, junto do número (ver syncPrintPageStyle) */
     section#listas{margin-top:14px}
@@ -389,19 +396,19 @@
         <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
         <span class="k">Não compraram este mês</span>
         <span class="v" data-k="alvos_mes">–</span>
-        <span class="note">Alvos do mês<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
+        <span class="note">Alvos do mês<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
       </div>
       <div class="kpi blue" data-goto="curva_a" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
         <span class="k">Principais Clientes</span>
         <span class="v" data-k="curva_a_qtd">–</span>
-        <span class="note">Curva A · top 20% dos clientes (12m)<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
+        <span class="note">Curva A · top 20% dos clientes (12m)<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
       </div>
       <div class="kpi blue" data-goto="pedidos_sem_entrega" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-caixa"/></svg></span>
         <span class="k">Pedidos a Entregar</span>
         <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
-        <span class="note">Confirmados, ainda sem data de entrega<br><span style="color:var(--blue-ink);font-weight:600">toque para ver ↗</span></span>
+        <span class="note">Confirmados, ainda sem data de entrega<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
       </div>
       <div class="kpi blue">
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
@@ -601,7 +608,7 @@ function renderListas(listas){
       card.appendChild(e);
     } else {
       const wrap = document.createElement("div"); wrap.className="lc-wrap";
-      const t = document.createElement("table"); t.className="lc";
+      const t = document.createElement("table"); t.className="lc t-"+k;
       t.innerHTML = "<thead><tr>"+cols.map(c=>{
         const active = st && st.col===c[0];
         const arrow = active ? (st.dir===1?"▲":"▼") : "⇅";
