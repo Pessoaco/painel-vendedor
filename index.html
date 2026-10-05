@@ -145,7 +145,7 @@
   .agenda .txt strong{font-family:"Archivo",sans-serif;font-weight:600;display:block;font-size:.92rem}
   .agenda .txt span{font-size:.77rem;color:var(--ink-soft)}
   .agenda .over{color:var(--clay-ink);font-weight:600}
-  .agenda .lnk{font-size:.68rem;color:var(--blue-ink);font-weight:600;cursor:pointer;text-decoration:underline}
+  .agenda .txt .lnk{font-size:.68rem;color:var(--blue-ink);font-weight:600;cursor:pointer;text-decoration:underline}
 
   /* rows */
   .rows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
@@ -1034,16 +1034,17 @@ async function load(){
     // fetch() sozinho (sem resposta nenhuma do servidor) lança TypeError quando não tem internet,
     // DNS falha, etc — diferente de um erro HTTP (que já tem resposta e cai no throw lá em cima.
     // Isso evita o bug de dizer "senha errada" quando o problema real é falta de conexão.
-    const semNet = err instanceof TypeError;
+    const semNet = err instanceof TypeError && navigator.onLine === false;   // sem conexão de verdade
+    const servidorOff = err instanceof TypeError && !semNet;                    // tem internet, mas o servidor (n8n) não respondeu
     if($("#content").hidden){
       $("#loading").hidden = false;
-      $("#loading").innerHTML = (semNet ? "📡 Sem internet. Este painel é só online — verifique sua conexão." :
+      $("#loading").innerHTML = (semNet ? "📡 Sem internet. Este painel é só online — verifique sua conexão." : servidorOff ? "⚠️ O servidor do painel não respondeu (sua internet está ok). Avise o escritório e tente de novo em instantes." :
         demorou ? "Demorou demais pra responder." : "Não consegui carregar.") +
         '<br><button class="btn" style="margin-top:10px" onclick="load()">Tentar de novo</button>';
-      setStatus("err", semNet ? "sem internet" : demorou ? "sem resposta (timeout)" : "erro ao carregar");
+      setStatus("err", semNet ? "sem internet" : servidorOff ? "servidor não respondeu" : demorou ? "sem resposta (timeout)" : "erro ao carregar");
       return;
     }
-    setStatus("err", semNet ? "📡 sem internet — este painel é só online" : "erro ao atualizar — tentando de novo em 1 min");
+    setStatus("err", semNet ? "📡 sem internet — este painel é só online" : servidorOff ? "⚠️ servidor não respondeu — tentando de novo em 1 min" : "erro ao atualizar — tentando de novo em 1 min");
     setTimeout(load, 60000);
   }
 }
