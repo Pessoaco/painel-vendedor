@@ -686,6 +686,11 @@ function renderListas(listas){
     box.appendChild(montarCard(k, titulo, cor, rows, "lista-", true));
   }
   renderBusca();
+  // vindo do card "Prospecção" do Copiloto de Vendas (link ...prospects/#atividades): rola uma vez até as atividades
+  if(location.hash === "#atividades" && !window.__hashRolou){
+    window.__hashRolou = true;
+    const el = $("#lista-atividades"); if(el) setTimeout(() => el.scrollIntoView({block:"start"}), 80);
+  }
 }
 
 /* monta o card de uma lista (usado nas listas de baixo e no resultado da busca por cliente) */
