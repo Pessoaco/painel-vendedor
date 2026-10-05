@@ -341,6 +341,18 @@
   table.lc td.c-_agendar{white-space:nowrap}
   table.lc td.c-estagio{white-space:nowrap}
   .masthead h1 .tag-p{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:4px;background:var(--green-bg);color:var(--green-ink);font-size:.7em;vertical-align:middle}
+  .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
+  .btn-print{font:inherit;font-family:"IBM Plex Sans",sans-serif;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid currentColor;background:var(--surface);color:inherit;cursor:pointer;white-space:nowrap}
+  .btn-print:hover{filter:brightness(.95)}
+  @media print{
+    /* imprimir só uma lista: some tudo do corpo, fica o cabeçalho (título, empresa, data) + a lista escolhida */
+    body.print-one .tagline,
+    body.print-one #content > *:not(#listas),
+    body.print-one #listas > .band-label,
+    body.print-one #listbox > *:not(.print-alvo){display:none!important}
+    body.print-one section#listas{margin-top:8px}
+    table.lc td.c-estagio{white-space:normal}
+  }
   @media (max-width:820px){ .filtro-regiao{max-width:100%;flex:1 1 100%} .busca-cliente{min-width:0;flex:1 1 100%} }
   @media print{
     .c-_agendar,.filtro-regiao{display:none!important}
@@ -355,7 +367,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v1.3 (Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v1.4 (botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -391,6 +403,7 @@
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
         <button class="btn no-print" id="btn-refresh">Atualizar</button>
+        <button class="btn no-print" id="btn-imprimir-tudo" title="Imprimir o Copiloto inteiro">🖨 Imprimir tudo</button>
         <button class="logout no-print" id="btn-logout">sair</button>
       </div>
     </div>
@@ -508,7 +521,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v1.3 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v1.4 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -559,7 +572,8 @@ const LISTAS = [
   {k:"sem_contato_60",      titulo:"Esfriando · já conversou, mas faz +60 dias",                             cor:"clay"},
   {k:"sem_zap",             titulo:"Radar · Sem Zap nem telefone (completar cadastro)",                      cor:"clay"},
   {k:"sem_cidade",          titulo:"Radar · Sem cidade no cadastro",                                         cor:"slate"},
-  {k:"por_regiao",          titulo:"Prospects por Região",                                                   cor:"blue"},
+  {k:"por_regiao",          titulo:"Prospects por Região (clique no nome da região pra ir à lista dela)",   cor:"blue"},
+  {k:"__grupos_regiao",     titulo:"Carteira por região",                                                    cor:"blue"},
   {k:"por_estagio",         titulo:"Prospects por Estágio do funil",                                         cor:"blue"},
   {k:"nunca_contatados",    titulo:"Nunca contatados",                                                       cor:"blue"},
   {k:"carteira",            titulo:"Carteira completa de prospects (por estágio)",                           cor:"slate"}
@@ -570,6 +584,7 @@ const COLS = {
   novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["prox_atividade","Próx. atividade"]],
   sem_contato_60: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   nunca_contatados: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"]],
+  grupo_regiao: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   por_regiao: [["regiao","Região"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]],
   por_estagio:[["estagio","Estágio"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]]
 };
@@ -681,6 +696,7 @@ function renderListas(listas){
   syncPrintPageStyle();
   const box = $("#listbox"); box.innerHTML = "";
   for(const {k,titulo,cor} of LISTAS){
+    if(k === "__grupos_regiao"){ montarGruposRegiao(box, L); continue; }
     let rows = L[k] || [];
     const st = sortState[k];
     if(st && st.col) rows = ordenarLinhasCopiloto(rows, st.col, st.dir);
@@ -694,12 +710,31 @@ function renderListas(listas){
   }
 }
 
+/* "Carteira por região": uma lista para cada região, já aberta na tela (maior região primeiro, sem região no fim) */
+const slugRegiao = r => "reg_" + (semAcento(r).replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "") || "sem");
+function montarGruposRegiao(box, L){
+  const grupos = {};
+  (L.carteira || []).forEach(r => { const g = r.regiao || ""; (grupos[g] = grupos[g] || []).push(r); });
+  const nomes = Object.keys(grupos).sort((a,b) => (a === "") - (b === "") || grupos[b].length - grupos[a].length || a.localeCompare(b, "pt-BR"));
+  if(!nomes.length) return;
+  const lbl = document.createElement("p"); lbl.className = "band-label"; lbl.style.marginTop = "10px";
+  lbl.textContent = "Carteira por região — " + nomes.length + (nomes.length === 1 ? " região" : " regiões");
+  box.appendChild(lbl);
+  for(const g of nomes){
+    const k = slugRegiao(g);
+    let rows = grupos[g].slice().sort((a,b) => String(a.cidade||"").localeCompare(String(b.cidade||""), "pt-BR") || String(a.cliente).localeCompare(String(b.cliente), "pt-BR"));
+    const st = sortState[k];
+    if(st && st.col) rows = ordenarLinhasCopiloto(rows, st.col, st.dir);
+    box.appendChild(montarCard(k, "📍 " + esc(g || "Sem região (sem cidade ou cidade sem região no Odoo)"), "blue", rows, "lista-", true));
+  }
+}
+
 /* monta o card de uma lista (usado nas listas de baixo e no resultado da busca por cliente) */
 function montarCard(k, titulo, cor, rows, pre, sortavel){
   {
     // Check-list de Atividades ganha caixinha de seleção + botões de ação (só quando o backend manda o id da atividade)
     const comAcoes = k === "atividades" && rows.some(r => r.id);
-    let cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || COLS.padrao);
+    let cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || (k.startsWith("reg_") ? COLS.grupo_regiao : COLS.padrao));
     // no Total, mostra de qual empresa é cada linha (o mesmo prospect pode estar nas duas)
     if(!empresa && k !== "por_regiao" && k !== "por_estagio"){
       const i = cols.findIndex(c => c[0] === "cliente");
@@ -707,9 +742,11 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
     }
     if(!LISTAS_RESUMO.has(k)) cols = cols.concat([["_agendar",""]]);
     const st = sortavel ? sortState[k] : null;
-    const card = document.createElement("div"); card.className = "listcard"; card.id = pre+k;
+    const card = document.createElement("div"); card.className = "listcard" + (pre+k === alvoImpressao ? " print-alvo" : ""); card.id = pre+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
-    h.innerHTML = '<span>'+titulo+'</span><span class="n">'+rows.length+'</span>';
+    h.innerHTML = '<span>'+titulo+'</span><span class="lc-h-dir">'+
+      (pre === "lista-" && rows.length ? '<button class="btn-print no-print" data-print="'+pre+k+'" title="Imprimir só esta lista">🖨 Imprimir esta lista</button>' : '')+
+      '<span class="n">'+rows.length+'</span></span>';
     card.appendChild(h);
     if(comAcoes && sortavel){
       const bar = document.createElement("div"); bar.className = "lc-bar no-print";
@@ -748,7 +785,7 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
-          if(c[0]==="regiao" && !v && k==="por_regiao") v = "(sem região)";
+          if(c[0]==="regiao" && k==="por_regiao") v = '<a href="#lista-'+slugRegiao(r.regiao||"")+'" class="lnk-reg" data-goto="'+slugRegiao(r.regiao||"")+'">'+(v || "(sem região)")+'</a>';
           if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
           if(c[0]==="_acoes") v = r.id
             ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'">✎ Editar</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'">✕ Cancelar</button>'
@@ -990,7 +1027,7 @@ function applyEmpresaUI(){
 function syncPrintPageStyle(){
   const chipTxt = ($("#chip-co")?.textContent || "").trim();
   const dataTxt = $("#hoje")?.textContent || "";
-  const texto = ("Copiloto de Prospects — Caça · " + (regiaoSel ? regiaoSel + " · " : "") + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
+  const texto = ("Copiloto de Prospects — Caça · " + (tituloImpressao ? tituloImpressao.replace(/^📍\s*/, "") + " · " : (regiaoSel ? regiaoSel + " · " : "")) + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
   const rodape = ($(".updated")?.textContent || "").trim().replace(/"/g,'\\"');
   const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : "#555");
   const el = $("#print-page-style");
@@ -1003,7 +1040,32 @@ window.addEventListener("beforeprint", syncPrintPageStyle);
 // em vez do "ao vivo". imprimindo trava esse recarregamento enquanto o diálogo está aberto.
 let imprimindo = false;
 window.addEventListener("beforeprint", ()=>{ imprimindo = true; });
-window.addEventListener("afterprint", ()=>{ imprimindo = false; });
+window.addEventListener("afterprint", ()=>{ imprimindo = false; fimImpressaoUma(); });
+
+/* ---- "🖨 Imprimir esta lista": imprime só o cabeçalho + aquela lista (sem o Daniel precisar escolher páginas) ---- */
+let tituloImpressao = "";
+let alvoImpressao = "";   // id da lista a imprimir (montarCard reaplica a marca se a tela redesenhar durante a impressão)
+function fimImpressaoUma(){
+  document.body.classList.remove("print-one");
+  $$(".print-alvo").forEach(x => x.classList.remove("print-alvo"));
+  tituloImpressao = ""; alvoImpressao = "";
+  syncPrintPageStyle();
+}
+function imprimirCard(id){
+  const card = document.getElementById(id); if(!card) return;
+  fimImpressaoUma();
+  alvoImpressao = id;
+  card.classList.add("print-alvo");
+  document.body.classList.add("print-one");
+  tituloImpressao = (card.querySelector(".lc-h > span")?.textContent || "").trim();
+  syncPrintPageStyle();
+  setTimeout(() => window.print(), 50);
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-print]");
+  if(b){ e.stopPropagation(); imprimirCard(b.dataset.print); }
+}, true);
+$("#btn-imprimir-tudo").addEventListener("click", () => { fimImpressaoUma(); window.print(); });
 function setEmpresa(v){
   empresa = v || "";
   try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
@@ -1114,7 +1176,7 @@ $("#seg").addEventListener("click", e => { const b = e.target.closest("button[da
 applyEmpresaUI();
 
 if(creds && creds.user){ load(); } else { showLogin(); }
-setInterval(()=>{ if(creds && creds.user) load(); }, REFRESH_MIN*60000);
+setInterval(()=>{ if(!imprimindo && creds && creds.user) load(); }, REFRESH_MIN*60000);
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && !imprimindo && creds && creds.user) load(); });
 </script>
 </body>
