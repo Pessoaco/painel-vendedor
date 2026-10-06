@@ -106,7 +106,11 @@
   .band-hint b{color:var(--ink);font-weight:600}
 
   /* hero */
-  .hero{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hero{margin-top:12px;display:grid;grid-template-columns:.8fr 1.3fr 1fr;gap:10px}
+  .hero-main.plain{background:var(--surface);border-color:var(--hair);border-top:3px solid var(--blue-edge)}
+  .hero-main.plain .k{color:var(--blue-ink)}
+  .hero-main.plain .v{color:var(--blue-ink)}
+  .hero-main .regiao-top{font-family:"Archivo",sans-serif;font-weight:700;font-size:1rem;color:var(--ink);margin:2px 0 0}
   .hero-main{border:1px solid;border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
   .hero-main.blue{background:var(--blue-bg);border-color:var(--blue-edge)}
   .hero-main.amber{background:var(--amber-bg);border-color:var(--amber-edge)}
@@ -253,7 +257,7 @@
     .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
     .chip-co.bb{background:var(--bb-edge);border-color:var(--bb-edge);color:#fff}
     .hero-main{padding:12px 14px}
-    .hero{grid-template-columns:1fr 1fr!important}
+    .hero{grid-template-columns:.8fr 1.3fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(5,1fr)!important}
     .rows{grid-template-columns:1fr 1fr 1fr!important}
     .hero,.hero-main,.kpi,.agenda,.row{break-inside:avoid}
@@ -420,10 +424,10 @@
 
   <div class="topbar">
     <div class="seg no-print" id="seg">
-      <button data-emp="" class="on">Total</button>
+      <button data-emp="BB">BB</button>
       <button data-emp="BNZ">BNZ</button>
       <button data-emp="CIAPLAC">CIAPLAC</button>
-      <button data-emp="BB">BB</button>
+      <button data-emp="">Total</button>
     </div>
     <select id="filtro-regiao" class="filtro-regiao no-print" title="Mostrar só uma região (pra planejar visita)">
       <option value="">📍 Todas as regiões</option>
@@ -459,6 +463,15 @@
           <span class="sub">Prospects por região · por estágio</span>
           <span class="lnk">↗ abrir lista</span>
         </div>
+      </div>
+      <div class="hero-main plain" data-goto="por_regiao" style="cursor:pointer">
+        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
+        <span class="k">Prospects por região</span>
+        <span class="v" data-k="top_regiao_qtd">–</span>
+        <span class="regiao-top" id="top-regiao-nome">—</span>
+        <span class="sub">é a região com mais prospects</span>
+        <span class="sub" style="margin-top:6px">Veja demais regiões</span>
+        <span class="lnk">↗ abrir lista</span>
       </div>
     </div>
 
@@ -697,6 +710,10 @@ function renderListas(listas){
   for(const [k,v] of Object.entries(map)){
     $$('[data-k="'+k+'"]').forEach(el => el.textContent = fmtInt(v));
   }
+  // 3º card: a região com MAIS prospects (número grande + nome); "sem região" não conta como região
+  const topReg = (L.por_regiao || []).filter(r => r.regiao).sort((a,b) => (b.prospects||0) - (a.prospects||0))[0];
+  $$('[data-k="top_regiao_qtd"]').forEach(el => el.textContent = topReg ? fmtInt(topReg.prospects) : "–");
+  const nomeTop = $("#top-regiao-nome"); if(nomeTop) nomeTop.textContent = topReg ? topReg.regiao : "—";
   const fa = $("#filtro-aviso");
   if(fa){
     fa.hidden = !regiaoSel;
@@ -1020,8 +1037,10 @@ const DEMO = (function(){
 })();
 
 /* ---- empresa selecionada (Total / BNZ / CIAPLAC / BB) ---- */
-let empresa = "";
-try { empresa = localStorage.getItem("pp_empresa") || ""; } catch(e){}
+// botões em ordem alfabética (BB, BNZ, CIAPLAC) e o Total por último; nunca abre no Total:
+// sem escolha anterior (ou se a última foi o Total), abre na primeira representada (BB)
+let empresa = "BB";
+try { empresa = localStorage.getItem("pp_empresa") || "BB"; } catch(e){}
 function applyEmpresaUI(){
   $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
   const chip = $("#chip-co");
