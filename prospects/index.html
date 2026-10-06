@@ -32,6 +32,7 @@
     --slate-bg:#eef0f1; --slate-ink:#56616a; --slate-edge:#a4aeb6;
     --bnz-bg:#e3edf7; --bnz-ink:#1f4e8a; --bnz-edge:#2a78d6;
     --ciaplac-bg:#fbe9de; --ciaplac-ink:#8a3f1f; --ciaplac-edge:#eb6834;
+    --bb-bg:#efe7fa; --bb-ink:#5b3596; --bb-edge:#8a5cd1;
     --purple-bg:#ece8f8; --purple-ink:#56409c; --purple-edge:#9585cf;
     --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
     --radius:9px;
@@ -45,6 +46,7 @@
     --slate-bg:#1a1d20; --slate-ink:#a3adb5; --slate-edge:#46505a;
     --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
     --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
+    --bb-bg:#241838; --bb-ink:#c6aaf2; --bb-edge:#7c55c4;
     --purple-bg:#1f1a33; --purple-ink:#b7a9ee; --purple-edge:#55488f;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }}
@@ -57,6 +59,7 @@
     --slate-bg:#1a1d20; --slate-ink:#a3adb5; --slate-edge:#46505a;
     --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
     --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
+    --bb-bg:#241838; --bb-ink:#c6aaf2; --bb-edge:#7c55c4;
     --purple-bg:#1f1a33; --purple-ink:#b7a9ee; --purple-edge:#55488f;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }
@@ -70,6 +73,7 @@
   .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:8px;border-bottom:3px solid var(--ink);transition:border-color .15s}
   body[data-empresa="BNZ"] .masthead{border-bottom-color:var(--bnz-edge)}
   body[data-empresa="CIAPLAC"] .masthead{border-bottom-color:var(--ciaplac-edge)}
+  body[data-empresa="BB"] .masthead{border-bottom-color:var(--bb-edge)}
   .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:-.01em;margin:0}
   .masthead h1 span{color:var(--ink-soft);font-weight:600}
   .meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 10px;font-size:.72rem;color:var(--ink-soft)}
@@ -77,6 +81,7 @@
   .chip-co{font-family:"Archivo",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.03em;padding:3px 10px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
   .chip-co.bnz{background:var(--bnz-bg);color:var(--bnz-ink);border-color:var(--bnz-edge)}
   .chip-co.ciaplac{background:var(--ciaplac-bg);color:var(--ciaplac-ink);border-color:var(--ciaplac-edge)}
+  .chip-co.bb{background:var(--bb-bg);color:var(--bb-ink);border-color:var(--bb-edge)}
 
   .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:8px}
   .seg{display:inline-flex;border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:var(--surface)}
@@ -85,6 +90,7 @@
   .seg button.on{background:var(--blue-bg);color:var(--blue-ink)}
   .seg button[data-emp="BNZ"].on{background:var(--bnz-bg);color:var(--bnz-ink)}
   .seg button[data-emp="CIAPLAC"].on{background:var(--ciaplac-bg);color:var(--ciaplac-ink)}
+  .seg button[data-emp="BB"].on{background:var(--bb-bg);color:var(--bb-ink)}
   .seg button:active{transform:translateY(1px)}
   .statusbar{display:flex;align-items:center;gap:10px;font-size:.72rem;color:var(--ink-faint)}
   .statusbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-edge);margin-right:6px;vertical-align:middle}
@@ -245,6 +251,7 @@
     .chip-co{font-size:.8rem;letter-spacing:.04em;padding:3px 12px;border:1px solid #211e18;border-radius:5px;background:#211e18;color:#fff}
     .chip-co.bnz{background:var(--bnz-edge);border-color:var(--bnz-edge);color:#fff}
     .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
+    .chip-co.bb{background:var(--bb-edge);border-color:var(--bb-edge);color:#fff}
     .hero-main{padding:12px 14px}
     .hero{grid-template-columns:1fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(5,1fr)!important}
@@ -342,6 +349,7 @@
   table.lc td.c-estagio{white-space:nowrap}
   .masthead h1 .tag-p{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:4px;background:var(--green-bg);color:var(--green-ink);font-size:.7em;vertical-align:middle}
   .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
+  table.lc a.lnk-reg{color:inherit;text-decoration:none;font-weight:500} table.lc a.lnk-reg:hover{color:var(--blue-ink)}
   .btn-print{font:inherit;font-family:"IBM Plex Sans",sans-serif;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid currentColor;background:var(--surface);color:inherit;cursor:pointer;white-space:nowrap}
   .btn-print:hover{filter:brightness(.95)}
   @media print{
@@ -367,7 +375,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v1.4 (botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v1.6 (3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -398,7 +406,7 @@
   <header class="masthead">
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
-      <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
+      <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -415,6 +423,7 @@
       <button data-emp="" class="on">Total</button>
       <button data-emp="BNZ">BNZ</button>
       <button data-emp="CIAPLAC">CIAPLAC</button>
+      <button data-emp="BB">BB</button>
     </div>
     <select id="filtro-regiao" class="filtro-regiao no-print" title="Mostrar só uma região (pra planejar visita)">
       <option value="">📍 Todas as regiões</option>
@@ -521,7 +530,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v1.4 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v1.6 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -1010,15 +1019,16 @@ const DEMO = (function(){
   };
 })();
 
-/* ---- empresa selecionada (Total / BNZ / CIAPLAC) ---- */
+/* ---- empresa selecionada (Total / BNZ / CIAPLAC / BB) ---- */
 let empresa = "";
-try { empresa = localStorage.getItem("pv_empresa") || ""; } catch(e){}
+try { empresa = localStorage.getItem("pp_empresa") || ""; } catch(e){}
 function applyEmpresaUI(){
   $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
   const chip = $("#chip-co");
-  chip.textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
+  chip.textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : (empresa === "BB" ? "BB" : "BNZ · CIAPLAC · BB"));
   chip.classList.toggle("bnz", empresa === "BNZ");
   chip.classList.toggle("ciaplac", empresa === "CIAPLAC");
+  chip.classList.toggle("bb", empresa === "BB");
   document.body.setAttribute("data-empresa", empresa || "");
   syncPrintPageStyle();
 }
@@ -1029,7 +1039,7 @@ function syncPrintPageStyle(){
   const dataTxt = $("#hoje")?.textContent || "";
   const texto = ("Copiloto de Prospects — Caça · " + (tituloImpressao ? tituloImpressao.replace(/^📍\s*/, "") + " · " : (regiaoSel ? regiaoSel + " · " : "")) + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
   const rodape = ($(".updated")?.textContent || "").trim().replace(/"/g,'\\"');
-  const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : "#555");
+  const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : (empresa === "BB" ? "#8a5cd1" : "#555"));
   const el = $("#print-page-style");
   // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
   if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
@@ -1068,7 +1078,7 @@ document.addEventListener("click", e => {
 $("#btn-imprimir-tudo").addEventListener("click", () => { fimImpressaoUma(); window.print(); });
 function setEmpresa(v){
   empresa = v || "";
-  try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
+  try { localStorage.setItem("pp_empresa", empresa); } catch(e){}
   applyEmpresaUI();
   load();
 }
