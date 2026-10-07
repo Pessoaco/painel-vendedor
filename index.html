@@ -109,6 +109,8 @@
   .hero-main.plain .k{color:var(--blue-ink)}
   .hero-main.plain .v{color:var(--blue-ink);font-size:clamp(2rem,6vw,2.6rem)}
   .hero-main .valor-ped{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.15rem;color:var(--ink);letter-spacing:-.02em;margin:2px 0 4px}
+  /* BNZ: acessórios (pendural etc.) e arame em kg — letra miúda, embaixo das peças de drywall */
+  .nota-miuda{display:block;margin-top:2px;font-size:.66rem;color:var(--ink-faint);font-variant-numeric:tabular-nums}
   .hero-main .nota-pecas{display:block;margin-top:6px;font-size:.78rem;color:var(--ink-soft)}
   .hero-main .nota-pecas b.pecas{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.05rem;color:var(--ink);letter-spacing:-.02em;margin-right:6px}
   .hero-main{border:1px solid;border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
@@ -431,6 +433,7 @@
         <span class="valor-ped" data-k="pedidos_valor" hidden>–</span>
         <span class="sub">Confirmados, ainda sem data de entrega</span>
         <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
+        <span class="nota-miuda" id="ped-acess" hidden>+ <span data-k="pedidos_acessorios">–</span> acessórios · <span data-k="pedidos_arame_kg">–</span> kg de arame</span>
         <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
         <span class="nota-pecas" id="ped-unid" hidden><b class="pecas" data-k="pedidos_unidades">–</b> un. de Acabamento/Acessório a entregar</span>
         <span class="lnk">↗ abrir lista</span>
@@ -444,6 +447,7 @@
         <span class="v" data-k="vendas_mes">–</span>
         <span class="note">Confirmados · até o momento</span>
         <span class="nota-pecas" id="nota-pecas-bnz"><b class="pecas" data-k="vendas_pecas">–</b> <span data-k="vendas_pecas_label">peças vendidas</span></span>
+        <span class="nota-miuda" id="vendas-acess" hidden>+ <span data-k="vendas_acessorios">–</span> acessórios · <span data-k="vendas_arame_kg">–</span> kg de arame</span>
         <span class="nota-pecas" id="nota-pecas-ciaplac-metros" hidden><b class="pecas" data-k="ciaplac_metros">–</b> m de Forro</span>
         <span class="nota-pecas" id="nota-pecas-ciaplac-unid" hidden><b class="pecas" data-k="ciaplac_unidades">–</b> un. de Acabamento/Acessório</span>
       </div>
@@ -653,6 +657,19 @@ function fill(data){
     const elM = document.querySelector('[data-k="ciaplac_metros"]'); if(elM) elM.textContent = fmtInt(kpi.ciaplac_metros);
     const elU = document.querySelector('[data-k="ciaplac_unidades"]'); if(elU) elU.textContent = fmtInt(kpi.ciaplac_unidades);
   }
+
+  // BNZ: acessórios (pendural, regulador…) e arame (kg) em letra miúda embaixo das peças de drywall — nos 2 cards (Vendas do Mês e Pedidos a Entregar)
+  const miudaBnz = (idLinha, kAcess, kArame, vAcess, vArame) => {
+    const el = $(idLinha); if(!el) return;
+    const tem = empresa !== "CIAPLAC" && vAcess != null && ((vAcess || 0) > 0 || (vArame || 0) > 0);
+    el.hidden = !tem;
+    if(tem){
+      const a = document.querySelector('[data-k="'+kAcess+'"]'); if(a) a.textContent = fmtInt(vAcess);
+      const b = document.querySelector('[data-k="'+kArame+'"]'); if(b) b.textContent = fmtInt(vArame);
+    }
+  };
+  miudaBnz("#vendas-acess", "vendas_acessorios", "vendas_arame_kg", kpi.vendas_acessorios, kpi.vendas_arame_kg);
+  miudaBnz("#ped-acess", "pedidos_acessorios", "pedidos_arame_kg", kpi.pedidos_acessorios, kpi.pedidos_arame_kg);
 
   // Pedidos a Entregar: quantidade a entregar, na mesma regra das vendas do mês.
   // BNZ = peças; CIAPLAC = metros de Forro + unidades de Acabamento/Acessório; Total mostra as duas empresas.
