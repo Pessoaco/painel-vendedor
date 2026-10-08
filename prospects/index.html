@@ -345,6 +345,8 @@
 
   /* ---- só do Copiloto de Prospects ---- */
   .filtro-regiao{font:inherit;font-size:.76rem;padding:6px 10px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);max-width:260px}
+  .chip-reg{display:inline-flex;align-items:center;gap:4px;margin:2px 2px;padding:1px 4px 1px 8px;border:1px solid var(--blue-edge);border-radius:12px;background:var(--surface)}
+  .chip-reg button{font:inherit;font-size:.7rem;border:0;background:none;color:var(--blue-ink);cursor:pointer;padding:0 3px}
   .filtro-regiao.on{border-color:var(--blue-edge);background:var(--blue-bg);color:var(--blue-ink);font-weight:600}
   .filtro-aviso{margin-top:10px;padding:8px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg);font-size:.78rem;color:var(--blue-ink)}
   .filtro-aviso button{margin-left:8px}
@@ -379,7 +381,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v1.6 (3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v1.8 (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -429,7 +431,7 @@
       <button data-emp="CIAPLAC">CIAPLAC</button>
       <button data-emp="">Total</button>
     </div>
-    <select id="filtro-regiao" class="filtro-regiao no-print" title="Mostrar só uma região (pra planejar visita)">
+    <select id="filtro-regiao" class="filtro-regiao no-print" title="Mostrar um ou mais DDDs ou regiões (ex.: DDD 14)">
       <option value="">📍 Todas as regiões</option>
     </select>
     <input type="search" id="busca-cliente" class="busca-cliente no-print" placeholder="🔎 Buscar prospect… (separe por vírgula p/ vários)" autocomplete="off">
@@ -543,7 +545,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v1.6 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v1.8 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -648,28 +650,56 @@ function fill(data){
   renderListas(data.listas || {});
 }
 
-/* ---- filtro por região (pra planejar visita: "vou pra Campinas, quem está lá?") ---- */
-let regiaoSel = "";
+/* ---- filtro por região e por DDD (pra planejar visita: "vou pra Campinas, quem está lá?" / "me dá o DDD 14") ---- */
+// v1.7: dá pra marcar VÁRIAS regiões. v1.8: também por DDD (o Daniel pensa em DDD).
+// Cada item marcado é uma região ("SP - Bauru") ou um DDD ("ddd:14"); o prospect aparece se bater com QUALQUER item marcado.
+const regioesSel = new Set();
+let regiaoSel = "";   // só o texto com o que está marcado (vai no cabeçalho da impressão e na busca)
+const rotuloFiltro = v => v.startsWith("ddd:") ? "DDD " + v.slice(4) : v;
+const ordemFiltro = (a,b) => (b.startsWith("ddd:") - a.startsWith("ddd:")) || a.localeCompare(b,"pt-BR");
+const atualizaTextoRegioes = () => { regiaoSel = [...regioesSel].sort(ordemFiltro).map(rotuloFiltro).join(" + "); };
 // a região NÃO é lembrada entre visitas: sempre abre limpo (filtro esquecido escondia prospects)
 try { localStorage.removeItem("pp_regiao"); } catch(e){}
+
+// DDD sai do Zap do prospect (wa.me/55 + DDD + número); atividade usa o Zap do prospect dela
+const dddDoZap = z => { const d = String(z || "").replace(/\D/g, ""); if(d.length < 12 || !d.startsWith("55")) return ""; const x = d.slice(2,4); return /^[1-9][1-9]$/.test(x) ? x : ""; };
+let dddPorLead = {};
+const dddDe = r => r.zap ? dddDoZap(r.zap) : (dddPorLead[r.lead] || "");
+const bateFiltro = r => regioesSel.has(r.regiao) || regioesSel.has("ddd:" + dddDe(r));
+
 function montaOpcoesRegiao(listas){
   const sel = $("#filtro-regiao"); if(!sel) return;
   const regs = (listas.por_regiao || []).filter(r => r.regiao).map(r => r.regiao).sort((a,b) => a.localeCompare(b,"pt-BR"));
-  if(regiaoSel && !regs.includes(regiaoSel)) regs.unshift(regiaoSel);
-  sel.innerHTML = '<option value="">📍 Todas as regiões</option>' +
-    regs.map(r => {
+  regioesSel.forEach(r => { if(!r.startsWith("ddd:") && !regs.includes(r)) regs.unshift(r); });
+  // DDDs da carteira, com as regiões que mais aparecem em cada um (ajuda o Daniel a aprender os nomes)
+  const porDdd = {};
+  (listas.carteira || []).forEach(r => { const d = dddDoZap(r.zap); if(!d) return; porDdd[d] = porDdd[d] || {n:0, regs:{}}; porDdd[d].n++; if(r.regiao) porDdd[d].regs[r.regiao] = (porDdd[d].regs[r.regiao] || 0) + 1; });
+  regioesSel.forEach(v => { if(v.startsWith("ddd:") && !porDdd[v.slice(4)]) porDdd[v.slice(4)] = {n:0, regs:{}}; });
+  const ddds = Object.keys(porDdd).sort();
+  const marca = v => regioesSel.has(v) ? "✓ " : "";
+  const qtd = regioesSel.size;
+  // a caixinha sempre volta pro texto de cima; o que está marcado aparece com ✓ (escolher de novo tira)
+  sel.innerHTML = '<option value="">'+(qtd ? "📍 + Somar outro DDD ou região ("+qtd+" marcado"+(qtd>1?"s":"")+")" : "📍 Todas — escolha DDD ou região (um ou mais)")+'</option>' +
+    (ddds.length ? '<optgroup label="Por DDD">' + ddds.map(d => {
+      const nomes = Object.keys(porDdd[d].regs).sort((a,b) => porDdd[d].regs[b] - porDdd[d].regs[a]).slice(0,3).map(x => x.replace(/^[A-Z]{2} - /, "")).join(", ");
+      return '<option value="ddd:'+d+'">'+marca("ddd:"+d)+'DDD '+d+' ('+porDdd[d].n+')'+(nomes ? ' · '+esc(nomes) : '')+'</option>';
+    }).join("") + '</optgroup>' : '') +
+    '<optgroup label="Por região">' + regs.map(r => {
       const n = ((listas.por_regiao || []).find(x => x.regiao === r) || {}).prospects || 0;
-      return '<option value="'+esc(r)+'"'+(r === regiaoSel ? " selected" : "")+'>'+esc(r)+' ('+n+')</option>';
-    }).join("");
-  sel.classList.toggle("on", !!regiaoSel);
+      return '<option value="'+esc(r)+'">'+marca(r)+esc(r)+' ('+n+')</option>';
+    }).join("") + '</optgroup>';
+  sel.value = "";
+  sel.classList.toggle("on", qtd > 0);
 }
 const temCot = r => /\bCOT(AÇÃO|ACAO)?\b/i.test(r.marcadores || "");
-// recorte das listas pela região escolhida (o resumo "por região" continua inteiro, pra comparar)
+// recorte das listas pelo que está marcado (o resumo "por região" continua inteiro, pra comparar)
 function listasFiltradas(listas){
-  if(!regiaoSel) return listas;
+  dddPorLead = {};
+  (listas.carteira || []).forEach(r => { const d = dddDoZap(r.zap); if(d) dddPorLead[r.lead] = d; });
+  if(!regioesSel.size) return listas;
   const out = {};
   for(const k of Object.keys(listas)){
-    out[k] = (k === "por_regiao") ? listas[k] : (listas[k] || []).filter(r => r.regiao === regiaoSel);
+    out[k] = (k === "por_regiao") ? listas[k] : (listas[k] || []).filter(bateFiltro);
   }
   const c = {};
   (out.carteira || []).forEach(r => { const e = r.estagio || ""; c[e] = c[e] || {estagio:e, prospects:0, com_zap:0, cotacao:0}; c[e].prospects++; if(r.zap) c[e].com_zap++; if(temCot(r)) c[e].cotacao++; });
@@ -711,13 +741,15 @@ function renderListas(listas){
     $$('[data-k="'+k+'"]').forEach(el => el.textContent = fmtInt(v));
   }
   // 3º card: a região com MAIS prospects (número grande + nome); "sem região" não conta como região
-  const topReg = (L.por_regiao || []).filter(r => r.regiao).sort((a,b) => (b.prospects||0) - (a.prospects||0))[0];
+  const topReg = (L.por_regiao || []).filter(r => r.regiao && (!regioesSel.size || (L.carteira || []).some(c => c.regiao === r.regiao))).sort((a,b) => (b.prospects||0) - (a.prospects||0))[0];
   $$('[data-k="top_regiao_qtd"]').forEach(el => el.textContent = topReg ? fmtInt(topReg.prospects) : "–");
   const nomeTop = $("#top-regiao-nome"); if(nomeTop) nomeTop.textContent = topReg ? topReg.regiao : "—";
   const fa = $("#filtro-aviso");
   if(fa){
-    fa.hidden = !regiaoSel;
-    fa.innerHTML = regiaoSel ? '📍 Mostrando só a região <b>'+esc(regiaoSel)+'</b> — '+cart.length+' prospects, '+n("atividades")+' atividades. <button class="btn no-print" id="filtro-limpar">✕ ver todas</button>' : "";
+    fa.hidden = !regioesSel.size;
+    fa.innerHTML = regioesSel.size ? '📍 Mostrando só '+
+      [...regioesSel].sort(ordemFiltro).map(r => '<span class="chip-reg"><b>'+esc(rotuloFiltro(r))+'</b><button class="no-print" data-tira-reg="'+esc(r)+'" title="tirar">✕</button></span>').join(" ")+
+      ' — '+cart.length+' prospects, '+n("atividades")+' atividades. <button class="btn no-print" id="filtro-limpar">✕ ver todas</button>' : "";
   }
   syncPrintPageStyle();
   const box = $("#listbox"); box.innerHTML = "";
@@ -1185,17 +1217,21 @@ $("#login-form").addEventListener("submit", e => {
 
 if(LINK_CLIENTES) { $("#link-clientes").href = LINK_CLIENTES; }
 $("#filtro-regiao").addEventListener("change", e => {
-  regiaoSel = e.target.value || "";
-  try { localStorage.setItem("pp_regiao", regiaoSel); } catch(err){}
-  e.target.classList.toggle("on", !!regiaoSel);
+  const v = e.target.value || "";
+  if(!v) return;
+  regioesSel.has(v) ? regioesSel.delete(v) : regioesSel.add(v);   // escolher de novo = tirar
+  atualizaTextoRegioes();
   selAtiv.clear();
+  montaOpcoesRegiao(LISTAS_BRUTAS);
   renderListas(LISTAS_BRUTAS);
 });
 document.addEventListener("click", e => {
-  if(!e.target.closest("#filtro-limpar")) return;
-  regiaoSel = ""; try { localStorage.setItem("pp_regiao", ""); } catch(err){}
-  const s = $("#filtro-regiao"); if(s){ s.value = ""; s.classList.remove("on"); }
+  const tira = e.target.closest("button[data-tira-reg]");
+  if(!tira && !e.target.closest("#filtro-limpar")) return;
+  if(tira) regioesSel.delete(tira.dataset.tiraReg); else regioesSel.clear();
+  atualizaTextoRegioes();
   selAtiv.clear();
+  montaOpcoesRegiao(LISTAS_BRUTAS);
   renderListas(LISTAS_BRUTAS);
 });
 $("#busca-cliente").addEventListener("input", e => { buscaCliente = e.target.value; renderBusca(); });
