@@ -32,6 +32,7 @@
     --slate-bg:#f0ede4; --slate-ink:#66604f; --slate-edge:#b2ab99;
     --bnz-bg:#e3edf7; --bnz-ink:#1f4e8a; --bnz-edge:#2a78d6;
     --ciaplac-bg:#fbe9de; --ciaplac-ink:#8a3f1f; --ciaplac-edge:#eb6834;
+    --bb-bg:#efe7fa; --bb-ink:#5b3596; --bb-edge:#8a5cd1;
     --purple-bg:#efe6f7; --purple-ink:#6b3fa0; --purple-edge:#a780c9;
     --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
     --radius:9px;
@@ -45,6 +46,7 @@
     --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
     --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
     --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
+    --bb-bg:#241838; --bb-ink:#c6aaf2; --bb-edge:#7c55c4;
     --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }}
@@ -57,6 +59,7 @@
     --slate-bg:#1e1c15; --slate-ink:#a6a08e; --slate-edge:#4a4534;
     --bnz-bg:#12233a; --bnz-ink:#7fb2e8; --bnz-edge:#3987e5;
     --ciaplac-bg:#3a1f12; --ciaplac-ink:#f0a97f; --ciaplac-edge:#d95926;
+    --bb-bg:#241838; --bb-ink:#c6aaf2; --bb-edge:#7c55c4;
     --purple-bg:#241a2e; --purple-ink:#c9a6e6; --purple-edge:#6b4d85;
     --shadow:0 1px 2px rgba(0,0,0,.32),0 5px 16px rgba(0,0,0,.26);
   }
@@ -70,6 +73,7 @@
   .masthead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding-bottom:8px;border-bottom:3px solid var(--ink);transition:border-color .15s}
   body[data-empresa="BNZ"] .masthead{border-bottom-color:var(--bnz-edge)}
   body[data-empresa="CIAPLAC"] .masthead{border-bottom-color:var(--ciaplac-edge)}
+  body[data-empresa="BB"] .masthead{border-bottom-color:var(--bb-edge)}
   .masthead h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.05rem,4vw,1.5rem);letter-spacing:-.01em;margin:0}
   .masthead h1 span{color:var(--ink-soft);font-weight:600}
   .meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 10px;font-size:.72rem;color:var(--ink-soft)}
@@ -77,6 +81,7 @@
   .chip-co{font-family:"Archivo",sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.03em;padding:3px 10px;border:1px solid var(--hair);border-radius:4px;color:var(--ink-soft)}
   .chip-co.bnz{background:var(--bnz-bg);color:var(--bnz-ink);border-color:var(--bnz-edge)}
   .chip-co.ciaplac{background:var(--ciaplac-bg);color:var(--ciaplac-ink);border-color:var(--ciaplac-edge)}
+  .chip-co.bb{background:var(--bb-bg);color:var(--bb-ink);border-color:var(--bb-edge)}
 
   .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:8px}
   .seg{display:inline-flex;border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:var(--surface)}
@@ -85,6 +90,7 @@
   .seg button.on{background:var(--blue-bg);color:var(--blue-ink)}
   .seg button[data-emp="BNZ"].on{background:var(--bnz-bg);color:var(--bnz-ink)}
   .seg button[data-emp="CIAPLAC"].on{background:var(--ciaplac-bg);color:var(--ciaplac-ink)}
+  .seg button[data-emp="BB"].on{background:var(--bb-bg);color:var(--bb-ink)}
   .seg button:active{transform:translateY(1px)}
   .statusbar{display:flex;align-items:center;gap:10px;font-size:.72rem;color:var(--ink-faint)}
   .statusbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-edge);margin-right:6px;vertical-align:middle}
@@ -243,6 +249,17 @@
   .cab-carteira{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid var(--blue-edge);border-left-width:5px;border-radius:var(--radius);background:var(--blue-bg);color:var(--blue-ink)}
   .cab-carteira b{font-family:"Archivo",sans-serif;font-size:1rem;display:block}
   .cab-carteira small{display:block;font-size:.72rem;color:var(--ink-soft);margin-top:1px}
+  /* tabelinha "Vendas do Mês por Região": só ocupa o espaço que usa, como a de clientes por região */
+  #lista-vendas_por_regiao{width:fit-content;min-width:380px;max-width:100%}
+  #lista-vendas_por_regiao table.lc{width:100%}
+  #lista-vendas_por_regiao table.lc td.c-valor,#lista-vendas_por_regiao table.lc td.c-pedidos,#lista-vendas_por_regiao table.lc td.c-participacao{text-align:right;font-variant-numeric:tabular-nums}
+  @media print{
+    #lista-vendas_por_regiao{width:fit-content;min-width:0;max-width:100%}
+    #lista-vendas_por_regiao table.lc{table-layout:auto;width:auto}
+    #lista-vendas_por_regiao table.lc th,#lista-vendas_por_regiao table.lc td{padding:3px 14px 3px 8px;white-space:nowrap}
+    #lista-vendas_por_regiao table.lc th{white-space:normal;max-width:90px;width:auto}
+    #lista-vendas_por_regiao table.lc td:first-child{max-width:none}
+  }
   .cab-carteira.fora{border-color:var(--slate-edge);background:var(--slate-bg);color:var(--slate-ink)}
   .btn-print{font:inherit;font-family:"IBM Plex Sans",sans-serif;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid currentColor;background:var(--surface);color:inherit;cursor:pointer;white-space:nowrap}
   .btn-print:hover{filter:brightness(.95)}
@@ -286,6 +303,7 @@
     .chip-co{font-size:.8rem;letter-spacing:.04em;padding:3px 12px;border:1px solid #211e18;border-radius:5px;background:#211e18;color:#fff}
     .chip-co.bnz{background:var(--bnz-edge);border-color:var(--bnz-edge);color:#fff}
     .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
+    .chip-co.bb{background:var(--bb-edge);border-color:var(--bb-edge);color:#fff}
     .hero-main{padding:12px 14px}
     .hero{grid-template-columns:.8fr 1.3fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(4,1fr)!important}
@@ -375,7 +393,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.23 (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v26 (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -420,9 +438,10 @@
 
   <div class="topbar">
     <div class="seg no-print" id="seg">
-      <button data-emp="" class="on">Total</button>
+      <button data-emp="BB">BB</button>
       <button data-emp="BNZ">BNZ</button>
       <button data-emp="CIAPLAC">CIAPLAC</button>
+      <button data-emp="" class="on">Total</button>
     </div>
     <select id="filtro-regiao" class="filtro-regiao no-print" title="Mostrar um ou mais DDDs ou regiões (ex.: DDD 14)">
       <option value="">📍 Todas as regiões</option>
@@ -469,6 +488,7 @@
         <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
         <span class="nota-miuda" id="ped-acess" hidden>+ <span data-k="pedidos_acessorios">–</span> acessórios · <span data-k="pedidos_arame_kg">–</span> kg de arame</span>
         <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
+        <span class="nota-pecas" id="ped-kg" hidden><b class="pecas" data-k="pedidos_kg">–</b> kg de bobinas a entregar</span>
         <span class="nota-pecas" id="ped-unid" hidden><b class="pecas" data-k="pedidos_unidades">–</b> un. de Acabamento/Acessório a entregar</span>
         <span class="lnk">↗ abrir lista</span>
       </div>
@@ -479,10 +499,11 @@
         <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
         <span class="k">Vendas do Mês Atual</span>
         <span class="v" data-k="vendas_mes">–</span>
-        <span class="note">Confirmados · até o momento</span>
+        <span class="note">Confirmados · até o momento<br><span style="color:var(--blue-ink);font-weight:600;cursor:pointer" data-goto="vendas_por_regiao">↗ ver por região</span></span>
         <span class="nota-pecas" id="nota-pecas-bnz"><b class="pecas" data-k="vendas_pecas">–</b> <span data-k="vendas_pecas_label">peças vendidas</span></span>
         <span class="nota-miuda" id="vendas-acess" hidden>+ <span data-k="vendas_acessorios">–</span> acessórios · <span data-k="vendas_arame_kg">–</span> kg de arame</span>
         <span class="nota-pecas" id="nota-pecas-ciaplac-metros" hidden><b class="pecas" data-k="ciaplac_metros">–</b> m de Forro</span>
+        <span class="nota-pecas" id="nota-kg-bb" hidden><b class="pecas" data-k="vendas_kg">–</b> kg de bobinas</span>
         <span class="nota-pecas" id="nota-pecas-ciaplac-unid" hidden><b class="pecas" data-k="ciaplac_unidades">–</b> un. de Acabamento/Acessório</span>
       </div>
       <div class="kpi amber" data-goto="alvos" style="cursor:pointer">
@@ -561,7 +582,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.23 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v26 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -620,6 +641,7 @@ const LISTAS = [
   {k:"carteira_semmov",     titulo:"Carteira · Sem Movimentação",                                            cor:"clay"},
   {k:"carteira_inativos",   titulo:"Carteira · Inativos (fora do placar)",                                  cor:"slate"},
   {k:"por_regiao",          titulo:"Clientes por Região",                                                   cor:"blue"},
+  {k:"vendas_por_regiao",   titulo:"Vendas do Mês por Região (pedidos confirmados no mês atual)",           cor:"green"},
   {k:"pedidos_sem_entrega", titulo:"Pedidos a Entregar (sem data de entrega ainda)",                        cor:"blue"}
 ];
 const COLS = {
@@ -631,6 +653,7 @@ const COLS = {
   alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   por_regiao: [["regiao","Região"],["ativos","Clientes ativos (placar)"],["inativos","Inativos"]],
+  vendas_por_regiao: [["regiao","Região"],["pedidos","Pedidos"],["valor","Vendas do mês"],["participacao","% do total"]],
   pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["data_pedido","Data Emissão"],["pedido","Pedido"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.carteira;
@@ -681,10 +704,15 @@ function pintaKpis(kpi){
   if(pl) pl.textContent = kpi.vendas_pecas_label || "produtos vendidos";
   // CIAPLAC: Forro é metro, Acabamento/Acessório é unidade — não dá pra somar num número só,
   // por isso vira 2 linhas separadas em vez da linha única de "peças vendidas" (só faz sentido pra BNZ).
-  const isCiaplac = empresa === "CIAPLAC";
+  // BB: bobinas em kg (soma das linhas, sem frete).
+  const soBB = empresa === "BB";
+  const isCiaplac = empresa === "CIAPLAC" || soBB;   // esconde a linha de peças da BNZ
   const notaBnz = $("#nota-pecas-bnz"), notaMetros = $("#nota-pecas-ciaplac-metros"), notaUnid = $("#nota-pecas-ciaplac-unid");
-  // BNZ = peças; CIAPLAC = metros de Forro + unidades; Total mostra as duas empresas (cada uma na sua unidade)
-  const mostraCiaplac = empresa !== "BNZ" && kpi.ciaplac_metros != null;
+  // BNZ = peças; CIAPLAC = metros de Forro + unidades; BB = kg; Total mostra cada empresa na sua unidade (kg só quando a BB já vendeu)
+  const mostraCiaplac = empresa !== "BNZ" && !soBB && kpi.ciaplac_metros != null;
+  const mostraKgVendas = kpi.vendas_kg != null && (soBB || (empresa === "" && kpi.vendas_kg > 0));
+  const notaKg = $("#nota-kg-bb"); if(notaKg) notaKg.hidden = !mostraKgVendas;
+  if(mostraKgVendas){ const e = document.querySelector('[data-k="vendas_kg"]'); if(e) e.textContent = fmtInt(kpi.vendas_kg); }
   if(notaBnz) notaBnz.hidden = isCiaplac;
   if(notaMetros) notaMetros.hidden = !mostraCiaplac;
   if(notaUnid) notaUnid.hidden = !mostraCiaplac;
@@ -696,7 +724,7 @@ function pintaKpis(kpi){
   // BNZ: acessórios (pendural, regulador…) e arame (kg) em letra miúda embaixo das peças de drywall — nos 2 cards (Vendas do Mês e Pedidos a Entregar)
   const miudaBnz = (idLinha, kAcess, kArame, vAcess, vArame) => {
     const el = $(idLinha); if(!el) return;
-    const tem = empresa !== "CIAPLAC" && vAcess != null && ((vAcess || 0) > 0 || (vArame || 0) > 0);
+    const tem = empresa !== "CIAPLAC" && empresa !== "BB" && vAcess != null && ((vAcess || 0) > 0 || (vArame || 0) > 0);
     el.hidden = !tem;
     if(tem){
       const a = document.querySelector('[data-k="'+kAcess+'"]'); if(a) a.textContent = fmtInt(vAcess);
@@ -710,9 +738,12 @@ function pintaKpis(kpi){
   // BNZ = peças; CIAPLAC = metros de Forro + unidades de Acabamento/Acessório; Total mostra as duas empresas.
   const temQtdPed = kpi.pedidos_pecas != null;
   const pedPecas = $("#ped-pecas"), pedMetros = $("#ped-metros"), pedUnid = $("#ped-unid");
-  if(pedPecas) pedPecas.hidden = !temQtdPed || empresa === "CIAPLAC";
-  if(pedMetros) pedMetros.hidden = !temQtdPed || empresa === "BNZ";
-  if(pedUnid) pedUnid.hidden = !temQtdPed || empresa === "BNZ";
+  if(pedPecas) pedPecas.hidden = !temQtdPed || empresa === "CIAPLAC" || soBB;
+  if(pedMetros) pedMetros.hidden = !temQtdPed || empresa === "BNZ" || soBB;
+  if(pedUnid) pedUnid.hidden = !temQtdPed || empresa === "BNZ" || soBB;
+  const pedKg = $("#ped-kg"), mostraKgPed = kpi.pedidos_kg != null && (soBB || (empresa === "" && kpi.pedidos_kg > 0));
+  if(pedKg) pedKg.hidden = !mostraKgPed;
+  if(mostraKgPed){ const e = document.querySelector('[data-k="pedidos_kg"]'); if(e) e.textContent = fmtInt(kpi.pedidos_kg); }
   // Prospecção: as atividades de prospect não entram no Check-list daqui; o card só avisa quantas existem
   const prosAtiv = $("#pros-ativ");
   if(prosAtiv){
@@ -814,6 +845,8 @@ function kpisDasListas(L, base){
     ciaplac_unidades: ou(base.ciaplac_unidades, soma("vendas_linhas", "un")),
     vendas_acessorios: ou(base.vendas_acessorios, soma("vendas_linhas", "acess")),
     vendas_arame_kg: ou(base.vendas_arame_kg, soma("vendas_linhas", "arame")),
+    vendas_kg: ou(base.vendas_kg, soma("vendas_linhas", "kg")),
+    pedidos_kg: ou(base.pedidos_kg, soma("pedidos_sem_entrega", "kg")),
     pedidos_sem_entrega_qtd: n("pedidos_sem_entrega"),
     pedidos_valor: ou(base.pedidos_valor, soma("pedidos_sem_entrega", "valor")),
     pedidos_pecas: ou(base.pedidos_pecas, soma("pedidos_sem_entrega", "pecas")),
@@ -829,7 +862,15 @@ let ULTIMA_LISTAS = {};   // listas como vieram do n8n (a busca por cliente e as
 const sortState = {};
 const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
 let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
-const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra","ativos","inativos"]);
+const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao"]);
+/* Vendas do mês por região: soma os pedidos do mês (valor total do pedido) de cada região — sempre inteira, como o resumo "Clientes por região" */
+function vendasPorRegiao(linhas){
+  const g = {};
+  (linhas || []).forEach(r => { const k = r.regiao || ""; g[k] = g[k] || {regiao:k, pedidos:0, valor:0}; g[k].pedidos++; g[k].valor += Number(r.valor) || 0; });
+  const total = Object.values(g).reduce((s,x) => s + x.valor, 0);
+  return Object.values(g).map(x => Object.assign(x, {participacao: total ? Math.round(x.valor / total * 1000) / 10 : 0}))
+    .sort((a,b) => (a.regiao === "") - (b.regiao === "") || b.valor - a.valor || a.regiao.localeCompare(b.regiao, "pt-BR"));
+}
 function ordenarLinhasCopiloto(rows, col, dir){
   return [...rows].sort((a,b) => {
     if(NUM_COLS_COPILOTO.has(col)){
@@ -841,7 +882,7 @@ function ordenarLinhasCopiloto(rows, col, dir){
 function renderListas(listas){
   ULTIMA_LISTAS = listas;
   montaOpcoesRegiao(listas);
-  const L = listasFiltradas(listas);
+  const L = Object.assign({}, listasFiltradas(listas), { vendas_por_regiao: vendasPorRegiao(listas.vendas_linhas) });
   // com filtro, os números de cima saem das próprias listas: assim batem com o que está marcado
   const kpis = regioesSel.size ? kpisDasListas(L, DADOS.kpis || {}) : (DADOS.kpis || {});
   pintaKpis(kpis);
@@ -921,6 +962,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
           if(c[0]==="regiao" && !v) v = "(sem região)";
+          if(k==="vendas_por_regiao" && c[0]==="valor") v = fmtBRL(v);
+          if(k==="vendas_por_regiao" && c[0]==="participacao") v = String(v).replace(".", ",") + "%";
           // no Check-list, o nome do cliente abre a oportunidade dele no Odoo (outra aba)
           if(k==="atividades" && c[0]==="cliente" && r.lead) v = '<a class="lk" href="'+ODOO_URL+'/odoo/crm/'+r.lead+'" target="_blank" rel="noopener" title="abrir no Odoo">'+v+'</a>';
           if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
@@ -930,10 +973,11 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+"\">"+v+"</td>";
         }).join("")+"</tr>";
       }
-      if(k==="por_regiao"){
-        // linha de total: a soma de "ativos" tem que bater com o número grande do placar da carteira
+      if(k==="por_regiao" || k==="vendas_por_regiao"){
+        // linha de total: a soma de "ativos" tem que bater com o número grande do placar da carteira; a de "Vendas do mês" com o card Vendas do Mês Atual
         const soma = c => rows.reduce((s,r)=> s + (Number(r[c])||0), 0);
-        tb.innerHTML += '<tr class="tot">'+cols.map(c => '<td class="c-'+c[0]+'">'+(c[0]==="regiao" ? "Total" : soma(c[0]))+'</td>').join("")+'</tr>';
+        const celula = c => c[0]==="regiao" ? "Total" : (k==="vendas_por_regiao" && c[0]==="valor" ? fmtBRL(soma(c[0])) : (k==="vendas_por_regiao" && c[0]==="participacao" ? "100%" : soma(c[0])));
+        tb.innerHTML += '<tr class="tot">'+cols.map(c => '<td class="c-'+c[0]+'">'+celula(c)+'</td>').join("")+'</tr>';
       }
       t.appendChild(tb); wrap.appendChild(t); card.appendChild(wrap);
     }
@@ -1115,9 +1159,10 @@ try { empresa = localStorage.getItem("pv_empresa") || ""; } catch(e){}
 function applyEmpresaUI(){
   $$("#seg button").forEach(b => b.classList.toggle("on", (b.dataset.emp||"") === empresa));
   const chip = $("#chip-co");
-  chip.textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : "BNZ · CIAPLAC");
+  chip.textContent = empresa === "BNZ" ? "BNZ METAIS" : (empresa === "CIAPLAC" ? "CIAPLAC" : (empresa === "BB" ? "BB" : "BB · BNZ · CIAPLAC"));
   chip.classList.toggle("bnz", empresa === "BNZ");
   chip.classList.toggle("ciaplac", empresa === "CIAPLAC");
+  chip.classList.toggle("bb", empresa === "BB");
   document.body.setAttribute("data-empresa", empresa || "");
   syncPrintPageStyle();
 }
@@ -1128,7 +1173,7 @@ function syncPrintPageStyle(){
   const dataTxt = $("#hoje")?.textContent || "";
   const texto = ("Copiloto de Vendas — Missões · " + (tituloImpressao ? tituloImpressao.replace(/^📍\s*/, "") + " · " : "") + (regiaoSel ? regiaoSel + " · " : "") + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
   const rodape = ($(".updated")?.textContent || "").trim().replace(/"/g,'\\"');
-  const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : "#555");
+  const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : (empresa === "BB" ? "#8a5cd1" : "#555"));
   const el = $("#print-page-style");
   // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
   if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
