@@ -231,6 +231,30 @@
   .login .autor-login{margin-top:6px;text-align:center;font-size:.7rem;color:var(--ink-faint)}
   .loading{padding:40px 0;text-align:center;color:var(--ink-faint);font-size:.85rem}
 
+  /* ---- filtro 📍 por DDD e região (várias de uma vez) + "Imprimir esta lista" ---- */
+  .filtro-regiao{font:inherit;font-size:.76rem;padding:6px 10px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);max-width:260px}
+  .filtro-regiao.on{border-color:var(--blue-edge);background:var(--blue-bg);color:var(--blue-ink);font-weight:600}
+  .chip-reg{display:inline-flex;align-items:center;gap:4px;margin:2px 2px;padding:1px 4px 1px 8px;border:1px solid var(--blue-edge);border-radius:12px;background:var(--surface)}
+  .chip-reg button{font:inherit;font-size:.7rem;border:0;background:none;color:var(--blue-ink);cursor:pointer;padding:0 3px}
+  .filtro-aviso{margin-top:10px;padding:8px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg);font-size:.78rem;color:var(--blue-ink)}
+  .filtro-aviso button.btn{margin-left:8px}
+  .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
+  .btn-print{font:inherit;font-family:"IBM Plex Sans",sans-serif;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid currentColor;background:var(--surface);color:inherit;cursor:pointer;white-space:nowrap}
+  .btn-print:hover{filter:brightness(.95)}
+  @media print{
+    /* imprimir só uma lista: some tudo do corpo, ficam o cabeçalho (título, empresa, data), o que está filtrado e a lista escolhida */
+    body.print-one .tagline,
+    body.print-one #content > *:not(#listas):not(#filtro-aviso),
+    body.print-one #listas > .band-label,
+    body.print-one #listbox > *:not(.print-alvo){display:none!important}
+    body.print-one section#listas{margin-top:8px}
+    .filtro-regiao{display:none!important}
+    .filtro-aviso{border:0;background:none;padding:0;margin-top:6px;color:#211e18;font-weight:700}
+    .filtro-aviso button{display:none}
+    .chip-reg{border:0;padding:0;margin:0}
+  }
+  @media (max-width:820px){ .filtro-regiao{max-width:100%;flex:1 1 100%} .busca-cliente{min-width:0;flex:1 1 100%} }
+
 
   @media (max-width:820px){
     .hero{grid-template-columns:1fr}
@@ -346,7 +370,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.21 (ajustes de impressão/cabeçalho, resumo por região, colunas das listas) -->
+<!-- Copiloto de Vendas — v2.22 (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -395,11 +419,15 @@
       <button data-emp="BNZ">BNZ</button>
       <button data-emp="CIAPLAC">CIAPLAC</button>
     </div>
+    <select id="filtro-regiao" class="filtro-regiao no-print" title="Mostrar um ou mais DDDs ou regiões (ex.: DDD 14)">
+      <option value="">📍 Todas as regiões</option>
+    </select>
     <input type="search" id="busca-cliente" class="busca-cliente no-print" placeholder="🔎 Buscar cliente… (separe por vírgula p/ vários)" autocomplete="off">
   </div>
 
   <div id="content" hidden>
 
+    <div id="filtro-aviso" class="filtro-aviso" hidden></div>
     <section id="busca-resultado" class="busca-resultado" hidden></section>
 
     <div class="hero">
@@ -527,7 +555,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.21 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v2.22 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -621,8 +649,9 @@ function setStatus(state, text){
   $("#status-text").textContent = text;
 }
 
-function fill(data){
-  const kpi = data.kpis || {};
+let DADOS = {};   // resposta do n8n como veio (os números de cima voltam daqui quando não há filtro)
+/* pinta os números de cima (cards e faixa de KPIs) a partir de um objeto de kpis — o do n8n, ou o recalculado das listas filtradas */
+function pintaKpis(kpi){
   const c   = kpi.carteira || {};
   const m   = kpi.missoes || {};
   const al  = kpi.alertas || {};
@@ -695,7 +724,10 @@ function fill(data){
       const el = document.querySelector('[data-k="'+k+'"]'); if(el) el.textContent = fmtInt(v);
     }
   }
+}
 
+function fill(data){
+  DADOS = data;
   $("#updated-at").textContent = fmtDateTime(data.atualizado_em);
   $("#hoje").textContent = new Date(data.atualizado_em||Date.now()).toLocaleDateString("pt-BR");
   syncPrintPageStyle();
@@ -704,7 +736,90 @@ function fill(data){
   renderListas(data.listas || {});
 }
 
-let ULTIMA_LISTAS = {};
+/* ---- filtro por região e por DDD (planejar visita: "vou pra Campinas, quem está lá?" / "me dá o DDD 14") ----
+   Igual ao do Copiloto de Prospects v1.8. Dá pra marcar VÁRIOS: cada item é uma região ("SP - Bauru") ou um DDD ("ddd:14");
+   o cliente aparece se bater com QUALQUER item marcado. A região vem do cadastro do contato (n8n v37, pelo partner_id);
+   o DDD sai do Zap do cliente (wa.me/55 + DDD + número); na atividade vale o Zap do cliente dela. */
+const regioesSel = new Set();
+let regiaoSel = "";   // só o texto com o que está marcado (vai no cabeçalho da impressão)
+const rotuloFiltro = v => v.startsWith("ddd:") ? "DDD " + v.slice(4) : v;
+const ordemFiltro = (a,b) => (b.startsWith("ddd:") - a.startsWith("ddd:")) || a.localeCompare(b,"pt-BR");
+const atualizaTextoRegioes = () => { regiaoSel = [...regioesSel].sort(ordemFiltro).map(rotuloFiltro).join(" + "); };
+// o filtro NÃO é lembrado entre visitas: sempre abre limpo (filtro esquecido escondia clientes)
+try { localStorage.removeItem("pv_regiao"); } catch(e){}
+const dddDoZap = z => { const d = String(z || "").replace(/\D/g, ""); if(d.length < 12 || !d.startsWith("55")) return ""; const x = d.slice(2,4); return /^[1-9][1-9]$/.test(x) ? x : ""; };
+const bateFiltro = r => regioesSel.has(r.regiao) || regioesSel.has("ddd:" + dddDoZap(r.zap));
+// os clientes da carteira (placar + inativos): base das contagens da caixinha
+const CARTEIRA_INTEIRA = ["carteira_ativos","carteira_negociacao","carteira_semmov","carteira_inativos"];
+
+function montaOpcoesRegiao(listas){
+  const sel = $("#filtro-regiao"); if(!sel) return;
+  const porReg = {};
+  (listas.por_regiao || []).forEach(r => { if(r.regiao) porReg[r.regiao] = (r.ativos || 0) + (r.inativos || 0); });
+  const regs = Object.keys(porReg).sort((a,b) => a.localeCompare(b,"pt-BR"));
+  regioesSel.forEach(r => { if(!r.startsWith("ddd:") && !regs.includes(r)) { regs.unshift(r); porReg[r] = 0; } });
+  // DDDs da carteira, com as regiões que mais aparecem em cada um (ajuda a aprender os nomes)
+  const porDdd = {};
+  CARTEIRA_INTEIRA.forEach(k => (listas[k] || []).forEach(r => {
+    const d = dddDoZap(r.zap); if(!d) return;
+    porDdd[d] = porDdd[d] || {n:0, regs:{}}; porDdd[d].n++;
+    if(r.regiao) porDdd[d].regs[r.regiao] = (porDdd[d].regs[r.regiao] || 0) + 1;
+  }));
+  regioesSel.forEach(v => { if(v.startsWith("ddd:") && !porDdd[v.slice(4)]) porDdd[v.slice(4)] = {n:0, regs:{}}; });
+  const ddds = Object.keys(porDdd).sort();
+  const marca = v => regioesSel.has(v) ? "✓ " : "";
+  const qtd = regioesSel.size;
+  // a caixinha sempre volta pro texto de cima; o que está marcado aparece com ✓ (escolher de novo tira)
+  sel.innerHTML = '<option value="">'+(qtd ? "📍 + Somar outro DDD ou região ("+qtd+" marcado"+(qtd>1?"s":"")+")" : "📍 Todas — escolha DDD ou região (um ou mais)")+'</option>' +
+    (ddds.length ? '<optgroup label="Por DDD">' + ddds.map(d => {
+      const nomes = Object.keys(porDdd[d].regs).sort((a,b) => porDdd[d].regs[b] - porDdd[d].regs[a]).slice(0,3).map(x => x.replace(/^[A-Z]{2} - /, "")).join(", ");
+      return '<option value="ddd:'+d+'">'+marca("ddd:"+d)+'DDD '+d+' ('+porDdd[d].n+')'+(nomes ? ' · '+esc(nomes) : '')+'</option>';
+    }).join("") + '</optgroup>' : '') +
+    '<optgroup label="Por região">' + regs.map(r => '<option value="'+esc(r)+'">'+marca(r)+esc(r)+' ('+porReg[r]+')</option>').join("") + '</optgroup>';
+  sel.value = "";
+  sel.classList.toggle("on", qtd > 0);
+}
+// recorte das listas pelo que está marcado (o resumo "Clientes por região" continua inteiro, pra comparar)
+function listasFiltradas(listas){
+  if(!regioesSel.size) return listas;
+  const out = {};
+  for(const k of Object.keys(listas)) out[k] = (k === "por_regiao") ? listas[k] : (listas[k] || []).filter(bateFiltro);
+  return out;
+}
+// os números de cima, refeitos a partir das listas já filtradas (mesmas regras do n8n; o que o n8n deixa em branco pra uma empresa continua em branco)
+function kpisDasListas(L, base){
+  const n = k => (L[k] || []).length;
+  const soma = (k, f) => (L[k] || []).reduce((s,r) => s + (Number(r[f]) || 0), 0);
+  const ou = (v, calc) => v == null ? null : calc;
+  const ativ = L.atividades || [];
+  return {
+    carteira_ativa: n("carteira_ativos") + n("carteira_negociacao") + n("carteira_semmov"),
+    em_negociacao: n("em_negociacao"),
+    alvos_mes: n("alvos"),
+    atividades: ativ.length, atividades_atrasadas: ativ.filter(a => a.estado === "atrasada").length,
+    carteira: { ativos: n("carteira_ativos"), negociacao: n("carteira_negociacao"), sem_movimentacao: n("carteira_semmov"), inativos: n("carteira_inativos") },
+    missoes: { contato_preventivo: n("contato_preventivo"), recuperacao: n("recuperacao"), em_formacao: n("em_formacao") },
+    alertas: { sem_movimentacao_30d: n("sem_movimentacao"), sem_conversa_zap: n("conversa_zap"), inativos: n("inativos") },
+    curva_a_qtd: n("curva_a"),
+    vendas_mes: soma("vendas_linhas", "valor"),
+    vendas_pecas: ou(base.vendas_pecas, soma("vendas_linhas", "pecas")),
+    vendas_pecas_label: base.vendas_pecas_label,
+    ciaplac_metros: ou(base.ciaplac_metros, soma("vendas_linhas", "metros")),
+    ciaplac_unidades: ou(base.ciaplac_unidades, soma("vendas_linhas", "un")),
+    vendas_acessorios: ou(base.vendas_acessorios, soma("vendas_linhas", "acess")),
+    vendas_arame_kg: ou(base.vendas_arame_kg, soma("vendas_linhas", "arame")),
+    pedidos_sem_entrega_qtd: n("pedidos_sem_entrega"),
+    pedidos_valor: ou(base.pedidos_valor, soma("pedidos_sem_entrega", "valor")),
+    pedidos_pecas: ou(base.pedidos_pecas, soma("pedidos_sem_entrega", "pecas")),
+    pedidos_metros: ou(base.pedidos_metros, soma("pedidos_sem_entrega", "metros")),
+    pedidos_unidades: ou(base.pedidos_unidades, soma("pedidos_sem_entrega", "un")),
+    pedidos_acessorios: ou(base.pedidos_acessorios, soma("pedidos_sem_entrega", "acess")),
+    pedidos_arame_kg: ou(base.pedidos_arame_kg, soma("pedidos_sem_entrega", "arame")),
+    prospect_atividades: null   // as atividades de prospect não têm região aqui: com filtro, a linha some do card Prospecção
+  };
+}
+
+let ULTIMA_LISTAS = {};   // listas como vieram do n8n (a busca por cliente e as ações das atividades usam estas)
 const sortState = {};
 const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
 let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
@@ -719,9 +834,22 @@ function ordenarLinhasCopiloto(rows, col, dir){
 }
 function renderListas(listas){
   ULTIMA_LISTAS = listas;
+  montaOpcoesRegiao(listas);
+  const L = listasFiltradas(listas);
+  // com filtro, os números de cima saem das próprias listas: assim batem com o que está marcado
+  const kpis = regioesSel.size ? kpisDasListas(L, DADOS.kpis || {}) : (DADOS.kpis || {});
+  pintaKpis(kpis);
+  const fa = $("#filtro-aviso");
+  if(fa){
+    fa.hidden = !regioesSel.size;
+    fa.innerHTML = regioesSel.size ? '📍 Mostrando só '+
+      [...regioesSel].sort(ordemFiltro).map(r => '<span class="chip-reg"><b>'+esc(rotuloFiltro(r))+'</b><button class="no-print" data-tira-reg="'+esc(r)+'" title="tirar">✕</button></span>').join(" ")+
+      ' — '+kpis.carteira_ativa+' clientes ativos (+ '+(kpis.carteira||{}).inativos+' inativos), '+kpis.atividades+' atividades, '+kpis.pedidos_sem_entrega_qtd+' pedidos a entregar. <button class="btn no-print" id="filtro-limpar">✕ ver todas</button>' : "";
+  }
+  syncPrintPageStyle();
   const box = $("#listbox"); box.innerHTML = "";
   for(const {k,titulo,cor} of LISTAS){
-    let rows = listas[k] || [];
+    let rows = L[k] || [];
     const st = sortState[k];
     if(st && st.col) rows = ordenarLinhasCopiloto(rows, st.col, st.dir);
     box.appendChild(montarCard(k, titulo, cor, rows, "lista-", true));
@@ -736,9 +864,11 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
     const comAcoes = k === "atividades" && rows.some(r => r.id);
     const cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || COLS.padrao);
     const st = sortavel ? sortState[k] : null;
-    const card = document.createElement("div"); card.className = "listcard"; card.id = pre+k;
+    const card = document.createElement("div"); card.className = "listcard" + (pre+k === alvoImpressao ? " print-alvo" : ""); card.id = pre+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
-    h.innerHTML = '<span>'+titulo+'</span><span class="n">'+rows.length+'</span>';
+    h.innerHTML = '<span>'+titulo+'</span><span class="lc-h-dir">'+
+      (pre === "lista-" && rows.length ? '<button class="btn-print no-print" data-print="'+pre+k+'" title="Imprimir só esta lista">🖨 Imprimir esta lista</button>' : '')+
+      '<span class="n">'+rows.length+'</span></span>';
     card.appendChild(h);
     if(comAcoes && sortavel){
       const bar = document.createElement("div"); bar.className = "lc-bar no-print";
@@ -949,8 +1079,11 @@ const DEMO = {
     missoes:{contato_preventivo:1,recuperacao:2,em_formacao:40},
     alertas:{sem_movimentacao_30d:6,sem_conversa_zap:4,inativos:26},
     curva_a_qtd:2, vendas_pecas:3480, vendas_pecas_label:"peças vendidas", ciaplac_metros:null, ciaplac_unidades:null, pedidos_sem_entrega_qtd:1 },
-  listas: { alvos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"5511…",cidade:"São Paulo",uf:"SP",marcadores:"BB CLIENTE AÇO",estagio:"Clientes Ativos",ultimo_pedido:"2026-08-12"}],
-    em_negociacao:[{cliente:"(exemplo) ANNA DECOR",fantasia:"Anna Decor",zap:"5519…",cidade:"Piracicaba",uf:"SP",marcadores:"",ultima_interacao:"2026-09-01"}],
+  listas: { alvos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"https://wa.me/5511999990000",cidade:"São Paulo",uf:"SP",regiao:"SP - São Paulo",marcadores:"BB CLIENTE AÇO",estagio:"Clientes Ativos",ultimo_pedido:"2026-08-12"}],
+    em_negociacao:[{cliente:"(exemplo) ANNA DECOR",fantasia:"Anna Decor",zap:"https://wa.me/5519999990000",cidade:"Piracicaba",uf:"SP",regiao:"SP - Campinas",marcadores:"",ultima_interacao:"2026-09-01"}],
+    carteira_ativos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",zap:"https://wa.me/5511999990000",regiao:"SP - São Paulo"},{cliente:"(exemplo) ANNA DECOR",zap:"https://wa.me/5519999990000",regiao:"SP - Campinas"}],
+    por_regiao:[{regiao:"SP - Campinas",ativos:1,inativos:0},{regiao:"SP - São Paulo",ativos:1,inativos:0}],
+    vendas_linhas:[{empresa:"BNZ METAIS",regiao:"SP - São Paulo",zap:"https://wa.me/5511999990000",valor:98935.25,pecas:3480,acess:0,arame:0,metros:0,un:0}],
     contato_preventivo:[],recuperacao:[],em_formacao:[],sem_movimentacao:[],conversa_zap:[],inativos:[],
     curva_a:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",marcadores:"GRUPO BRASIL",zap:"5511…",cidade:"São Paulo",uf:"SP",faturamento:"R$ 412.000"}],
     pedidos_sem_entrega:[{cliente:"(exemplo) CASA DO FORRO",fantasia:"Casa do Forro",zap:"5511…",cidade:"Guarujá",uf:"SP",marcadores:"",pedido:"S02090",data_pedido:"2026-09-10"}],
@@ -974,7 +1107,7 @@ function applyEmpresaUI(){
 function syncPrintPageStyle(){
   const chipTxt = ($("#chip-co")?.textContent || "").trim();
   const dataTxt = $("#hoje")?.textContent || "";
-  const texto = ("Copiloto de Vendas — Missões · " + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
+  const texto = ("Copiloto de Vendas — Missões · " + (tituloImpressao ? tituloImpressao.replace(/^📍\s*/, "") + " · " : "") + (regiaoSel ? regiaoSel + " · " : "") + chipTxt + (dataTxt && dataTxt !== "—" ? " · " + dataTxt : "")).replace(/"/g,'\\"');
   const rodape = ($(".updated")?.textContent || "").trim().replace(/"/g,'\\"');
   const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : "#555");
   const el = $("#print-page-style");
@@ -987,7 +1120,31 @@ window.addEventListener("beforeprint", syncPrintPageStyle);
 // em vez do "ao vivo". imprimindo trava esse recarregamento enquanto o diálogo está aberto.
 let imprimindo = false;
 window.addEventListener("beforeprint", ()=>{ imprimindo = true; });
-window.addEventListener("afterprint", ()=>{ imprimindo = false; });
+window.addEventListener("afterprint", ()=>{ imprimindo = false; fimImpressaoUma(); });
+
+/* ---- "🖨 Imprimir esta lista": imprime só o cabeçalho + o que está filtrado + aquela lista (sem precisar escolher páginas) ---- */
+let tituloImpressao = "";
+let alvoImpressao = "";   // id da lista a imprimir (montarCard reaplica a marca se a tela redesenhar durante a impressão)
+function fimImpressaoUma(){
+  document.body.classList.remove("print-one");
+  $$(".print-alvo").forEach(x => x.classList.remove("print-alvo"));
+  tituloImpressao = ""; alvoImpressao = "";
+  syncPrintPageStyle();
+}
+function imprimirCard(id){
+  const card = document.getElementById(id); if(!card) return;
+  fimImpressaoUma();
+  alvoImpressao = id;
+  card.classList.add("print-alvo");
+  document.body.classList.add("print-one");
+  tituloImpressao = (card.querySelector(".lc-h > span")?.textContent || "").trim();
+  syncPrintPageStyle();
+  setTimeout(() => window.print(), 50);
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-print]");
+  if(b){ e.stopPropagation(); imprimirCard(b.dataset.print); }
+}, true);
 function setEmpresa(v){
   empresa = v || "";
   try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
@@ -1080,6 +1237,22 @@ if(LINK_PROSPECCAO) {
   $("#link-prospeccao").href = LINK_PROSPECCAO;
   $("#link-prospeccao-ativ").href = LINK_PROSPECCAO + "#atividades";   // abre o Copiloto de Prospects já na lista de atividades
 } else { $("#link-prospeccao-ativ").closest(".note").hidden = true; }
+$("#filtro-regiao").addEventListener("change", e => {
+  const v = e.target.value || "";
+  if(!v) return;
+  regioesSel.has(v) ? regioesSel.delete(v) : regioesSel.add(v);   // escolher de novo = tirar
+  atualizaTextoRegioes();
+  selAtiv.clear();
+  renderListas(ULTIMA_LISTAS);
+});
+document.addEventListener("click", e => {
+  const tira = e.target.closest("button[data-tira-reg]");
+  if(!tira && !e.target.closest("#filtro-limpar")) return;
+  if(tira) regioesSel.delete(tira.dataset.tiraReg); else regioesSel.clear();
+  atualizaTextoRegioes();
+  selAtiv.clear();
+  renderListas(ULTIMA_LISTAS);
+});
 $("#busca-cliente").addEventListener("input", e => { buscaCliente = e.target.value; renderBusca(); });
 $("#btn-refresh").addEventListener("click", load);
 $("#btn-logout").addEventListener("click", logout);
