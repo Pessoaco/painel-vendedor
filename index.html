@@ -239,6 +239,11 @@
   .filtro-aviso{margin-top:10px;padding:8px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg);font-size:.78rem;color:var(--blue-ink)}
   .filtro-aviso button.btn{margin-left:8px}
   .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
+  /* título que abre o bloco "Carteira ativa" (e o "Fora do placar") entre as listas */
+  .cab-carteira{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid var(--blue-edge);border-left-width:5px;border-radius:var(--radius);background:var(--blue-bg);color:var(--blue-ink)}
+  .cab-carteira b{font-family:"Archivo",sans-serif;font-size:1rem;display:block}
+  .cab-carteira small{display:block;font-size:.72rem;color:var(--ink-soft);margin-top:1px}
+  .cab-carteira.fora{border-color:var(--slate-edge);background:var(--slate-bg);color:var(--slate-ink)}
   .btn-print{font:inherit;font-family:"IBM Plex Sans",sans-serif;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid currentColor;background:var(--surface);color:inherit;cursor:pointer;white-space:nowrap}
   .btn-print:hover{filter:brightness(.95)}
   @media print{
@@ -370,7 +375,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v2.22 (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v2.23 (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -443,6 +448,7 @@
         <span class="k">Minha carteira ativa</span>
         <span class="v" data-k="carteira_ativa">–</span>
         <span class="sub">Placar de clientes</span>
+        <span class="lnk" data-goto="cab-carteira" style="cursor:pointer">↗ abrir lista</span>
         <span class="breakdown">
           <b data-k="c_ativos" data-goto="carteira_ativos">–</b> ativos &nbsp;·&nbsp;
           <b data-k="c_negociacao" data-goto="carteira_negociacao">–</b> em negociação &nbsp;·&nbsp;
@@ -451,7 +457,7 @@
         </span>
         <div class="regiao-link" data-goto="por_regiao">
           <span class="sub">Clientes por região</span>
-          <span class="lnk">↗ abrir lista</span>
+          <span class="lnk">↗ abrir resumo por região</span>
         </div>
       </div>
       <div class="hero-main plain" data-goto="pedidos_sem_entrega" style="cursor:pointer">
@@ -555,7 +561,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v2.22 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v2.23 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -849,6 +855,19 @@ function renderListas(listas){
   syncPrintPageStyle();
   const box = $("#listbox"); box.innerHTML = "";
   for(const {k,titulo,cor} of LISTAS){
+    // títulos que separam o bloco "Carteira ativa" (as 3 listas que somam o número do placar) do que vem antes e depois
+    if(k === "carteira_ativos"){
+      const nAtiva = ["carteira_ativos","carteira_negociacao","carteira_semmov"].reduce((s,x) => s + (L[x] || []).length, 0);
+      const cab = document.createElement("div"); cab.className = "cab-carteira" + (alvosImpressao.includes("cab-carteira") ? " print-alvo" : ""); cab.id = "cab-carteira";
+      cab.innerHTML = '<div><b>Carteira ativa — '+nAtiva+' cliente'+(nAtiva === 1 ? '' : 's')+'</b>'+
+        '<small>É o número do placar “Minha carteira ativa”: Ativos + Em Negociação + Sem Movimentação, nas 3 listas abaixo.</small></div>'+
+        (nAtiva ? '<button class="btn-print no-print" data-print="cab-carteira" title="Imprimir a carteira ativa inteira (as 3 listas)">🖨 Imprimir a carteira ativa</button>' : '');
+      box.appendChild(cab);
+    } else if(k === "carteira_inativos"){
+      const cab = document.createElement("div"); cab.className = "cab-carteira fora" + (alvosImpressao.includes("cab-fora") ? " print-alvo" : ""); cab.id = "cab-fora";
+      cab.innerHTML = '<div><b>Fora do placar</b><small>Inativos não entram no número da carteira ativa.</small></div>';
+      box.appendChild(cab);
+    }
     let rows = L[k] || [];
     const st = sortState[k];
     if(st && st.col) rows = ordenarLinhasCopiloto(rows, st.col, st.dir);
@@ -864,7 +883,7 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
     const comAcoes = k === "atividades" && rows.some(r => r.id);
     const cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || COLS.padrao);
     const st = sortavel ? sortState[k] : null;
-    const card = document.createElement("div"); card.className = "listcard" + (pre+k === alvoImpressao ? " print-alvo" : ""); card.id = pre+k;
+    const card = document.createElement("div"); card.className = "listcard" + (alvosImpressao.includes(pre+k) ? " print-alvo" : ""); card.id = pre+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
     h.innerHTML = '<span>'+titulo+'</span><span class="lc-h-dir">'+
       (pre === "lista-" && rows.length ? '<button class="btn-print no-print" data-print="'+pre+k+'" title="Imprimir só esta lista">🖨 Imprimir esta lista</button>' : '')+
@@ -1069,7 +1088,7 @@ document.addEventListener("click", e=>{
     return;
   }
   const g = e.target.closest("[data-goto]");
-  if(g){ const el = $("#lista-"+g.dataset.goto); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); }
+  if(g){ const el = $("#lista-"+g.dataset.goto) || document.getElementById(g.dataset.goto); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); }
 });
 
 const DEMO = {
@@ -1124,20 +1143,24 @@ window.addEventListener("afterprint", ()=>{ imprimindo = false; fimImpressaoUma(
 
 /* ---- "🖨 Imprimir esta lista": imprime só o cabeçalho + o que está filtrado + aquela lista (sem precisar escolher páginas) ---- */
 let tituloImpressao = "";
-let alvoImpressao = "";   // id da lista a imprimir (montarCard reaplica a marca se a tela redesenhar durante a impressão)
+let alvosImpressao = [];   // ids das listas a imprimir (montarCard reaplica a marca se a tela redesenhar durante a impressão)
 function fimImpressaoUma(){
   document.body.classList.remove("print-one");
   $$(".print-alvo").forEach(x => x.classList.remove("print-alvo"));
-  tituloImpressao = ""; alvoImpressao = "";
+  tituloImpressao = ""; alvosImpressao = [];
   syncPrintPageStyle();
 }
 function imprimirCard(id){
-  const card = document.getElementById(id); if(!card) return;
+  // o título "Carteira ativa" imprime o bloco inteiro: título + as 3 listas que somam o placar
+  const ids = id === "cab-carteira" ? ["cab-carteira","lista-carteira_ativos","lista-carteira_negociacao","lista-carteira_semmov"] : [id];
+  const cards = ids.map(i => document.getElementById(i)).filter(Boolean);
+  if(!cards.length) return;
   fimImpressaoUma();
-  alvoImpressao = id;
-  card.classList.add("print-alvo");
+  alvosImpressao = ids;
+  cards.forEach(c => c.classList.add("print-alvo"));
   document.body.classList.add("print-one");
-  tituloImpressao = (card.querySelector(".lc-h > span")?.textContent || "").trim();
+  const card = cards[0];
+  tituloImpressao = id === "cab-carteira" ? "Carteira ativa" : (card.querySelector(".lc-h > span")?.textContent || "").trim();
   syncPrintPageStyle();
   setTimeout(() => window.print(), 50);
 }
