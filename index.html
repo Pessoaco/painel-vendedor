@@ -331,6 +331,8 @@
     table.lc th.c-entrega_efetiva,table.lc th.c-data_pedido,table.lc th.c-vencimento{width:7.5%}
     table.lc th.c-tipo{width:12%} table.lc th.c-estado{width:9%} table.lc th.c-responsavel{width:14%}
     table.lc th.c-ativos,table.lc th.c-inativos{width:22%}
+    table.lc th.c-situacao{width:6.5%} table.lc th.c-a_entregar{width:10%} table.lc th.c-valor{width:9%}
+    table.lc td.c-valor{white-space:nowrap}
     /* nomes de cliente e fantasia dividem o espaço nas listas curtas (poucas colunas) */
     table.t-em_negociacao th.c-fantasia,table.t-curva_a th.c-fantasia,table.t-pedidos_sem_entrega th.c-fantasia{width:19%}
     /* resumo por região: tabelinha compacta, números colados no nome da região */
@@ -393,7 +395,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v26 (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v27 (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -484,7 +486,7 @@
         <span class="k">Pedidos a entregar</span>
         <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
         <span class="valor-ped" data-k="pedidos_valor" hidden>–</span>
-        <span class="sub">Confirmados, ainda sem data de entrega</span>
+        <span class="sub">Confirmados e ainda não entregues por inteiro (entrega parcial: só o que falta)</span>
         <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
         <span class="nota-miuda" id="ped-acess" hidden>+ <span data-k="pedidos_acessorios">–</span> acessórios · <span data-k="pedidos_arame_kg">–</span> kg de arame</span>
         <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
@@ -582,7 +584,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v26 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v27 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -642,7 +644,7 @@ const LISTAS = [
   {k:"carteira_inativos",   titulo:"Carteira · Inativos (fora do placar)",                                  cor:"slate"},
   {k:"por_regiao",          titulo:"Clientes por Região",                                                   cor:"blue"},
   {k:"vendas_por_regiao",   titulo:"Vendas do Mês por Região (pedidos confirmados no mês atual)",           cor:"green"},
-  {k:"pedidos_sem_entrega", titulo:"Pedidos a Entregar (sem data de entrega ainda)",                        cor:"blue"}
+  {k:"pedidos_sem_entrega", titulo:"Pedidos a Entregar (sem entrega ou com entrega parcial: mostra só o que falta)", cor:"blue"}
 ];
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
@@ -654,7 +656,7 @@ const COLS = {
   carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
   por_regiao: [["regiao","Região"],["ativos","Clientes ativos (placar)"],["inativos","Inativos"]],
   vendas_por_regiao: [["regiao","Região"],["pedidos","Pedidos"],["valor","Vendas do mês"],["participacao","% do total"]],
-  pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["data_pedido","Data Emissão"],["pedido","Pedido"]]
+  pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["situacao","Situação"],["a_entregar","A entregar"],["valor","Valor a entregar"],["data_pedido","Data Emissão"],["pedido","Pedido"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.carteira;
 COLS.contato_preventivo = COLS.recuperacao = COLS.em_formacao = COLS.missao;
@@ -863,6 +865,17 @@ const sortState = {};
 const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
 let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
 const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao"]);
+/* quanto falta entregar num pedido, na unidade de cada empresa (BNZ peças, CIAPLAC m/un., BB kg); parcial já vem só com o saldo */
+function textoAEntregar(r){
+  const p = [];
+  if(r.pecas) p.push(fmtInt(r.pecas)+" peças");
+  if(r.acess) p.push(fmtInt(r.acess)+" acess.");
+  if(r.arame) p.push(fmtInt(r.arame)+" kg arame");
+  if(r.metros) p.push(fmtInt(r.metros)+" m");
+  if(r.un) p.push(fmtInt(r.un)+" un.");
+  if(r.kg) p.push(fmtInt(r.kg)+" kg");
+  return p.join(" · ") || "–";
+}
 /* Vendas do mês por região: soma os pedidos do mês (valor total do pedido) de cada região — sempre inteira, como o resumo "Clientes por região" */
 function vendasPorRegiao(linhas){
   const g = {};
@@ -962,6 +975,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
           if(c[0]==="regiao" && !v) v = "(sem região)";
+          if(k==="pedidos_sem_entrega" && c[0]==="a_entregar") v = textoAEntregar(r);
+          if(k==="pedidos_sem_entrega" && c[0]==="valor") v = fmtBRL(v);
           if(k==="vendas_por_regiao" && c[0]==="valor") v = fmtBRL(v);
           if(k==="vendas_por_regiao" && c[0]==="participacao") v = String(v).replace(".", ",") + "%";
           // no Check-list, o nome do cliente abre a oportunidade dele no Odoo (outra aba)
