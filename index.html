@@ -333,6 +333,12 @@
     table.lc th.c-ativos,table.lc th.c-inativos{width:22%}
     table.lc th.c-situacao{width:6.5%} table.lc th.c-a_entregar{width:10%} table.lc th.c-valor{width:9%}
     table.lc td.c-valor{white-space:nowrap}
+    table.lc th.c-ciclo_dias{width:7.5%} table.lc th.c-proxima_compra{width:7%}
+    table.lc td.c-ultima_interacao,table.lc td.c-ultimo_pedido,table.lc td.c-ultima_conversa_zap,table.lc td.c-proxima_compra,table.lc td.c-entrega_efetiva,table.lc td.c-data_pedido,table.lc td.c-vencimento,table.lc td.c-ciclo_dias{white-space:nowrap}
+    /* "Não compraram este mês" tem 13 colunas: afina as demais pra sobrar espaço pro nome do Cliente */
+    table.t-alvos th.c-fantasia{width:8%} table.t-alvos th.c-zap{width:9.5%} table.t-alvos th.c-cidade{width:6.5%} table.t-alvos th.c-uf{width:3%}
+    table.t-alvos th.c-ultima_conversa_zap,table.t-alvos th.c-ultima_interacao{width:7%} table.t-alvos th.c-ultimo_pedido,table.t-alvos th.c-entrega_efetiva{width:6.5%}
+    table.t-alvos th.c-dias_desde_ultima_compra{width:6%} table.t-alvos th.c-marcadores{width:9%} table.t-alvos th.c-estagio{width:6.5%}
     /* nomes de cliente e fantasia dividem o espaço nas listas curtas (poucas colunas) */
     table.t-em_negociacao th.c-fantasia,table.t-curva_a th.c-fantasia,table.t-pedidos_sem_entrega th.c-fantasia{width:19%}
     /* resumo por região: tabelinha compacta, números colados no nome da região */
@@ -395,7 +401,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v27 (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v28 (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -584,7 +590,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v27 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v28 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -647,13 +653,13 @@ const LISTAS = [
   {k:"pedidos_sem_entrega", titulo:"Pedidos a Entregar (sem entrega ou com entrega parcial: mostra só o que falta)", cor:"blue"}
 ];
 const COLS = {
-  padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
+  padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
-  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["faturamento","Faturamento Acum. 12m"]],
-  missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["marcadores","Marcadores"]],
-  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
-  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"]],
+  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["faturamento","Faturamento Acum. 12m"]],
+  missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["marcadores","Marcadores"]],
+  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
+  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
   por_regiao: [["regiao","Região"],["ativos","Clientes ativos (placar)"],["inativos","Inativos"]],
   vendas_por_regiao: [["regiao","Região"],["pedidos","Pedidos"],["valor","Vendas do mês"],["participacao","% do total"]],
   pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["situacao","Situação"],["a_entregar","A entregar"],["valor","Valor a entregar"],["data_pedido","Data Emissão"],["pedido","Pedido"]]
@@ -668,7 +674,7 @@ const $$ = s => document.querySelectorAll(s);
 const fmtInt = n => (n==null||isNaN(n)) ? "–" : Number(n).toLocaleString("pt-BR");
 const fmtBRL = n => (n==null||isNaN(n)) ? "R$ –" : Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
 const fmtDateTime = iso => { try{ return new Date(iso).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}catch(e){return iso||"—";} };
-const DATE_COLS = new Set(["ultima_interacao","ultimo_pedido","vencimento","ultima_conversa_zap","entrega_efetiva","data_pedido"]);
+const DATE_COLS = new Set(["proxima_compra","ultima_interacao","ultimo_pedido","vencimento","ultima_conversa_zap","entrega_efetiva","data_pedido"]);
 const fmtDateBR = v => { const m = String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? (m[3]+"/"+m[2]+"/"+m[1].slice(2)) : (v || ""); };
 
 function setStatus(state, text){
@@ -864,7 +870,7 @@ let ULTIMA_LISTAS = {};   // listas como vieram do n8n (a busca por cliente e as
 const sortState = {};
 const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
 let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
-const NUM_COLS_COPILOTO = new Set(["dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao"]);
+const NUM_COLS_COPILOTO = new Set(["ciclo_dias","dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao"]);
 /* quanto falta entregar num pedido, na unidade de cada empresa (BNZ peças, CIAPLAC m/un., BB kg); parcial já vem só com o saldo */
 function textoAEntregar(r){
   const p = [];
@@ -970,6 +976,9 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           let v = r[c[0]] ?? "";
           if(DATE_COLS.has(c[0])) v = fmtDateBR(v);
           if(c[0]==="dias_desde_ultima_compra") v = (v===""||v==null) ? "–" : v+"d";
+          // ciclo de compra (calculado na Inteligência Comercial): "a cada 28d"; sem ciclo ainda = Em Formação (menos de 3 compras) ou "–"
+          if(c[0]==="ciclo_dias") v = Number(r.ciclo_dias) > 0 ? "a cada "+r.ciclo_dias+"d" : (r.situacao === "Em Formação" ? "em formação" : "–");
+          if(c[0]==="proxima_compra" && !v) v = "–";
           if(c[0]==="zap" && /^https?:\/\//.test(v)){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
@@ -1191,7 +1200,10 @@ function syncPrintPageStyle(){
   const cor = empresa === "BNZ" ? "#2a78d6" : (empresa === "CIAPLAC" ? "#eb6834" : (empresa === "BB" ? "#8a5cd1" : "#555"));
   const el = $("#print-page-style");
   // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
-  if(el) el.textContent = '@media print{ @page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
+  // listas largas (11 a 13 colunas) impressas sozinhas saem em paisagem; o resto continua em retrato
+  const PAISAGEM = ["lista-alvos","lista-contato_preventivo","lista-recuperacao","lista-em_formacao","lista-conversa_zap","lista-sem_movimentacao","lista-inativos"];
+  const paisagem = alvosImpressao.some(id => PAISAGEM.includes(id));
+  if(el) el.textContent = '@media print{ '+(paisagem ? '@page{ size:A4 landscape; } ' : '')+'@page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
 }
 window.addEventListener("beforeprint", syncPrintPageStyle);
 // Abrir o diálogo de impressão (ou "Salvar como PDF") dispara visibilitychange no Chrome, que sem essa
