@@ -246,6 +246,7 @@
   .filtro-aviso button.btn{margin-left:8px}
   .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
   table.lc td.est-alerta{color:var(--clay-ink);font-weight:700}
+  table.lc b.zap-hoje{color:var(--green-ink)}
   /* título que abre o bloco "Carteira ativa" (e o "Fora do placar") entre as listas */
   .cab-carteira{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid var(--blue-edge);border-left-width:5px;border-radius:var(--radius);background:var(--blue-bg);color:var(--blue-ink)}
   .cab-carteira b{font-family:"Archivo",sans-serif;font-size:1rem;display:block}
@@ -403,7 +404,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v30 (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v31 (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -592,7 +593,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v30 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v31 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -657,7 +658,7 @@ const LISTAS = [
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
   alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
-  atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
+  atividades: [["cliente","Cliente"],["ultima_conversa_zap","Últ. conversa Zap"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
   curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["marcadores","Marcadores"]],
   alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
@@ -982,6 +983,13 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
         tb.innerHTML += "<tr>"+cols.map(c=>{
           let v = r[c[0]] ?? "";
           if(DATE_COLS.has(c[0])) v = fmtDateBR(v);
+          // Check-list: última conversa no Zap do cliente; se foi HOJE aparece em destaque com a hora (o horário vem em UTC, converte pro local)
+          if(k==="atividades" && c[0]==="ultima_conversa_zap"){
+            const dz = r.ultima_conversa_zap ? new Date(String(r.ultima_conversa_zap).replace(" ","T")+"Z") : null;
+            if(!dz || isNaN(dz.getTime())) v = "–";
+            else if(dz.toDateString() === new Date().toDateString()) v = '<b class="zap-hoje">hoje '+dz.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})+'</b>';
+            else v = fmtDateBR(r.ultima_conversa_zap);
+          }
           if(c[0]==="dias_desde_ultima_compra") v = (v===""||v==null) ? "–" : v+"d";
           // ciclo de compra (calculado na Inteligência Comercial): "a cada 28d"; sem ciclo ainda = Em Formação (menos de 3 compras) ou "–"
           if(c[0]==="ciclo_dias") v = Number(r.ciclo_dias) > 0 ? "a cada "+r.ciclo_dias+"d" : (r.situacao === "Em Formação" ? "em formação" : "–");
