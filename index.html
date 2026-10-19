@@ -245,6 +245,7 @@
   .filtro-aviso{margin-top:10px;padding:8px 12px;border:1px solid var(--blue-edge);border-radius:var(--radius);background:var(--blue-bg);font-size:.78rem;color:var(--blue-ink)}
   .filtro-aviso button.btn{margin-left:8px}
   .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
+  table.lc td.est-alerta{color:var(--clay-ink);font-weight:700}
   /* título que abre o bloco "Carteira ativa" (e o "Fora do placar") entre as listas */
   .cab-carteira{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid var(--blue-edge);border-left-width:5px;border-radius:var(--radius);background:var(--blue-bg);color:var(--blue-ink)}
   .cab-carteira b{font-family:"Archivo",sans-serif;font-size:1rem;display:block}
@@ -333,6 +334,7 @@
     table.lc th.c-ativos,table.lc th.c-inativos{width:22%}
     table.lc th.c-situacao{width:6.5%} table.lc th.c-a_entregar{width:10%} table.lc th.c-valor{width:9%}
     table.lc td.c-valor{white-space:nowrap}
+    table.lc th.c-empresa{width:7%} table.lc td.c-empresa{white-space:nowrap}
     table.lc th.c-ciclo_dias{width:7.5%} table.lc th.c-proxima_compra{width:7%}
     table.lc td.c-ultima_interacao,table.lc td.c-ultimo_pedido,table.lc td.c-ultima_conversa_zap,table.lc td.c-proxima_compra,table.lc td.c-entrega_efetiva,table.lc td.c-data_pedido,table.lc td.c-vencimento,table.lc td.c-ciclo_dias{white-space:nowrap}
     /* "Não compraram este mês" tem 13 colunas: afina as demais pra sobrar espaço pro nome do Cliente */
@@ -401,7 +403,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v28 (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v30 (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -590,7 +592,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v28 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v30 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -656,7 +658,7 @@ const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
   alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
   atividades: [["cliente","Cliente"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
-  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["faturamento","Faturamento Acum. 12m"]],
+  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["marcadores","Marcadores"]],
   alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
   carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
@@ -941,7 +943,12 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
   {
     // Check-list de Atividades ganha caixinha de seleção + botões de ação (só quando o backend manda o id da atividade)
     const comAcoes = k === "atividades" && rows.some(r => r.id);
-    const cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || COLS.padrao);
+    let cols = comAcoes ? [["_sel",""]].concat(COLS.atividades, [["_acoes","Ações"]]) : (COLS[k] || COLS.padrao);
+    // no Total, mostra de qual empresa é cada linha (o mesmo cliente pode estar nas duas, cada uma no seu estágio)
+    if(!empresa && !["por_regiao","vendas_por_regiao","pedidos_sem_entrega"].includes(k) && rows.some(r => r.empresa)){
+      const i = cols.findIndex(c => c[0] === "cliente");
+      cols = cols.slice(0, i+1).concat([["empresa","Empresa"]], cols.slice(i+1));
+    }
     const st = sortavel ? sortState[k] : null;
     const card = document.createElement("div"); card.className = "listcard" + (alvosImpressao.includes(pre+k) ? " print-alvo" : ""); card.id = pre+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
@@ -994,7 +1001,9 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           if(c[0]==="_acoes") v = r.id
             ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'">✎ Editar</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'">✕ Cancelar</button>'
             : "";
-          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+"\">"+v+"</td>";
+          // Curva A: cliente grande parado (Sem Movimentação / Inativo) aparece em destaque pra ficar de olho
+          const alertaEst = (k==="curva_a" && c[0]==="estagio" && /Sem Movimenta|Inativ/.test(r.estagio||"")) ? " est-alerta" : "";
+          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+alertaEst+"\">"+v+"</td>";
         }).join("")+"</tr>";
       }
       if(k==="por_regiao" || k==="vendas_por_regiao"){
