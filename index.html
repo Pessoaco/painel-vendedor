@@ -247,6 +247,8 @@
   .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
   table.lc td.est-alerta{color:var(--clay-ink);font-weight:700}
   table.lc b.zap-hoje{color:var(--green-ink)}
+  .aviso-erro{margin-top:10px;padding:9px 12px;border:1px solid var(--clay-edge);border-left-width:5px;border-radius:var(--radius);background:var(--clay-bg);font-size:.8rem;font-weight:600;color:var(--clay-ink)}
+  @media print{ .aviso-erro{background:none;border:2px solid #93402f;color:#93402f} }
   /* Check-list: colunas com largura que ela puxa com o mouse (alça na borda direita do título) */
   i.col-resize{position:absolute;top:0;right:0;width:8px;height:100%;cursor:col-resize;user-select:none;touch-action:none}
   i.col-resize::after{content:"";position:absolute;right:3px;top:22%;bottom:22%;width:1px;background:var(--hair)}
@@ -415,7 +417,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v32 (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v34 (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -473,6 +475,7 @@
 
   <div id="content" hidden>
 
+    <div id="aviso-desatualizado" class="aviso-erro" hidden></div>
     <div id="filtro-aviso" class="filtro-aviso" hidden></div>
     <section id="busca-resultado" class="busca-resultado" hidden></section>
 
@@ -604,7 +607,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v32 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v34 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -1143,7 +1146,7 @@ function abrirDialogo(acao, ids){
     $("#dlg-tipo").innerHTML = TIPOS.map(t => '<option value="'+t.id+'"'+(t.id === acts[0].tipo_id ? " selected" : "")+'>'+esc(t.nome)+'</option>').join("");
     $("#dlg-prox-resumo").value = ""; $("#dlg-prox-data").value = "";
   }
-  $("#dlg-ok").textContent = acao === "cancelar" ? "Cancelar atividade" : (acao === "editar" ? "Salvar" : "Confirmar");
+  $("#dlg-ok").textContent = acao === "cancelar" ? (acts.length > 1 ? "Cancelar as "+acts.length+" atividades" : "Cancelar atividade") : (acao === "editar" ? "Salvar" : (acts.length > 1 ? "Concluir as "+acts.length+" atividades" : "Confirmar"));
   $("#dlg-acao").showModal();
 }
 async function chamarAcao(p){
@@ -1337,6 +1340,26 @@ function logout(){
   showLogin("");
 }
 
+/* ---- cópia dos últimos dados (v33) ----
+   1) o n8n guarda a última consulta boa de cada empresa e devolve ela com desatualizado:true quando o Odoo cai;
+   2) este aparelho também guarda a última que ele recebeu (reserva, pra quando o próprio n8n ou a internet caem).
+   Nos dois casos a tela mostra um aviso com a data e a hora dos dados. */
+const chaveCopia = () => "pv_ultima_copia_" + (empresa || "TOTAL");
+function guardaCopia(data){ try{ localStorage.setItem(chaveCopia(), JSON.stringify({ salvo_em: Date.now(), data })); }catch(e){} }
+function lerCopia(){ try{ const c = JSON.parse(localStorage.getItem(chaveCopia()) || "null"); return (c && c.data && c.data.listas) ? c : null; }catch(e){ return null; } }
+const fmtQuando = iso => { const d = new Date(iso); return isNaN(d.getTime()) ? "—" : d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}) + " às " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}); };
+function avisoCopia(texto){ const el = $("#aviso-desatualizado"); if(!el) return; el.hidden = !texto; el.textContent = texto || ""; }
+let timerNovaTentativa = null;
+function tentaDepois(){ clearTimeout(timerNovaTentativa); timerNovaTentativa = setTimeout(load, 60000); }
+function usaCopiaDoAparelho(motivo){
+  const c = lerCopia(); if(!c) return false;
+  $("#login").hidden = true; $("#loading").hidden = true; $("#content").hidden = false;
+  try { fill(c.data); } catch(e){}
+  avisoCopia("⚠ " + motivo + " — mostrando os dados de " + fmtQuando(c.data.atualizado_em) + " (guardados neste aparelho). Tentando de novo a cada 1 min.");
+  setStatus("err", "dados de " + fmtQuando(c.data.atualizado_em));
+  return true;
+}
+
 async function load(){
   if(WEBHOOK_URL.startsWith("COLE_AQUI")){
     setStatus("stale","DEMONSTRAÇÃO — configure WEBHOOK_URL no arquivo pra ligar no Odoo");
@@ -1358,6 +1381,11 @@ async function load(){
     if(!r.ok) throw new Error("HTTP "+r.status);
     const data = await r.json();
     if(data && data.erro){ logout(); showLogin("Usuário ou senha errado."); return; }
+    // o Odoo caiu e o n8n ainda não tinha cópia dessa empresa: usa a que este aparelho guardou (se tiver)
+    if(!data || data.erro_odoo || !data.listas){
+      if(usaCopiaDoAparelho("O sistema de dados está fora do ar")){ tentaDepois(); return; }
+      throw new Error("Odoo fora do ar e sem cópia dos dados");
+    }
     // mostra o painel PRIMEIRO — se fill() quebrar, pelo menos aparece
     $("#login").hidden = true;
     $("#loading").hidden = true;
@@ -1367,7 +1395,16 @@ async function load(){
     const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
     // data e empresa já aparecem ao lado (selo + data do cabeçalho): aqui só a hora da atualização
     const hora = new Date(data.atualizado_em||Date.now()).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-    setStatus(age>20 ? "stale" : null, "ao vivo · " + hora);
+    if(data.desatualizado){
+      // o n8n respondeu, mas devolveu a última consulta boa porque o Odoo está fora do ar
+      avisoCopia("⚠ Sistema fora do ar — mostrando os dados de " + fmtQuando(data.atualizado_em) + " (última consulta que deu certo). Tentando de novo a cada 1 min.");
+      setStatus("err", "dados de " + fmtQuando(data.atualizado_em));
+      tentaDepois();
+    } else {
+      avisoCopia("");
+      guardaCopia(data);
+      setStatus(age>20 ? "stale" : null, "ao vivo · " + hora);
+    }
   }catch(err){
     clearTimeout(to);
     const demorou = err.name === "AbortError";
@@ -1376,6 +1413,8 @@ async function load(){
     // Isso evita o bug de dizer "senha errada" quando o problema real é falta de conexão.
     const semNet = err instanceof TypeError && navigator.onLine === false;   // sem conexão de verdade
     const servidorOff = err instanceof TypeError && !semNet;                    // tem internet, mas o servidor (n8n) não respondeu
+    // com internet ruim ou servidor fora, mostra os últimos dados que este aparelho guardou, com aviso (e tenta de novo a cada 1 min)
+    if(usaCopiaDoAparelho(semNet ? "Sem internet" : servidorOff ? "O servidor do painel não respondeu" : demorou ? "O servidor demorou demais" : "Não consegui atualizar")){ tentaDepois(); return; }
     if($("#content").hidden){
       $("#loading").hidden = false;
       $("#loading").innerHTML = (semNet ? "📡 Sem internet. Este painel é só online — verifique sua conexão." : servidorOff ? "⚠️ O servidor do painel não respondeu (sua internet está ok). Avise o escritório e tente de novo em instantes." :
