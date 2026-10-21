@@ -247,6 +247,17 @@
   .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
   table.lc td.est-alerta{color:var(--clay-ink);font-weight:700}
   table.lc b.zap-hoje{color:var(--green-ink)}
+  /* Check-list: colunas com largura que ela puxa com o mouse (alça na borda direita do título) */
+  i.col-resize{position:absolute;top:0;right:0;width:8px;height:100%;cursor:col-resize;user-select:none;touch-action:none}
+  i.col-resize::after{content:"";position:absolute;right:3px;top:22%;bottom:22%;width:1px;background:var(--hair)}
+  i.col-resize:hover::after{background:var(--blue-edge);width:2px}
+  @media screen{
+    table.lc.redim{table-layout:fixed}
+    table.lc.redim td,table.lc.redim th{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    table.lc.redim th{max-width:none}
+    table.lc.redim td.c-_acoes{overflow:visible}
+  }
+  @media print{ table.lc colgroup{display:none} table.lc.redim{width:100%!important} i.col-resize{display:none!important} }
   /* título que abre o bloco "Carteira ativa" (e o "Fora do placar") entre as listas */
   .cab-carteira{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid var(--blue-edge);border-left-width:5px;border-radius:var(--radius);background:var(--blue-bg);color:var(--blue-ink)}
   .cab-carteira b{font-family:"Archivo",sans-serif;font-size:1rem;display:block}
@@ -404,7 +415,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v31 (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v32 (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -593,7 +604,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v31 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v32 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -658,7 +669,7 @@ const LISTAS = [
 const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
   alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
-  atividades: [["cliente","Cliente"],["ultima_conversa_zap","Últ. conversa Zap"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["responsavel","Responsável"]],
+  atividades: [["cliente","Cliente"],["ultima_conversa_zap","Últ. conversa Zap"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"]],
   curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["marcadores","Marcadores"]],
   alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
@@ -885,6 +896,37 @@ function textoAEntregar(r){
   if(r.kg) p.push(fmtInt(r.kg)+" kg");
   return p.join(" · ") || "–";
 }
+/* larguras das colunas do Check-list (px). A Leidi arrasta a borda do título com o mouse; fica guardado neste navegador. Duplo clique na alça = volta ao padrão. */
+const LARG_ATIV_PADRAO = {_sel:30, cliente:240, empresa:92, ultima_conversa_zap:100, tipo:170, resumo:320, vencimento:90, estado:84, _acoes:122};
+function largurasAtiv(){ let s = {}; try{ s = JSON.parse(localStorage.getItem("pv_cols_atividades") || "{}") || {}; }catch(e){} return s; }
+function guardaLargurasAtiv(s){ try{ localStorage.setItem("pv_cols_atividades", JSON.stringify(s)); }catch(e){} }
+let redimAtiv = null;
+document.addEventListener("pointerdown", e => {
+  const h = e.target.closest && e.target.closest("i.col-resize"); if(!h) return;
+  const t = h.closest("table"); const col = t && t.querySelector('col[data-col="'+h.dataset.colW+'"]'); if(!col) return;
+  e.preventDefault(); e.stopPropagation();
+  redimAtiv = { t, col, x0: e.clientX, w0: parseFloat(col.style.width) || col.getBoundingClientRect().width, key: h.dataset.colW };
+  try{ h.setPointerCapture(e.pointerId); }catch(err){}
+}, true);
+document.addEventListener("pointermove", e => {
+  if(!redimAtiv) return;
+  const w = Math.max(40, Math.round(redimAtiv.w0 + e.clientX - redimAtiv.x0));
+  redimAtiv.col.style.width = w + "px";
+  let soma = 0; redimAtiv.t.querySelectorAll("col").forEach(c => { soma += parseFloat(c.style.width) || 0; });
+  redimAtiv.t.style.width = soma + "px";
+});
+const fimRedimAtiv = () => {
+  if(!redimAtiv) return;
+  const sv = largurasAtiv(); sv[redimAtiv.key] = parseFloat(redimAtiv.col.style.width); guardaLargurasAtiv(sv);
+  redimAtiv = null;
+};
+document.addEventListener("pointerup", fimRedimAtiv);
+document.addEventListener("pointercancel", fimRedimAtiv);
+document.addEventListener("dblclick", e => {
+  const h = e.target.closest && e.target.closest("i.col-resize"); if(!h) return;
+  const sv = largurasAtiv(); delete sv[h.dataset.colW]; guardaLargurasAtiv(sv);
+  renderListas(ULTIMA_LISTAS);
+});
 /* Vendas do mês por região: soma os pedidos do mês (valor total do pedido) de cada região — sempre inteira, como o resumo "Clientes por região" */
 function vendasPorRegiao(linhas){
   const g = {};
@@ -975,9 +1017,18 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
         const arrow = active ? (st.dir===1?"▲":"▼") : "⇅";
         const marc = c[0]==="marcadores" ? " col-marc" : "";
         if(c[0]==="_sel") return "<th class=\"c-_sel\">"+(sortavel?'<input type="checkbox" class="sel-todas" title="selecionar todas">':"")+"</th>";
-        if(!sortavel || c[0][0]==="_") return "<th class=\"c-"+c[0]+marc+"\">"+c[1]+"</th>";
-        return "<th class=\"sortable c-"+c[0]+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
+        // Check-list: cada título ganha uma alça na borda direita pra arrastar com o mouse e mudar a largura da coluna
+        const alca = (k==="atividades" && sortavel) ? '<i class="col-resize" data-col-w="'+c[0]+'" title="arraste para mudar a largura (duplo clique volta ao padrão)"></i>' : "";
+        if(!sortavel || c[0][0]==="_") return "<th class=\"c-"+c[0]+marc+"\">"+c[1]+alca+"</th>";
+        return "<th class=\"sortable c-"+c[0]+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span>"+alca+"</th>";
       }).join("")+"</tr></thead>";
+      if(k==="atividades" && sortavel){
+        // larguras das colunas do Check-list: as que ela arrastou (guardadas neste navegador) ou o padrão
+        const sv = largurasAtiv();
+        const cg = document.createElement("colgroup"); let soma = 0;
+        cols.forEach(c => { const w = Math.max(40, Number(sv[c[0]]) || LARG_ATIV_PADRAO[c[0]] || 120); soma += w; const col = document.createElement("col"); col.style.width = w+"px"; col.dataset.col = c[0]; cg.appendChild(col); });
+        t.insertBefore(cg, t.firstChild); t.style.width = soma+"px"; t.classList.add("redim");
+      }
       const tb = document.createElement("tbody");
       for(const r of rows){
         tb.innerHTML += "<tr>"+cols.map(c=>{
@@ -1007,11 +1058,13 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           if(k==="atividades" && c[0]==="cliente" && r.lead) v = '<a class="lk" href="'+ODOO_URL+'/odoo/crm/'+r.lead+'" target="_blank" rel="noopener" title="abrir no Odoo">'+v+'</a>';
           if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
           if(c[0]==="_acoes") v = r.id
-            ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'">✎ Editar</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'">✕ Cancelar</button>'
+            ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'" title="concluir a atividade">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'" title="editar resumo e vencimento">✎</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'" title="cancelar a atividade">✕</button>'
             : "";
           // Curva A: cliente grande parado (Sem Movimentação / Inativo) aparece em destaque pra ficar de olho
           const alertaEst = (k==="curva_a" && c[0]==="estagio" && /Sem Movimenta|Inativ/.test(r.estagio||"")) ? " est-alerta" : "";
-          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+alertaEst+"\">"+v+"</td>";
+          // Check-list: texto cortado com "…" quando a coluna é estreita; o texto inteiro aparece ao passar o mouse
+          const dica = (k==="atividades" && (c[0]==="cliente"||c[0]==="resumo"||c[0]==="tipo")) ? ' title="'+esc(String(r[c[0]]||""))+'"' : "";
+          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+alertaEst+"\""+dica+">"+v+"</td>";
         }).join("")+"</tr>";
       }
       if(k==="por_regiao" || k==="vendas_por_regiao"){
@@ -1151,6 +1204,7 @@ document.addEventListener("change", e => {
 
 /* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
 document.addEventListener("click", e=>{
+  if(e.target.closest && e.target.closest("i.col-resize")) return;   // soltar a alça de largura não conta como clique pra ordenar
   const bt = e.target.closest("button[data-ac]");
   if(bt){
     const ac = bt.dataset.ac;
