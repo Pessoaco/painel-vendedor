@@ -260,7 +260,10 @@
   .fi-corpo{padding:10px 18px 16px;overflow:auto}
   .fi-cards{font-size:.8rem;color:var(--ink-soft);margin-bottom:4px}
   .fi-tag{display:inline-block;padding:0 7px;border:1px solid var(--hair);border-radius:10px;font-size:.68rem;background:var(--slate-bg);color:var(--slate-ink)}
-  .fi-ativ{margin:0 0 6px;padding-left:18px;font-size:.8rem}
+  .fi-ativ{margin:0 0 6px;padding-left:0;list-style:none;font-size:.8rem}
+  .fi-ativ li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;padding:6px 0;border-bottom:1px dashed var(--hair)}
+  .fi-ativ-txt{flex:1 1 260px;min-width:0}
+  .fi-ab{display:inline-flex;gap:6px;flex:none}
   .fi-atraso{color:var(--clay-ink);font-weight:600}
   .fnota{border:1px solid var(--hair);border-left:4px solid var(--blue-edge);border-radius:8px;padding:8px 12px;margin:8px 0;background:var(--surface)}
   .fn-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:.78rem}
@@ -442,7 +445,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v37 (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v38 (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -632,7 +635,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v37 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v38 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -1201,8 +1204,11 @@ function notaHTML(n){
     '<button type="button" class="fn-edit" data-edit="'+n.id+'" title="corrigir o texto desta anotação">✏️</button></div>'+
     '<div class="fn-texto">'+(n.texto ? esc(n.texto) : '<i>(sem texto)</i>')+'</div></div>';
 }
+const FICHA_ATIV = {};      // atividades abertas mostradas na ficha (o pop-up de Feito/Editar/Cancelar acha elas aqui)
+let ULTIMA_FICHA = null;    // pra recarregar a ficha depois de concluir/editar/cancelar uma atividade
 async function abrirFicha(lead, cliente, emp){
   const dlg = $("#dlg-ficha"); if(!dlg) return;
+  ULTIMA_FICHA = { lead, cliente, emp };
   const nomeLimpo = String(cliente||"").replace(/ - (BB|BNZ METAIS|CIAPLAC)$/i, "").trim();
   $("#fi-nome").textContent = nomeLimpo || "Cliente"; $("#fi-sub").textContent = emp ? "· " + emp : "";
   const crm = $("#fi-crm"); crm.hidden = !lead; if(lead) crm.href = ODOO_URL + "/odoo/crm/" + lead;
@@ -1218,8 +1224,11 @@ async function abrirFicha(lead, cliente, emp){
   const hoje = new Date().toLocaleDateString("en-CA");
   let h = '<div class="fi-cards">' + cards.map(c => esc(c.nome)+' <span class="fi-tag">'+esc(c.empresa)+'</span> <span class="fi-tag">'+esc(c.estagio)+'</span>').join(" &nbsp;·&nbsp; ") + '</div>';
   h += '<p class="band-label">Atividades abertas</p>';
+  // cada atividade aberta tem os mesmos botões do Check-list (✔ Feito / ✎ editar-reprogramar / ✕ cancelar): o vendedor concluiu a visita aqui mesmo
+  (r.abertas || []).forEach(a => { if(a.id) FICHA_ATIV[String(a.id)] = { id: a.id, lead: a.lead || lead, tipo_id: a.tipo_id, cliente: nomeLimpo, empresa: emp, tipo: a.tipo, resumo: a.resumo, vencimento: a.vencimento }; });
   h += (r.abertas || []).length
-    ? '<ul class="fi-ativ">' + r.abertas.map(a => '<li><b>'+esc(a.tipo)+'</b> — '+esc(a.resumo || "sem resumo")+' <span class="'+(a.vencimento && a.vencimento < hoje ? "fi-atraso" : "")+'">· vence '+esc(fmtDateBR(a.vencimento))+'</span></li>').join("") + '</ul>'
+    ? '<ul class="fi-ativ">' + r.abertas.map(a => '<li><span class="fi-ativ-txt"><b>'+esc(a.tipo)+'</b> — '+esc(a.resumo || "sem resumo")+' <span class="'+(a.vencimento && a.vencimento < hoje ? "fi-atraso" : "")+'">· vence '+esc(fmtDateBR(a.vencimento))+'</span></span>'+
+        (a.id ? '<span class="fi-ab"><button type="button" class="btn-ac ok" data-ac="feito" data-id="'+a.id+'" title="concluir a atividade">✔ Feito</button> <button type="button" class="btn-ac" data-ac="editar" data-id="'+a.id+'" title="editar o resumo ou reprogramar a data">✎ Editar / reprogramar</button> <button type="button" class="btn-ac cancel" data-ac="cancelar" data-id="'+a.id+'" title="cancelar a atividade">✕</button></span>' : '')+'</li>').join("") + '</ul>'
     : '<div class="lc-empty">— nenhuma atividade aberta —</div>';
   h += '<p class="band-label">Anotações (as mais recentes primeiro)</p>';
   h += (r.notas || []).length ? r.notas.map(notaHTML).join("") : '<div class="lc-empty">— ainda não há anotações para este cliente —</div>';
@@ -1244,7 +1253,7 @@ $("#dlg-ficha").addEventListener("click", async e => {
   if(r && r.ok){ box.querySelector(".fn-texto").innerHTML = esc(r.texto || novo); box.querySelector(".fn-edit").hidden = false; toast("Anotação corrigida ✔"); }
   else { salva.disabled = false; salva.textContent = "Salvar"; toast((r && r.erro) || "Não consegui salvar.", true); }
 });
-const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id));
+const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id)) || FICHA_ATIV[String(id)];
 function atualizaSel(){ $$("#sel-n").forEach(n => n.textContent = selAtiv.size); }
 function abrirDialogo(acao, ids){
   const acts = ids.map(atividadePorId).filter(Boolean);
@@ -1292,6 +1301,8 @@ function posAcao(A, p, r){
     if(a){ if(p.resumo) a.resumo = p.resumo; if(p.data) a.vencimento = p.data; }
   }
   renderListas(ULTIMA_LISTAS);
+  // se a ficha do cliente está aberta, recarrega: a atividade some das abertas e a anotação nova aparece
+  if(ULTIMA_FICHA && $("#dlg-ficha") && $("#dlg-ficha").open) abrirFicha(ULTIMA_FICHA.lead, ULTIMA_FICHA.cliente, ULTIMA_FICHA.emp);
   toast(r.aviso || (A.acao === "feito" ? "Atividade concluída ✔" : A.acao === "cancelar" ? "Atividade cancelada" : "Atividade atualizada"));
   setTimeout(load, 1500);   // puxa os números certos do Odoo
 }
