@@ -247,6 +247,31 @@
   .lc-h-dir{display:inline-flex;align-items:center;gap:10px}
   table.lc td.est-alerta{color:var(--clay-ink);font-weight:700}
   table.lc b.zap-hoje{color:var(--green-ink)}
+  table.lc span.zap-depois{color:var(--amber-ink);font-weight:700}
+  /* Ficha do cliente (📋) */
+  button.btn-ficha{font:inherit;font-size:.78rem;line-height:1;padding:1px 4px;margin-right:5px;border:1px solid transparent;border-radius:5px;background:none;cursor:pointer;vertical-align:baseline;opacity:.55}
+  button.btn-ficha:hover{opacity:1;border-color:var(--blue-edge);background:var(--blue-bg)}
+  dialog.dlg-ficha{width:min(760px,96vw);max-height:88vh;display:none;flex-direction:column;padding:0}
+  dialog.dlg-ficha[open]{display:flex}
+  .fi-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px 18px 10px;border-bottom:1px solid var(--hair)}
+  .fi-titulo b{font-family:"Archivo",sans-serif;font-size:1.05rem;display:block}
+  .fi-titulo small{color:var(--ink-soft);font-size:.74rem}
+  .fi-acoes{display:flex;gap:8px;flex:none}
+  .fi-corpo{padding:10px 18px 16px;overflow:auto}
+  .fi-cards{font-size:.8rem;color:var(--ink-soft);margin-bottom:4px}
+  .fi-tag{display:inline-block;padding:0 7px;border:1px solid var(--hair);border-radius:10px;font-size:.68rem;background:var(--slate-bg);color:var(--slate-ink)}
+  .fi-ativ{margin:0 0 6px;padding-left:18px;font-size:.8rem}
+  .fi-atraso{color:var(--clay-ink);font-weight:600}
+  .fnota{border:1px solid var(--hair);border-left:4px solid var(--blue-edge);border-radius:8px;padding:8px 12px;margin:8px 0;background:var(--surface)}
+  .fn-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:.78rem}
+  .fn-quando{color:var(--ink-faint);font-size:.72rem}
+  .fn-edit{margin-left:auto;font:inherit;border:0;background:none;cursor:pointer;opacity:.6;font-size:.85rem}
+  .fn-edit:hover{opacity:1}
+  .fn-texto{margin-top:4px;font-size:.84rem;white-space:pre-wrap;word-break:break-word;color:var(--ink)}
+  .fn-area{width:100%;font:inherit;font-size:.84rem;padding:7px 9px;border:1px solid var(--blue-edge);border-radius:7px;background:var(--surface);color:var(--ink)}
+  .fn-bt{margin-top:6px;display:flex;gap:8px}
+  @media print{ .btn-ficha{display:none!important} }
+  table.lc td.prev-vencida{color:var(--clay-ink);font-weight:600}
   .aviso-erro{margin-top:10px;padding:9px 12px;border:1px solid var(--clay-edge);border-left-width:5px;border-radius:var(--radius);background:var(--clay-bg);font-size:.8rem;font-weight:600;color:var(--clay-ink)}
   @media print{ .aviso-erro{background:none;border:2px solid #93402f;color:#93402f} }
   /* Check-list: colunas com largura que ela puxa com o mouse (alça na borda direita do título) */
@@ -417,7 +442,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v34 (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v37 (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -607,7 +632,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v34 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v37 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -637,6 +662,15 @@
       <button type="submit" class="btn" id="dlg-ok">Confirmar</button>
     </div>
   </form>
+</dialog>
+
+<!-- Ficha do cliente: anotações do histórico do CRM (as do assistente do vendedor, do Copiloto e do Odoo) + atividades abertas -->
+<dialog class="dlg dlg-ficha" id="dlg-ficha">
+  <div class="fi-topo">
+    <div class="fi-titulo"><b id="fi-nome">—</b><small id="fi-sub"></small></div>
+    <div class="fi-acoes"><a class="btn" id="fi-crm" href="#" target="_blank" rel="noopener" hidden>Abrir no CRM ↗</a> <button class="btn" id="fi-fechar" type="button">Fechar</button></div>
+  </div>
+  <div id="fi-corpo" class="fi-corpo">carregando…</div>
 </dialog>
 
 <script>
@@ -670,13 +704,13 @@ const LISTAS = [
   {k:"pedidos_sem_entrega", titulo:"Pedidos a Entregar (sem entrega ou com entrega parcial: mostra só o que falta)", cor:"blue"}
 ];
 const COLS = {
-  padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
-  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
-  atividades: [["cliente","Cliente"],["ultima_conversa_zap","Últ. conversa Zap"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"]],
-  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["faturamento","Faturamento Acum. 12m"]],
-  missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"],["marcadores","Marcadores"]],
-  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
-  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Próxima compra"]],
+  padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"]],
+  alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
+  atividades: [["cliente","Cliente"],["ultima_conversa_zap","Últ. conversa Zap"],["tipo","Tipo"],["resumo","Resumo"],["criada_em","Criada em"],["vencimento","Vencimento"],["estado","Estado"]],
+  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"],["faturamento","Faturamento Acum. 12m"]],
+  missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"],["marcadores","Marcadores"]],
+  alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"]],
+  carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"]],
   por_regiao: [["regiao","Região"],["ativos","Clientes ativos (placar)"],["inativos","Inativos"]],
   vendas_por_regiao: [["regiao","Região"],["pedidos","Pedidos"],["valor","Vendas do mês"],["participacao","% do total"]],
   pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["situacao","Situação"],["a_entregar","A entregar"],["valor","Valor a entregar"],["data_pedido","Data Emissão"],["pedido","Pedido"]]
@@ -900,7 +934,7 @@ function textoAEntregar(r){
   return p.join(" · ") || "–";
 }
 /* larguras das colunas do Check-list (px). A Leidi arrasta a borda do título com o mouse; fica guardado neste navegador. Duplo clique na alça = volta ao padrão. */
-const LARG_ATIV_PADRAO = {_sel:30, cliente:240, empresa:92, ultima_conversa_zap:100, tipo:170, resumo:320, vencimento:90, estado:84, _acoes:122};
+const LARG_ATIV_PADRAO = {_sel:30, cliente:240, empresa:92, ultima_conversa_zap:110, tipo:170, resumo:300, criada_em:84, vencimento:90, estado:84, _acoes:122};
 function largurasAtiv(){ let s = {}; try{ s = JSON.parse(localStorage.getItem("pv_cols_atividades") || "{}") || {}; }catch(e){} return s; }
 function guardaLargurasAtiv(s){ try{ localStorage.setItem("pv_cols_atividades", JSON.stringify(s)); }catch(e){} }
 let redimAtiv = null;
@@ -1043,11 +1077,16 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             if(!dz || isNaN(dz.getTime())) v = "–";
             else if(dz.toDateString() === new Date().toDateString()) v = '<b class="zap-hoje">hoje '+dz.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})+'</b>';
             else v = fmtDateBR(r.ultima_conversa_zap);
+            // falou com o cliente DEPOIS que a atividade foi criada: o vendedor provavelmente já fez o contato (pode ter esquecido de concluir)
+            const dcriada = r.criada_em ? new Date(String(r.criada_em).replace(" ","T")+"Z") : null;
+            if(dz && dcriada && !isNaN(dcriada.getTime()) && dz > dcriada) v = '<span class="zap-depois" title="Falou com o cliente DEPOIS que esta atividade foi criada — talvez já tenha feito o contato e esqueceu de concluir">💬 '+v+'</span>';
           }
           if(c[0]==="dias_desde_ultima_compra") v = (v===""||v==null) ? "–" : v+"d";
           // ciclo de compra (calculado na Inteligência Comercial): "a cada 28d"; sem ciclo ainda = Em Formação (menos de 3 compras) ou "–"
-          if(c[0]==="ciclo_dias") v = Number(r.ciclo_dias) > 0 ? "a cada "+r.ciclo_dias+"d" : (r.situacao === "Em Formação" ? "em formação" : "–");
+          if(c[0]==="ciclo_dias") v = Number(r.ciclo_dias) > 0 ? "a cada "+r.ciclo_dias+"d" : (r.situacao === "Em Formação" ? "em formação" : "sem ciclo");
           if(c[0]==="proxima_compra" && !v) v = "–";
+          // Check-list: dia em que a atividade foi aberta (o horário vem em UTC, converte pro local)
+          if(c[0]==="criada_em"){ const dc = r.criada_em ? new Date(String(r.criada_em).replace(" ","T")+"Z") : null; v = (dc && !isNaN(dc.getTime())) ? dc.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"}) : "–"; }
           if(c[0]==="zap" && /^https?:\/\//.test(v)){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
@@ -1059,6 +1098,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           if(k==="vendas_por_regiao" && c[0]==="participacao") v = String(v).replace(".", ",") + "%";
           // no Check-list, o nome do cliente abre a oportunidade dele no Odoo (outra aba)
           if(k==="atividades" && c[0]==="cliente" && r.lead) v = '<a class="lk" href="'+ODOO_URL+'/odoo/crm/'+r.lead+'" target="_blank" rel="noopener" title="abrir no Odoo">'+v+'</a>';
+          // botão 📋 ao lado do nome do cliente: abre a Ficha (anotações e histórico)
+          if(c[0]==="cliente" && k!=="por_regiao" && k!=="vendas_por_regiao") v = '<button type="button" class="btn-ficha no-print" data-lead="'+(r.lead||"")+'" data-cliente="'+esc(String(r.cliente||""))+'" data-empresa="'+esc(String(r.empresa||""))+'" title="Ver as anotações e o histórico deste cliente">📋</button>' + v;
           if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
           if(c[0]==="_acoes") v = r.id
             ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'" title="concluir a atividade">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'" title="editar resumo e vencimento">✎</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'" title="cancelar a atividade">✕</button>'
@@ -1066,8 +1107,15 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           // Curva A: cliente grande parado (Sem Movimentação / Inativo) aparece em destaque pra ficar de olho
           const alertaEst = (k==="curva_a" && c[0]==="estagio" && /Sem Movimenta|Inativ/.test(r.estagio||"")) ? " est-alerta" : "";
           // Check-list: texto cortado com "…" quando a coluna é estreita; o texto inteiro aparece ao passar o mouse
-          const dica = (k==="atividades" && (c[0]==="cliente"||c[0]==="resumo"||c[0]==="tipo")) ? ' title="'+esc(String(r[c[0]]||""))+'"' : "";
-          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+alertaEst+"\""+dica+">"+v+"</td>";
+          let dica = (k==="atividades" && (c[0]==="cliente"||c[0]==="resumo"||c[0]==="tipo")) ? ' title="'+esc(String(r[c[0]]||""))+'"' : "";
+          let extra = alertaEst;
+          if(c[0]==="ciclo_dias") dica = ' title="'+(Number(r.ciclo_dias) > 0 ? "Ritmo HISTÓRICO do cliente: mediana dos intervalos entre as últimas compras (sem pedidos complementares/troca). Não quer dizer que ele esteja comprando assim agora." : "Ainda sem ritmo: poucas compras, ou intervalos muito irregulares entre elas")+'"';
+          if(c[0]==="proxima_compra"){
+            dica = ' title="PREVISÃO: data do último pedido + o ritmo de compra do cliente. Em vermelho = a previsão já passou."';
+            if(r.proxima_compra && String(r.proxima_compra).slice(0,10) < new Date().toLocaleDateString("en-CA")) extra += " prev-vencida";
+          }
+          if(c[0]==="criada_em") dica = ' title="dia em que a atividade foi aberta no Odoo"';
+          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+extra+"\""+dica+">"+v+"</td>";
         }).join("")+"</tr>";
       }
       if(k==="por_regiao" || k==="vendas_por_regiao"){
@@ -1126,6 +1174,76 @@ function toast(msg, erro){
   const t = document.createElement("div"); t.className = "toast" + (erro ? " erro" : ""); t.textContent = msg;
   document.body.appendChild(t); setTimeout(()=>t.remove(), erro ? 6000 : 3500);
 }
+/* ---- Ficha do cliente (📋): anotações do histórico do CRM + atividades abertas; ✏️ corrige o texto de uma anotação ---- */
+// a Ficha usa o MESMO fluxo das ações (Feito/Cancelar/Editar): acao=ficha_ler / ficha_editar no webhook painel-vendedor-acao
+async function chamarFicha(p){
+  if(!creds || !creds.user) return {ok:false, erro:"entre de novo no Copiloto"};
+  const q = new URLSearchParams(Object.assign({user: creds.user, pass: creds.pass, t: Date.now()}, p, {acao: "ficha_" + p.acao}));
+  const ctrl = new AbortController(); const to = setTimeout(()=>ctrl.abort(), 40000);
+  try{
+    const r = await fetch(WEBHOOK_ACAO + "?" + q.toString(), {cache:"no-store", signal: ctrl.signal});
+    clearTimeout(to);
+    if(r.status === 404) return {ok:false, erro:"O fluxo de Ações não está ativo no servidor (n8n)."};
+    if(!r.ok) return {ok:false, erro:"o servidor respondeu "+r.status};
+    const j = await r.json();
+    // fluxo de Ações antigo (v2) não conhece a ficha e responde "ação inválida"
+    if(j && j.ok === false && /inv/i.test(String(j.erro || ""))) return {ok:false, erro:"Falta atualizar o fluxo “Copiloto de Vendas - Ações” para a v3 no n8n (é ele que abre a ficha)."};
+    return j;
+  }catch(err){
+    clearTimeout(to);
+    return {ok:false, erro: err.name === "AbortError" ? "demorou demais — tente de novo" : "sem conexão"};
+  }
+}
+const fmtQuandoBR = s => { const d = new Date(String(s||"").replace(" ","T")+"Z"); return isNaN(d.getTime()) ? "" : d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"}) + " " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}); };
+function notaHTML(n){
+  return '<div class="fnota" data-id="'+n.id+'"><div class="fn-h"><b>'+(n.titulo ? esc(n.titulo) : "📝 Anotação")+'</b>'+
+    '<span class="fn-quando">'+esc(fmtQuandoBR(n.data))+(n.autor ? " · "+esc(n.autor) : "")+'</span>'+
+    '<button type="button" class="fn-edit" data-edit="'+n.id+'" title="corrigir o texto desta anotação">✏️</button></div>'+
+    '<div class="fn-texto">'+(n.texto ? esc(n.texto) : '<i>(sem texto)</i>')+'</div></div>';
+}
+async function abrirFicha(lead, cliente, emp){
+  const dlg = $("#dlg-ficha"); if(!dlg) return;
+  const nomeLimpo = String(cliente||"").replace(/ - (BB|BNZ METAIS|CIAPLAC)$/i, "").trim();
+  $("#fi-nome").textContent = nomeLimpo || "Cliente"; $("#fi-sub").textContent = emp ? "· " + emp : "";
+  const crm = $("#fi-crm"); crm.hidden = !lead; if(lead) crm.href = ODOO_URL + "/odoo/crm/" + lead;
+  $("#fi-corpo").innerHTML = "carregando as anotações…";
+  if(!dlg.open) dlg.showModal();
+  if(WEBHOOK_URL.startsWith("COLE_AQUI")){ $("#fi-corpo").innerHTML = '<div class="lc-empty">Modo demonstração: aqui aparecem as anotações do CRM deste cliente.</div>'; return; }
+  const p = lead ? {acao:"ler", lead} : {acao:"ler", cliente: nomeLimpo, empresa: emp || (empresa || "")};
+  const r = await chamarFicha(p);
+  if(!r || !r.ok){ $("#fi-corpo").innerHTML = '<div class="lc-empty">'+esc((r && r.erro) || "não consegui abrir a ficha")+'</div>'; return; }
+  const cards = (r.leads || []);
+  if(!cards.length){ $("#fi-corpo").innerHTML = '<div class="lc-empty">Não achei o card deste cliente no CRM.</div>'; return; }
+  if(!lead && cards[0]){ crm.hidden = false; crm.href = ODOO_URL + "/odoo/crm/" + cards[0].id; }
+  const hoje = new Date().toLocaleDateString("en-CA");
+  let h = '<div class="fi-cards">' + cards.map(c => esc(c.nome)+' <span class="fi-tag">'+esc(c.empresa)+'</span> <span class="fi-tag">'+esc(c.estagio)+'</span>').join(" &nbsp;·&nbsp; ") + '</div>';
+  h += '<p class="band-label">Atividades abertas</p>';
+  h += (r.abertas || []).length
+    ? '<ul class="fi-ativ">' + r.abertas.map(a => '<li><b>'+esc(a.tipo)+'</b> — '+esc(a.resumo || "sem resumo")+' <span class="'+(a.vencimento && a.vencimento < hoje ? "fi-atraso" : "")+'">· vence '+esc(fmtDateBR(a.vencimento))+'</span></li>').join("") + '</ul>'
+    : '<div class="lc-empty">— nenhuma atividade aberta —</div>';
+  h += '<p class="band-label">Anotações (as mais recentes primeiro)</p>';
+  h += (r.notas || []).length ? r.notas.map(notaHTML).join("") : '<div class="lc-empty">— ainda não há anotações para este cliente —</div>';
+  $("#fi-corpo").innerHTML = h;
+}
+$("#fi-fechar").addEventListener("click", () => $("#dlg-ficha").close());
+$("#dlg-ficha").addEventListener("click", async e => {
+  const bt = e.target.closest("button[data-edit]"); if(!bt) return;
+  const box = bt.closest(".fnota"); const txtEl = box.querySelector(".fn-texto");
+  const atual = txtEl.innerText.replace(/^\(sem texto\)$/, "");
+  txtEl.innerHTML = '<textarea class="fn-area" rows="4" maxlength="2000"></textarea><div class="fn-bt"><button type="button" class="btn" data-salvar="'+bt.dataset.edit+'">Salvar</button> <button type="button" class="btn" data-cancelar="1">Cancelar</button></div>';
+  txtEl.querySelector("textarea").value = atual; txtEl.querySelector("textarea").focus(); txtEl.dataset.antes = atual; bt.hidden = true;
+});
+$("#dlg-ficha").addEventListener("click", async e => {
+  const cancela = e.target.closest("button[data-cancelar]");
+  if(cancela){ const box = cancela.closest(".fnota"); const t = box.querySelector(".fn-texto"); t.innerHTML = esc(t.dataset.antes || "") || "<i>(sem texto)</i>"; box.querySelector(".fn-edit").hidden = false; return; }
+  const salva = e.target.closest("button[data-salvar]"); if(!salva) return;
+  const box = salva.closest(".fnota"); const novo = box.querySelector("textarea").value.trim();
+  if(!novo){ toast("O texto não pode ficar vazio.", true); return; }
+  salva.disabled = true; salva.textContent = "salvando…";
+  const r = await chamarFicha({acao:"editar", msg: salva.dataset.salvar, texto: novo});
+  if(r && r.ok){ box.querySelector(".fn-texto").innerHTML = esc(r.texto || novo); box.querySelector(".fn-edit").hidden = false; toast("Anotação corrigida ✔"); }
+  else { salva.disabled = false; salva.textContent = "Salvar"; toast((r && r.erro) || "Não consegui salvar.", true); }
+});
 const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id));
 function atualizaSel(){ $$("#sel-n").forEach(n => n.textContent = selAtiv.size); }
 function abrirDialogo(acao, ids){
@@ -1207,6 +1325,8 @@ document.addEventListener("change", e => {
 
 /* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
 document.addEventListener("click", e=>{
+  const bf = e.target.closest && e.target.closest("button.btn-ficha");
+  if(bf){ e.stopPropagation(); abrirFicha(bf.dataset.lead ? Number(bf.dataset.lead) : null, bf.dataset.cliente, bf.dataset.empresa); return; }
   if(e.target.closest && e.target.closest("i.col-resize")) return;   // soltar a alça de largura não conta como clique pra ordenar
   const bt = e.target.closest("button[data-ac]");
   if(bt){
