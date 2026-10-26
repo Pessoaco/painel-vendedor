@@ -29,7 +29,7 @@
     --bb-bg:#efe7fa; --bb-ink:#5b3596; --bb-edge:#8a5cd1;
     --purple-bg:#ece8f8; --purple-ink:#56409c; --purple-edge:#9585cf;
     /* cores dos pinos: cliente / prospect (iguais na tela clara e escura, o mapa é claro) */
-    --pin-cli:#2f8a3e; --pin-pro:#7b52c9; --pin-atr:#d13b4b;
+    --pin-cli:#f07800; --pin-pro:#7b52c9; --pin-atr:#d13b4b;
     --shadow:0 1px 2px rgba(33,30,24,.05),0 4px 14px rgba(33,30,24,.045);
     --radius:9px;
   }
@@ -86,12 +86,20 @@
   .seg button[data-emp="BNZ"].on{background:var(--bnz-bg);color:var(--bnz-ink)}
   .seg button[data-emp="CIAPLAC"].on{background:var(--ciaplac-bg);color:var(--ciaplac-ink)}
   .seg button[data-emp="BB"].on{background:var(--bb-bg);color:var(--bb-ink)}
-  .seg button[data-tipo="cliente"].on{background:var(--green-bg);color:var(--green-ink)}
+  .seg button[data-tipo="cliente"].on{background:#fff0e0;color:#a24f00}
   .seg button[data-tipo="prospect"].on{background:var(--purple-bg);color:var(--purple-ink)}
   select.filtro,input.busca{font:inherit;font-size:.76rem;padding:6px 10px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink)}
   select.filtro{max-width:260px}
   input.busca{min-width:240px;flex:0 1 320px}
   input.busca.destino{flex:1 1 380px;border-color:var(--blue-edge);font-weight:500}
+  .seletor{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+  .seletor .fila{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .seletor .rot{font-family:"Archivo",sans-serif;font-weight:600;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-right:2px}
+  .chip{font:inherit;font-size:.76rem;font-weight:600;padding:5px 11px;border:1px solid var(--hair);border-radius:999px;background:var(--surface);color:var(--ink-soft);cursor:pointer;white-space:nowrap}
+  .chip .n{font-family:"IBM Plex Mono",monospace;font-weight:500;color:var(--ink-faint);margin-left:4px;font-size:.7rem}
+  .chip.on{background:var(--blue-ink);border-color:var(--blue-ink);color:#fff}
+  .chip.on .n{color:#dff3ec}
+  .chip.limpar{border-style:dashed}
   .chk-linha{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;color:var(--ink-soft);cursor:pointer}
 
   .resumo{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 6px;font-size:.76rem;color:var(--ink-soft)}
@@ -114,19 +122,24 @@
   .cidade-h{display:flex;align-items:center;gap:8px;padding:7px 10px;background:color-mix(in srgb,var(--hair) 35%,transparent);font-size:.78rem;font-weight:600}
   .cidade-h .n{color:var(--ink-faint);font-weight:500}
   .cidade-h .btn{margin-left:auto;font-size:.7rem;padding:3px 9px}
-  .item{display:grid;grid-template-columns:22px 1fr auto;gap:4px 10px;align-items:center;padding:8px 10px;border-top:1px solid var(--hair)}
+  .item{display:grid;grid-template-columns:22px minmax(0,1fr);gap:3px 10px;align-items:center;padding:8px 10px;border-top:1px solid var(--hair)}
   .item:first-of-type{border-top:0}
   .item input{width:18px;height:18px;accent-color:var(--blue-ink);cursor:pointer}
+  /* nome + botões juntos, logo ao lado do nome (não lá na direita) */
+  .item .linha{display:flex;align-items:center;gap:8px;min-width:0}
   .item .nm{font-weight:600;font-size:.82rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item .acoes{display:flex;gap:5px;flex:none}
   .item .info{grid-column:2;font-size:.72rem;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:3px 8px;min-width:0}
-  .item .acoes{grid-row:1 / span 2;grid-column:3;display:flex;gap:5px}
   .tag{font-family:"Archivo",sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:1px 6px;border-radius:4px;white-space:nowrap}
-  .tag.cli{background:var(--green-bg);color:var(--green-ink)} .tag.pro{background:var(--purple-bg);color:var(--purple-ink)}
+  .tag.cli{background:#fff0e0;color:#a24f00} .tag.pro{background:var(--purple-bg);color:var(--purple-ink)}
   .tag.atr{background:var(--clay-bg);color:var(--clay-ink)}
   .tag.emp{background:var(--blue-bg);color:var(--blue-ink)}
   .tag.semmapa{background:transparent;color:var(--ink-faint);border:1px dashed var(--hair)}
-  .ic{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);text-decoration:none;font-size:1rem;line-height:1}
-  .ic.zap{color:#1f9e55}
+  .ic{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink-soft);text-decoration:none;line-height:1}
+  .ico{width:17px;height:17px;flex:none}
+  .ic.zap{color:#1fa855}          /* igual ao Copiloto */
+  .ic.maps{color:#d93025}
+  .ic.waze{color:#2a9fd8}
   .ic:active{transform:translateY(1px)}
   .vazio{padding:24px;text-align:center;color:var(--ink-faint);font-size:.82rem}
   .mais{text-align:center;margin:10px 0}
@@ -168,6 +181,12 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-whats" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm0 1.8a8.2 8.2 0 0 1 6.9 12.6 8.2 8.2 0 0 1-10.4 3l-.3-.2-2.9.8.8-2.8-.2-.3A8.2 8.2 0 0 1 12 3.8Zm-3 3.4c-.2 0-.5 0-.7.4-.3.4-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 5 4.3 2.4 1 2.9.8 3.5.8.5-.1 1.6-.7 1.9-1.4.2-.6.2-1.2.1-1.3l-.5-.3c-.4-.2-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.2 0-.4.1-.5l.4-.4.3-.5c.1-.2 0-.3 0-.5l-.9-2c-.2-.5-.4-.5-.6-.5h-.3Z"/></symbol>
+  <symbol id="i-mapa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.6"/></symbol>
+  <symbol id="i-carro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v2H3z"/><circle cx="7.5" cy="18.5" r="1.6"/><circle cx="16.5" cy="18.5" r="1.6"/><path d="M5 11h14"/></symbol>
+</svg>
+
 <div class="login" id="login" hidden>
   <form id="login-form" autocomplete="on">
     <h2>Rota de Visitas</h2>
@@ -206,12 +225,18 @@
       <button data-tipo="prospect">Prospects</button>
       <button data-tipo="todos">Todos</button>
     </div>
+    <div class="seg" id="seg-agrupa" title="Como agrupar a lista embaixo do mapa">
+      <button data-agrupa="cidade">Por cidade</button>
+      <button data-agrupa="regiao">Por região</button>
+    </div>
     <input type="search" id="destino" class="busca destino" list="lista-destinos" autocomplete="off"
-           placeholder="📍 Para onde você vai? Estado, regiões ou cidades (separe por vírgula)">
+           placeholder="📍 Ou digite cidades: Campinas, Valinhos, Louveira…">
     <datalist id="lista-destinos"></datalist>
     <input type="search" id="busca" class="busca" placeholder="🔎 Buscar cliente…" autocomplete="off">
     <label class="chk-linha"><input type="checkbox" id="so-visita"> só com visita marcada</label>
   </div>
+  <!-- 1º escolhe o estado, depois marca as regiões dele (botões) -->
+  <div class="seletor" id="seletor"></div>
 
   <div id="loading" class="loading">carregando o mapa… (pode levar até 30s)</div>
 
@@ -231,7 +256,7 @@
 <div class="barra-rota" id="barra-rota" hidden>
   <div class="in">
     <span class="qtd">🧭 <span id="qtd-rota">0</span> na rota</span>
-    <span class="sub" id="dica-rota" style="font-size:.72rem;color:var(--ink-soft)">ordem pelos mais próximos</span>
+    <span class="sub" id="dica-rota" style="font-size:.72rem;color:var(--ink-soft)">toque em Montar rota: põe na ordem dos mais próximos e abre no Google Maps</span>
     <div class="btns">
       <button class="btn" id="btn-limpar-rota">Limpar</button>
       <button class="btn forte" id="btn-montar-rota">Montar rota</button>
@@ -271,13 +296,19 @@ let tipo = ler("rv_tipo", "cliente");            // padrão: só clientes (regra
 let destino = ler("rv_destino", "");              // "Rio de Janeiro" · "Região dos Lagos, Baixada" · "Campinas, Valinhos, Louveira"
 let busca = "";
 let soVisita = false;
+let agrupa = ler("rv_agrupa", "cidade");          // lista "Por cidade" ou "Por região"
+// seletor clicável: 1 estado (ex. "RJ") e, dentro dele, as regiões marcadas (ninguém precisa decorar o nome da região)
+let estadoSel = ler("rv_estado", "");
+let regioesSel = new Set(JSON.parse(ler("rv_regioes", "[]")));
+const salvaSeletor = () => { gravar("rv_estado", estadoSel); gravar("rv_regioes", JSON.stringify([...regioesSel])); };
 let limiteLista = LISTA_PASSO;
 let rota = new Set(JSON.parse(ler("rv_rota", "[]")));   // ids escolhidos para a rota (fica salvo no aparelho)
 // atalho vindo do card do Copiloto: rota/?regiao=RJ - Grande Rio&tipo=cliente&empresa=BNZ
 (() => {
   const p = new URLSearchParams(location.search);
-  if(p.has("destino")) destino = p.get("destino");
-  else if(p.has("regiao")) destino = p.get("regiao");
+  if(p.has("destino") || p.has("regiao") || p.has("estado")){ destino = p.get("destino") || p.get("regiao") || ""; estadoSel = ""; regioesSel = new Set(); }
+  if(p.has("estado")) estadoSel = p.get("estado").toUpperCase();
+  if(p.has("regioes")) regioesSel = new Set(p.get("regioes").split("|").filter(Boolean));
   if(["cliente", "prospect", "todos"].includes(p.get("tipo"))) tipo = p.get("tipo");
   if(p.has("empresa") && ["", "BB", "BNZ", "CIAPLAC"].includes(p.get("empresa").toUpperCase())) empresa = p.get("empresa").toUpperCase();
 })();
@@ -288,10 +319,11 @@ const alvoNav = i => (i.lat && i.lng && !i.aprox) ? (i.lat + "," + i.lng) : (i.e
 const linkMaps = i => "https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=" + encodeURIComponent(alvoNav(i));
 const linkWaze = i => (i.lat && i.lng && !i.aprox) ? "https://waze.com/ul?ll=" + i.lat + "," + i.lng + "&navigate=yes"
                                                     : "https://waze.com/ul?q=" + encodeURIComponent(alvoNav(i)) + "&navigate=yes";
+// mesmo ícone de WhatsApp do Copiloto (verde); Maps = alfinete, Waze = carro
 const botoes = i =>
-  (i.zap ? '<a class="ic zap" href="' + esc(i.zap) + '" target="_blank" rel="noopener" title="WhatsApp do comprador">💬</a>' : "") +
-  '<a class="ic" href="' + esc(linkMaps(i)) + '" target="_blank" rel="noopener" title="Abrir no Google Maps">🗺️</a>' +
-  '<a class="ic" href="' + esc(linkWaze(i)) + '" target="_blank" rel="noopener" title="Abrir no Waze">🚗</a>';
+  (i.zap ? '<a class="ic zap" href="' + esc(i.zap) + '" target="_blank" rel="noopener" title="WhatsApp do comprador"><svg class="ico"><use href="#i-whats"/></svg></a>' : "") +
+  '<a class="ic maps" href="' + esc(linkMaps(i)) + '" target="_blank" rel="noopener" title="Abrir no Google Maps"><svg class="ico"><use href="#i-mapa"/></svg></a>' +
+  '<a class="ic waze" href="' + esc(linkWaze(i)) + '" target="_blank" rel="noopener" title="Abrir no Waze"><svg class="ico"><use href="#i-carro"/></svg></a>';
 
 /* ---- filtro ---- */
 // "Para onde você vai?": cada pedaço separado por vírgula pode ser ESTADO, REGIÃO ou CIDADE (vale qualquer um que bater)
@@ -325,18 +357,56 @@ function casaDestino(i, termos){
     return reg.includes(t) || cid.includes(t);
   });
 }
-function filtrados(){
+// estado do item: pela UF do cadastro ou pela sigla da região ("RJ - Grande Rio")
+const ufDe = i => (String(i.uf || "").toUpperCase()) || ((String(i.regiao).match(/^([A-Z]{2}) -/) || [])[1] || "");
+const SEM_REG = "__sem";
+const regDe = i => i.regiao || SEM_REG;
+function casaSeletor(i){
+  if(estadoSel && ufDe(i) !== estadoSel) return false;
+  if(regioesSel.size && !regioesSel.has(regDe(i))) return false;
+  return true;
+}
+// base = tudo, menos o lugar (é a base das contagens dos botões de estado/região)
+function base(){
   if(!DADOS) return [];
   const termos = busca.split(",").map(semAcento).map(t => t.trim()).filter(t => t.length >= 2);
-  const destinos = lerDestinos(destino);
   const nomeEmp = ({ BNZ: "BNZ METAIS", CIAPLAC: "CIAPLAC", BB: "BB" })[empresa];   // os dados já vêm das 3 empresas
   return DADOS.itens.filter(i =>
     (!empresa || i.empresa === nomeEmp) &&
     (tipo === "todos" || i.tipo === tipo) &&
-    casaDestino(i, destinos) &&
     (!soVisita || i.visita) &&
     (!termos.length || termos.some(t => semAcento(i.nome + " " + i.fantasia).includes(t)))
   );
+}
+function filtrados(){
+  const destinos = lerDestinos(destino);
+  return base().filter(i => casaSeletor(i) && casaDestino(i, destinos));
+}
+
+/* ---- seletor clicável: estados e, dentro do estado escolhido, as regiões ---- */
+const NOME_UF = { RJ: "Rio de Janeiro", SP: "São Paulo", MG: "Minas Gerais", ES: "Espírito Santo", PR: "Paraná", SC: "Santa Catarina",
+  RS: "Rio Grande do Sul", GO: "Goiás", MS: "Mato Grosso do Sul", BA: "Bahia", DF: "Distrito Federal", AP: "Amapá",
+  PE: "Pernambuco", CE: "Ceará", MT: "Mato Grosso", PA: "Pará", AM: "Amazonas", MA: "Maranhão", PB: "Paraíba", RN: "Rio Grande do Norte",
+  AL: "Alagoas", SE: "Sergipe", PI: "Piauí", TO: "Tocantins", RO: "Rondônia", AC: "Acre", RR: "Roraima" };
+function desenhaSeletor(){
+  const b = base();
+  const porUf = {}; b.forEach(i => { const u = ufDe(i); if(u) porUf[u] = (porUf[u] || 0) + 1; });
+  const ufs = Object.keys(porUf).sort((x, y) => porUf[y] - porUf[x]);
+  let html = '<div class="fila"><span class="rot">Estado</span>' +
+    '<button class="chip' + (estadoSel ? '' : ' on') + '" data-estado="">Todos</button>' +
+    ufs.map(u => '<button class="chip' + (estadoSel === u ? ' on' : '') + '" data-estado="' + u + '">' + esc(NOME_UF[u] || u) + '<span class="n">' + porUf[u] + '</span></button>').join("") +
+    '</div>';
+  if(estadoSel){
+    const porReg = {}; b.filter(i => ufDe(i) === estadoSel).forEach(i => { const r = regDe(i); porReg[r] = (porReg[r] || 0) + 1; });
+    const regs = Object.keys(porReg).sort((x, y) => (x === SEM_REG) - (y === SEM_REG) || x.localeCompare(y, "pt-BR"));
+    html += '<div class="fila"><span class="rot">Regiões</span>' +
+      '<button class="chip' + (regioesSel.size ? '' : ' on') + '" data-reg-todas="1">Todas do estado</button>' +
+      regs.map(r => '<button class="chip' + (regioesSel.has(r) ? ' on' : '') + '" data-reg="' + esc(r) + '">' +
+        // tira o "RJ - " só se for do próprio estado (região de outro estado = cadastro trocado, mostra inteiro)
+        esc(r === SEM_REG ? "Sem região" : (r.startsWith(estadoSel + " - ") ? r.slice(estadoSel.length + 3) : r)) + '<span class="n">' + porReg[r] + '</span></button>').join("") +
+      '</div>';
+  }
+  $("#seletor").innerHTML = html;
 }
 
 /* ---- mapa ---- */
@@ -356,27 +426,32 @@ function popupHtml(i){
     (i.aprox ? '<div class="pp-sub"><i>local aproximado (centro da cidade)</i></div>' : '') +
     '<div class="pp-acoes"><button class="btn' + (naRota ? '' : ' forte') + '" data-rota="' + i.id + '">' + (naRota ? '✓ Na rota' : '+ Rota') + '</button>' + botoes(i) + '</div>';
 }
-function desenhaMapa(lista){
+// enquadrar=false: só repinta (ao marcar/desmarcar na rota não mexe no zoom que o vendedor escolheu)
+function desenhaMapa(lista, enquadrar = true){
   iniciaMapa();
   camada.clearLayers();
   const pts = [];
-  lista.forEach(i => {
+  // os que estão NA ROTA são desenhados por último (ficam por cima) e com destaque forte
+  const ordem = [...lista].sort((a, b) => rota.has(a.id) - rota.has(b.id));
+  ordem.forEach(i => {
     if(!i.lat || !i.lng) return;
-    const cor = i.tipo === "cliente" ? "#2f8a3e" : "#7b52c9";
+    const cor = i.tipo === "cliente" ? "#f07800" : "#7b52c9";
     const atrasada = i.visita && i.visita.atrasada;
-    const m = L.circleMarker([i.lat, i.lng], {
-      radius: rota.has(i.id) ? 10 : 7,
-      color: rota.has(i.id) ? "#211e18" : (atrasada ? "#d13b4b" : "#ffffff"),
-      weight: rota.has(i.id) || atrasada ? 3 : 2,
-      fillColor: i.aprox ? "#ffffff" : cor, fillOpacity: i.aprox ? .85 : .95,
-      dashArray: i.aprox ? "3 3" : null
-    });
-    if(i.aprox) m.setStyle({ color: cor });
+    const naRota = rota.has(i.id);
+    const m = naRota
+      ? L.circleMarker([i.lat, i.lng], { radius: 11, color: "#111111", weight: 4, fillColor: cor, fillOpacity: 1 })
+      : L.circleMarker([i.lat, i.lng], {
+          radius: 7,
+          color: i.aprox ? cor : (atrasada ? "#d13b4b" : "#ffffff"),
+          weight: atrasada ? 3 : 2,
+          fillColor: i.aprox ? "#ffffff" : cor, fillOpacity: i.aprox ? .85 : .95,
+          dashArray: i.aprox ? "3 3" : null
+        });
     m.bindPopup(() => popupHtml(i));
     m.addTo(camada);
     pts.push([i.lat, i.lng]);
   });
-  if(pts.length) mapa.fitBounds(pts, { padding: [30, 30], maxZoom: 12 });
+  if(enquadrar && pts.length) mapa.fitBounds(pts, { padding: [30, 30], maxZoom: 12 });
   setTimeout(() => mapa.invalidateSize(), 50);
 }
 
@@ -399,14 +474,20 @@ function desenhaLista(lista){
   let html = "", regAtual = null, cidAtual = null;
   const contaReg = {}, contaCid = {};
   ord.forEach(i => { contaReg[i.regiao || ""] = (contaReg[i.regiao || ""] || 0) + 1; const k = (i.regiao||"") + "|" + cidKey(i); contaCid[k] = (contaCid[k] || 0) + 1; });
+  const porRegiao = agrupa === "regiao";    // "Por região": um bloco por região, sem dividir por cidade
   mostrar.forEach(i => {
     if(i.regiao !== regAtual){
       if(cidAtual !== null) html += "</div>";
       if(regAtual !== null) html += "</div>";
       regAtual = i.regiao; cidAtual = null;
       html += '<div class="grupo"><h2 class="grupo-h">📍 ' + esc(i.regiao || "Sem região") + ' <span class="n">' + contaReg[i.regiao || ""] + '</span></h2>';
+      if(porRegiao){
+        cidAtual = "*";
+        html += '<div class="cidade"><div class="cidade-h">' + contaReg[i.regiao || ""] + ' na região' +
+          '<button class="btn" data-regiao-toda="' + esc(i.regiao || "") + '">+ todos da região</button></div>';
+      }
     }
-    if(cidKey(i) !== cidAtual){
+    if(!porRegiao && cidKey(i) !== cidAtual){
       if(cidAtual !== null) html += "</div>";
       cidAtual = cidKey(i);
       const k = (i.regiao||"") + "|" + cidKey(i);
@@ -415,9 +496,10 @@ function desenhaLista(lista){
     }
     const v = i.visita;
     html += '<div class="item"><input type="checkbox" data-id="' + i.id + '"' + (rota.has(i.id) ? " checked" : "") + ' title="colocar na rota">' +
-      '<div class="nm" title="' + esc(i.nome) + '">' + esc(i.nome) + (i.fantasia ? ' <span style="font-weight:400;color:var(--ink-soft)">· ' + esc(i.fantasia) + '</span>' : '') + '</div>' +
-      '<div class="acoes">' + botoes(i) + '</div>' +
+      '<div class="linha"><div class="nm" title="' + esc(i.nome) + '">' + esc(i.nome) + (i.fantasia ? ' <span style="font-weight:400;color:var(--ink-soft)">· ' + esc(i.fantasia) + '</span>' : '') + '</div>' +
+      '<div class="acoes">' + botoes(i) + '</div></div>' +
       '<div class="info">' +
+        (porRegiao ? '<span>' + esc(cidNome(i.cidade) || "Sem cidade") + '</span>' : '') +
         '<span class="tag ' + (i.tipo === "cliente" ? "cli" : "pro") + '">' + (i.tipo === "cliente" ? "Cliente" : "Prospect") + '</span>' +
         (empresa ? '' : '<span class="tag emp">' + esc(i.empresa) + '</span>') +
         '<span>' + esc(i.etapa) + '</span>' +
@@ -441,8 +523,11 @@ function resumo(lista){
     (sem ? '<span title="aparecem só na lista, com Maps/Waze pelo endereço"><b>' + sem + '</b> sem ponto no mapa</span>' : '');
 }
 
+// redesenha mapa + lista SEM mudar o zoom (usado ao marcar/desmarcar na rota)
+function repinta(){ const l = filtrados(); desenhaMapa(l, false); desenhaLista(l); atualizaBarra(); }
 function render(){
   const lista = filtrados();
+  desenhaSeletor();
   resumo(lista);
   desenhaMapa(lista);
   desenhaLista(lista);
@@ -518,8 +603,19 @@ async function montarRota(){
 function aplicaUI(){
   $$("#seg-emp button").forEach(b => b.classList.toggle("on", (b.dataset.emp || "") === empresa));
   $$("#seg-tipo button").forEach(b => b.classList.toggle("on", b.dataset.tipo === tipo));
+  $$("#seg-agrupa button").forEach(b => b.classList.toggle("on", b.dataset.agrupa === agrupa));
   document.body.setAttribute("data-empresa", empresa);
 }
+$("#seg-agrupa").addEventListener("click", e => { const b = e.target.closest("button[data-agrupa]"); if(!b) return;
+  agrupa = b.dataset.agrupa; gravar("rv_agrupa", agrupa); aplicaUI(); desenhaLista(filtrados()); });
+// botões de estado / região
+$("#seletor").addEventListener("click", e => {
+  const be = e.target.closest("[data-estado]");
+  if(be){ const u = be.dataset.estado; estadoSel = (estadoSel === u ? "" : u); regioesSel = new Set(); }
+  else if(e.target.closest("[data-reg-todas]")) regioesSel = new Set();
+  else { const br = e.target.closest("[data-reg]"); if(!br) return; const r = br.dataset.reg; regioesSel.has(r) ? regioesSel.delete(r) : regioesSel.add(r); }
+  salvaSeletor(); limiteLista = LISTA_PASSO; render();
+});
 $("#seg-emp").addEventListener("click", e => { const b = e.target.closest("button[data-emp]"); if(!b) return;
   empresa = b.dataset.emp || ""; gravar("rv_empresa", empresa); aplicaUI(); limiteLista = LISTA_PASSO; render(); });
 $("#seg-tipo").addEventListener("click", e => { const b = e.target.closest("button[data-tipo]"); if(!b) return;
@@ -527,12 +623,14 @@ $("#seg-tipo").addEventListener("click", e => { const b = e.target.closest("butt
 let tDest; $("#destino").addEventListener("input", e => { clearTimeout(tDest); tDest = setTimeout(() => { destino = e.target.value; gravar("rv_destino", destino); limiteLista = LISTA_PASSO; render(); }, 350); });
 let tBusca; $("#busca").addEventListener("input", e => { clearTimeout(tBusca); tBusca = setTimeout(() => { busca = e.target.value; limiteLista = LISTA_PASSO; render(); }, 250); });
 $("#so-visita").addEventListener("change", e => { soVisita = e.target.checked; render(); });
-document.addEventListener("change", e => { const c = e.target; if(c.matches && c.matches('#lista input[data-id]')){ alternaRota(c.dataset.id, c.checked); desenhaMapa(filtrados()); } });
+document.addEventListener("change", e => { const c = e.target; if(c.matches && c.matches('#lista input[data-id]')){ alternaRota(c.dataset.id, c.checked); desenhaMapa(filtrados(), false); toast(c.checked ? "✓ Adicionado à rota (" + rota.size + ")" : "Tirado da rota"); } });
 document.addEventListener("click", e => {
   const r = e.target.closest("[data-rota]");
-  if(r){ alternaRota(r.dataset.rota); mapa.closePopup(); render(); return; }
+  if(r){ alternaRota(r.dataset.rota); mapa.closePopup(); repinta(); toast("Rota: " + rota.size + " parada" + (rota.size === 1 ? "" : "s")); return; }
   const cb = e.target.closest("[data-cidade]");
-  if(cb){ const k = cb.dataset.cidade; filtrados().filter(i => ((i.regiao||"") + "|" + cidKey(i)) === k).forEach(i => rota.add(i.id)); render(); toast("Cidade inteira na rota"); return; }
+  if(cb){ const k = cb.dataset.cidade; filtrados().filter(i => ((i.regiao||"") + "|" + cidKey(i)) === k).forEach(i => rota.add(i.id)); repinta(); toast("Cidade inteira na rota (" + rota.size + ")"); return; }
+  const br = e.target.closest("[data-regiao-toda]");
+  if(br){ const g = br.dataset.regiaoToda; filtrados().filter(i => (i.regiao || "") === g).forEach(i => rota.add(i.id)); repinta(); toast("Região inteira na rota (" + rota.size + ")"); return; }
   if(e.target.id === "btn-mais"){ limiteLista += LISTA_PASSO; desenhaLista(filtrados()); }
 });
 $("#btn-limpar-rota").addEventListener("click", () => { rota.clear(); render(); });
