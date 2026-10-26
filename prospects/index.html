@@ -343,6 +343,29 @@
   .login .msg{font-size:.78rem;color:var(--clay-ink);min-height:1.1em}
   .logout{background:none;border:0;color:var(--ink-faint);font:inherit;font-size:.7rem;cursor:pointer;text-decoration:underline;padding:0}
 
+  /* Ficha do cliente (📋) */
+  button.btn-ficha{font:inherit;font-size:.78rem;line-height:1;padding:1px 4px;margin-right:5px;border:1px solid transparent;border-radius:5px;background:none;cursor:pointer;vertical-align:baseline;opacity:.55}
+  button.btn-ficha:hover{opacity:1;border-color:var(--blue-edge);background:var(--blue-bg)}
+  dialog.dlg-ficha{width:min(760px,96vw);max-height:88vh;display:none;flex-direction:column;padding:0}
+  dialog.dlg-ficha[open]{display:flex}
+  .fi-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px 18px 10px;border-bottom:1px solid var(--hair)}
+  .fi-titulo b{font-family:"Archivo",sans-serif;font-size:1.05rem;display:block}
+  .fi-titulo small{color:var(--ink-soft);font-size:.74rem}
+  .fi-acoes{display:flex;gap:8px;flex:none}
+  .fi-corpo{padding:10px 18px 16px;overflow:auto}
+  .fi-cards{font-size:.8rem;color:var(--ink-soft);margin-bottom:4px}
+  .fi-tag{display:inline-block;padding:0 7px;border:1px solid var(--hair);border-radius:10px;font-size:.68rem;background:var(--slate-bg);color:var(--slate-ink)}
+  .fi-ativ{margin:0 0 6px;padding-left:18px;font-size:.8rem}
+  .fi-atraso{color:var(--clay-ink);font-weight:600}
+  .fnota{border:1px solid var(--hair);border-left:4px solid var(--blue-edge);border-radius:8px;padding:8px 12px;margin:8px 0;background:var(--surface)}
+  .fn-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:.78rem}
+  .fn-quando{color:var(--ink-faint);font-size:.72rem}
+  .fn-edit{margin-left:auto;font:inherit;border:0;background:none;cursor:pointer;opacity:.6;font-size:.85rem}
+  .fn-edit:hover{opacity:1}
+  .fn-texto{margin-top:4px;font-size:.84rem;white-space:pre-wrap;word-break:break-word;color:var(--ink)}
+  .fn-area{width:100%;font:inherit;font-size:.84rem;padding:7px 9px;border:1px solid var(--blue-edge);border-radius:7px;background:var(--surface);color:var(--ink)}
+  .fn-bt{margin-top:6px;display:flex;gap:8px}
+  @media print{ .btn-ficha{display:none!important} }
   /* ---- só do Copiloto de Prospects ---- */
   .filtro-regiao{font:inherit;font-size:.76rem;padding:6px 10px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink);max-width:260px}
   .chip-reg{display:inline-flex;align-items:center;gap:4px;margin:2px 2px;padding:1px 4px 1px 8px;border:1px solid var(--blue-edge);border-radius:12px;background:var(--surface)}
@@ -381,7 +404,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v1.8 (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v9 (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -545,7 +568,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v1.8 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v9 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -577,6 +600,15 @@
   </form>
 </dialog>
 
+<!-- Ficha do cliente: anotações do histórico do CRM (as do assistente do vendedor, do Copiloto e do Odoo) + atividades abertas -->
+<dialog class="dlg dlg-ficha" id="dlg-ficha">
+  <div class="fi-topo">
+    <div class="fi-titulo"><b id="fi-nome">—</b><small id="fi-sub"></small></div>
+    <div class="fi-acoes"><a class="btn" id="fi-crm" href="#" target="_blank" rel="noopener" hidden>Abrir no CRM ↗</a> <button class="btn" id="fi-fechar" type="button">Fechar</button></div>
+  </div>
+  <div id="fi-corpo" class="fi-corpo">carregando…</div>
+</dialog>
+
 <script>
 /* ============================================================================
    CONFIGURAÇÃO — troque a URL abaixo pela do seu webhook no n8n
@@ -584,6 +616,7 @@
    ============================================================================ */
 const WEBHOOK_URL   = "https://auto.ialink.com.br/webhook/painel-prospects";
 const REFRESH_MIN   = 5;      // re-busca sozinho a cada X minutos
+const ODOO_URL      = "https://bnz-metais.odoo.com";   // links "Abrir no CRM"
 const LINK_CLIENTES = "../";  // Copiloto de Vendas (clientes) — esta página fica na pasta /prospects/ do mesmo site
 
 /* ---- definição das listas que aparecem embaixo ---- */
@@ -843,6 +876,7 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
+          if(c[0]==="cliente" && r.lead) v = '<button type="button" class="btn-ficha no-print" data-lead="'+r.lead+'" data-cliente="'+esc(String(r.cliente||""))+'" data-empresa="'+esc(String(r.empresa||""))+'" title="Ver as anotações e o histórico deste prospect">📋</button>' + v;
           if(c[0]==="regiao" && k==="por_regiao") v = '<a href="#lista-'+slugRegiao(r.regiao||"")+'" class="lnk-reg" data-goto="'+slugRegiao(r.regiao||"")+'">'+(v || "(sem região)")+'</a>';
           if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
           if(c[0]==="_acoes") v = r.id
@@ -907,6 +941,76 @@ function toast(msg, erro){
   const t = document.createElement("div"); t.className = "toast" + (erro ? " erro" : ""); t.textContent = msg;
   document.body.appendChild(t); setTimeout(()=>t.remove(), erro ? 6000 : 3500);
 }
+/* ---- Ficha do cliente (📋): anotações do histórico do CRM + atividades abertas; ✏️ corrige o texto de uma anotação ---- */
+// a Ficha usa o MESMO fluxo das ações (Feito/Cancelar/Editar): acao=ficha_ler / ficha_editar no webhook painel-vendedor-acao
+async function chamarFicha(p){
+  if(!creds || !creds.user) return {ok:false, erro:"entre de novo no Copiloto"};
+  const q = new URLSearchParams(Object.assign({user: creds.user, pass: creds.pass, t: Date.now()}, p, {acao: "ficha_" + p.acao}));
+  const ctrl = new AbortController(); const to = setTimeout(()=>ctrl.abort(), 40000);
+  try{
+    const r = await fetch(WEBHOOK_ACAO + "?" + q.toString(), {cache:"no-store", signal: ctrl.signal});
+    clearTimeout(to);
+    if(r.status === 404) return {ok:false, erro:"O fluxo de Ações não está ativo no servidor (n8n)."};
+    if(!r.ok) return {ok:false, erro:"o servidor respondeu "+r.status};
+    const j = await r.json();
+    // fluxo de Ações antigo (v2) não conhece a ficha e responde "ação inválida"
+    if(j && j.ok === false && /inv/i.test(String(j.erro || ""))) return {ok:false, erro:"Falta atualizar o fluxo “Copiloto de Vendas - Ações” para a v3 no n8n (é ele que abre a ficha)."};
+    return j;
+  }catch(err){
+    clearTimeout(to);
+    return {ok:false, erro: err.name === "AbortError" ? "demorou demais — tente de novo" : "sem conexão"};
+  }
+}
+const fmtQuandoBR = s => { const d = new Date(String(s||"").replace(" ","T")+"Z"); return isNaN(d.getTime()) ? "" : d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"}) + " " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}); };
+function notaHTML(n){
+  return '<div class="fnota" data-id="'+n.id+'"><div class="fn-h"><b>'+(n.titulo ? esc(n.titulo) : "📝 Anotação")+'</b>'+
+    '<span class="fn-quando">'+esc(fmtQuandoBR(n.data))+(n.autor ? " · "+esc(n.autor) : "")+'</span>'+
+    '<button type="button" class="fn-edit" data-edit="'+n.id+'" title="corrigir o texto desta anotação">✏️</button></div>'+
+    '<div class="fn-texto">'+(n.texto ? esc(n.texto) : '<i>(sem texto)</i>')+'</div></div>';
+}
+async function abrirFicha(lead, cliente, emp){
+  const dlg = $("#dlg-ficha"); if(!dlg) return;
+  const nomeLimpo = String(cliente||"").replace(/ - (BB|BNZ METAIS|CIAPLAC)$/i, "").trim();
+  $("#fi-nome").textContent = nomeLimpo || "Cliente"; $("#fi-sub").textContent = emp ? "· " + emp : "";
+  const crm = $("#fi-crm"); crm.hidden = !lead; if(lead) crm.href = ODOO_URL + "/odoo/crm/" + lead;
+  $("#fi-corpo").innerHTML = "carregando as anotações…";
+  if(!dlg.open) dlg.showModal();
+  if(WEBHOOK_URL.startsWith("COLE_AQUI")){ $("#fi-corpo").innerHTML = '<div class="lc-empty">Modo demonstração: aqui aparecem as anotações do CRM deste prospect.</div>'; return; }
+  const p = lead ? {acao:"ler", lead} : {acao:"ler", cliente: nomeLimpo, empresa: emp || (empresa || "")};
+  const r = await chamarFicha(p);
+  if(!r || !r.ok){ $("#fi-corpo").innerHTML = '<div class="lc-empty">'+esc((r && r.erro) || "não consegui abrir a ficha")+'</div>'; return; }
+  const cards = (r.leads || []);
+  if(!cards.length){ $("#fi-corpo").innerHTML = '<div class="lc-empty">Não achei o card deste prospect no CRM.</div>'; return; }
+  if(!lead && cards[0]){ crm.hidden = false; crm.href = ODOO_URL + "/odoo/crm/" + cards[0].id; }
+  const hoje = new Date().toLocaleDateString("en-CA");
+  let h = '<div class="fi-cards">' + cards.map(c => esc(c.nome)+' <span class="fi-tag">'+esc(c.empresa)+'</span> <span class="fi-tag">'+esc(c.estagio)+'</span>').join(" &nbsp;·&nbsp; ") + '</div>';
+  h += '<p class="band-label">Atividades abertas</p>';
+  h += (r.abertas || []).length
+    ? '<ul class="fi-ativ">' + r.abertas.map(a => '<li><b>'+esc(a.tipo)+'</b> — '+esc(a.resumo || "sem resumo")+' <span class="'+(a.vencimento && a.vencimento < hoje ? "fi-atraso" : "")+'">· vence '+esc(fmtDateBR(a.vencimento))+'</span></li>').join("") + '</ul>'
+    : '<div class="lc-empty">— nenhuma atividade aberta —</div>';
+  h += '<p class="band-label">Anotações (as mais recentes primeiro)</p>';
+  h += (r.notas || []).length ? r.notas.map(notaHTML).join("") : '<div class="lc-empty">— ainda não há anotações para este prospect —</div>';
+  $("#fi-corpo").innerHTML = h;
+}
+$("#fi-fechar").addEventListener("click", () => $("#dlg-ficha").close());
+$("#dlg-ficha").addEventListener("click", async e => {
+  const bt = e.target.closest("button[data-edit]"); if(!bt) return;
+  const box = bt.closest(".fnota"); const txtEl = box.querySelector(".fn-texto");
+  const atual = txtEl.innerText.replace(/^\(sem texto\)$/, "");
+  txtEl.innerHTML = '<textarea class="fn-area" rows="4" maxlength="2000"></textarea><div class="fn-bt"><button type="button" class="btn" data-salvar="'+bt.dataset.edit+'">Salvar</button> <button type="button" class="btn" data-cancelar="1">Cancelar</button></div>';
+  txtEl.querySelector("textarea").value = atual; txtEl.querySelector("textarea").focus(); txtEl.dataset.antes = atual; bt.hidden = true;
+});
+$("#dlg-ficha").addEventListener("click", async e => {
+  const cancela = e.target.closest("button[data-cancelar]");
+  if(cancela){ const box = cancela.closest(".fnota"); const t = box.querySelector(".fn-texto"); t.innerHTML = esc(t.dataset.antes || "") || "<i>(sem texto)</i>"; box.querySelector(".fn-edit").hidden = false; return; }
+  const salva = e.target.closest("button[data-salvar]"); if(!salva) return;
+  const box = salva.closest(".fnota"); const novo = box.querySelector("textarea").value.trim();
+  if(!novo){ toast("O texto não pode ficar vazio.", true); return; }
+  salva.disabled = true; salva.textContent = "salvando…";
+  const r = await chamarFicha({acao:"editar", msg: salva.dataset.salvar, texto: novo});
+  if(r && r.ok){ box.querySelector(".fn-texto").innerHTML = esc(r.texto || novo); box.querySelector(".fn-edit").hidden = false; toast("Anotação corrigida ✔"); }
+  else { salva.disabled = false; salva.textContent = "Salvar"; toast((r && r.erro) || "Não consegui salvar.", true); }
+});
 const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id));
 function atualizaSel(){ $$("#sel-n").forEach(n => n.textContent = selAtiv.size); }
 function abrirDialogo(acao, ids){
@@ -1022,6 +1126,8 @@ document.addEventListener("change", e => {
 
 /* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
 document.addEventListener("click", e=>{
+  const bf = e.target.closest && e.target.closest("button.btn-ficha");
+  if(bf){ e.stopPropagation(); abrirFicha(bf.dataset.lead ? Number(bf.dataset.lead) : null, bf.dataset.cliente, bf.dataset.empresa); return; }
   const bt = e.target.closest("button[data-ac]");
   if(bt){
     const ac = bt.dataset.ac;
