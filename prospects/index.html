@@ -355,7 +355,10 @@
   .fi-corpo{padding:10px 18px 16px;overflow:auto}
   .fi-cards{font-size:.8rem;color:var(--ink-soft);margin-bottom:4px}
   .fi-tag{display:inline-block;padding:0 7px;border:1px solid var(--hair);border-radius:10px;font-size:.68rem;background:var(--slate-bg);color:var(--slate-ink)}
-  .fi-ativ{margin:0 0 6px;padding-left:18px;font-size:.8rem}
+  .fi-ativ{margin:0 0 6px;padding-left:0;list-style:none;font-size:.8rem}
+  .fi-ativ li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;padding:6px 0;border-bottom:1px dashed var(--hair)}
+  .fi-ativ-txt{flex:1 1 260px;min-width:0}
+  .fi-ab{display:inline-flex;gap:6px;flex:none}
   .fi-atraso{color:var(--clay-ink);font-weight:600}
   .fnota{border:1px solid var(--hair);border-left:4px solid var(--blue-edge);border-radius:8px;padding:8px 12px;margin:8px 0;background:var(--surface)}
   .fn-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:.78rem}
@@ -404,7 +407,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v9 (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v10 (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -568,7 +571,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v9 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v10 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -968,7 +971,10 @@ function notaHTML(n){
     '<button type="button" class="fn-edit" data-edit="'+n.id+'" title="corrigir o texto desta anotação">✏️</button></div>'+
     '<div class="fn-texto">'+(n.texto ? esc(n.texto) : '<i>(sem texto)</i>')+'</div></div>';
 }
+const FICHA_ATIV = {};      // atividades abertas mostradas na ficha (o pop-up de Feito/Editar/Cancelar acha elas aqui)
+let ULTIMA_FICHA = null;    // pra recarregar a ficha depois de concluir/editar/cancelar uma atividade
 async function abrirFicha(lead, cliente, emp){
+  ULTIMA_FICHA = { lead, cliente, emp };
   const dlg = $("#dlg-ficha"); if(!dlg) return;
   const nomeLimpo = String(cliente||"").replace(/ - (BB|BNZ METAIS|CIAPLAC)$/i, "").trim();
   $("#fi-nome").textContent = nomeLimpo || "Cliente"; $("#fi-sub").textContent = emp ? "· " + emp : "";
@@ -985,8 +991,11 @@ async function abrirFicha(lead, cliente, emp){
   const hoje = new Date().toLocaleDateString("en-CA");
   let h = '<div class="fi-cards">' + cards.map(c => esc(c.nome)+' <span class="fi-tag">'+esc(c.empresa)+'</span> <span class="fi-tag">'+esc(c.estagio)+'</span>').join(" &nbsp;·&nbsp; ") + '</div>';
   h += '<p class="band-label">Atividades abertas</p>';
+  // cada atividade aberta tem os mesmos botões do Check-list (✔ Feito / ✎ editar-reprogramar / ✕ cancelar)
+  (r.abertas || []).forEach(a => { if(a.id) FICHA_ATIV[String(a.id)] = { id: a.id, lead: a.lead || lead, tipo_id: a.tipo_id, cliente: nomeLimpo, empresa: emp, tipo: a.tipo, resumo: a.resumo, vencimento: a.vencimento }; });
   h += (r.abertas || []).length
-    ? '<ul class="fi-ativ">' + r.abertas.map(a => '<li><b>'+esc(a.tipo)+'</b> — '+esc(a.resumo || "sem resumo")+' <span class="'+(a.vencimento && a.vencimento < hoje ? "fi-atraso" : "")+'">· vence '+esc(fmtDateBR(a.vencimento))+'</span></li>').join("") + '</ul>'
+    ? '<ul class="fi-ativ">' + r.abertas.map(a => '<li><span class="fi-ativ-txt"><b>'+esc(a.tipo)+'</b> — '+esc(a.resumo || "sem resumo")+' <span class="'+(a.vencimento && a.vencimento < hoje ? "fi-atraso" : "")+'">· vence '+esc(fmtDateBR(a.vencimento))+'</span></span>'+
+        (a.id ? '<span class="fi-ab"><button type="button" class="btn-ac ok" data-ac="feito" data-id="'+a.id+'" title="concluir a atividade">✔ Feito</button> <button type="button" class="btn-ac" data-ac="editar" data-id="'+a.id+'" title="editar o resumo ou reprogramar a data">✎ Editar / reprogramar</button> <button type="button" class="btn-ac cancel" data-ac="cancelar" data-id="'+a.id+'" title="cancelar a atividade">✕</button></span>' : '')+'</li>').join("") + '</ul>'
     : '<div class="lc-empty">— nenhuma atividade aberta —</div>';
   h += '<p class="band-label">Anotações (as mais recentes primeiro)</p>';
   h += (r.notas || []).length ? r.notas.map(notaHTML).join("") : '<div class="lc-empty">— ainda não há anotações para este prospect —</div>';
@@ -1011,7 +1020,7 @@ $("#dlg-ficha").addEventListener("click", async e => {
   if(r && r.ok){ box.querySelector(".fn-texto").innerHTML = esc(r.texto || novo); box.querySelector(".fn-edit").hidden = false; toast("Anotação corrigida ✔"); }
   else { salva.disabled = false; salva.textContent = "Salvar"; toast((r && r.erro) || "Não consegui salvar.", true); }
 });
-const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id));
+const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id)) || FICHA_ATIV[String(id)];
 function atualizaSel(){ $$("#sel-n").forEach(n => n.textContent = selAtiv.size); }
 function abrirDialogo(acao, ids){
   const acts = ids.map(atividadePorId).filter(Boolean);
@@ -1087,6 +1096,8 @@ function posAcao(A, p, r){
     if(a){ if(p.resumo) a.resumo = p.resumo; if(p.data) a.vencimento = p.data; }
   }
   renderListas(LISTAS_BRUTAS);
+  // se a ficha está aberta, recarrega: a atividade some das abertas e a anotação nova aparece
+  if(ULTIMA_FICHA && $("#dlg-ficha") && $("#dlg-ficha").open) abrirFicha(ULTIMA_FICHA.lead, ULTIMA_FICHA.cliente, ULTIMA_FICHA.emp);
   toast(r.aviso || (A.acao === "feito" ? "Atividade concluída ✔" : A.acao === "cancelar" ? "Atividade cancelada" : "Atividade atualizada"));
   setTimeout(load, 1500);   // puxa os números certos do Odoo
 }
