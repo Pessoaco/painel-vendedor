@@ -92,7 +92,7 @@
   select.filtro{max-width:260px}
   input.busca{min-width:240px;flex:0 1 320px}
   input.busca.destino{flex:1 1 380px;border-color:var(--blue-edge);font-weight:500}
-  .seletor{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+  .seletor{margin-top:8px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
   .seletor .fila{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
   .seletor .rot{font-family:"Archivo",sans-serif;font-weight:600;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-right:2px}
   .chip{font:inherit;font-size:.76rem;font-weight:600;padding:5px 11px;border:1px solid var(--hair);border-radius:999px;background:var(--surface);color:var(--ink-soft);cursor:pointer;white-space:nowrap}
@@ -102,12 +102,25 @@
   .chip.limpar{border-style:dashed}
   .chk-linha{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;color:var(--ink-soft);cursor:pointer}
 
-  .resumo{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 6px;font-size:.76rem;color:var(--ink-soft)}
+  .resumo-linha{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;margin:8px 0 6px}
+  .resumo{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.76rem;color:var(--ink-soft)}
   .resumo b{font-family:"IBM Plex Mono",monospace;color:var(--ink)}
   .legenda{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.72rem;color:var(--ink-soft)}
   .legenda i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 
-  #mapa{height:min(56vh,560px);min-height:300px;border:1px solid var(--hair);border-radius:var(--radius);box-shadow:var(--shadow);z-index:1}
+  .mapa-box{position:relative;margin-top:6px}
+  #mapa{height:calc(100vh - 150px);min-height:340px;max-height:900px;border:1px solid var(--hair);border-radius:var(--radius);box-shadow:var(--shadow);z-index:1}
+  .mapa-btns{position:absolute;top:10px;right:10px;z-index:500;display:flex;gap:6px}
+  .mapa-btns .btn{box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .dica-zoom{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:600;background:rgba(33,30,24,.82);color:#fff;padding:8px 14px;border-radius:8px;font-size:.8rem;pointer-events:none;opacity:0;transition:opacity .2s}
+  .dica-zoom.on{opacity:1}
+  /* mapa em tela cheia: só o mapa na tela, bom pra tirar print inteiro */
+  body.mapa-cheio{overflow:hidden}
+  body.mapa-cheio .mapa-box{position:fixed;inset:0;z-index:40;margin:0;background:var(--ground)}
+  body.mapa-cheio #mapa{height:100vh;max-height:none;border-radius:0;border:0}
+  body.mapa-cheio .barra-rota{display:none!important}
+  .rodape{margin-top:18px;text-align:right;font-size:.7rem;color:var(--ink-faint)}
+  .rodape a{color:inherit;font-weight:600;text-decoration:none}
   .leaflet-popup-content{margin:10px 12px;font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:.8rem;line-height:1.4;min-width:200px}
   .pp-nome{font-family:"Archivo",sans-serif;font-weight:700;font-size:.86rem}
   .pp-sub{color:#5c574c;font-size:.74rem}
@@ -200,7 +213,7 @@
 
 <div class="wrap">
   <header class="masthead">
-    <h1>Rota de Visitas <span>— quem está no caminho</span></h1>
+    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span></h1>
     <div class="meta">
       <a id="link-clientes" href="../">← Copiloto de Vendas</a>
       <a id="link-prospects" href="../prospects/">Copiloto de Prospects</a>
@@ -211,7 +224,7 @@
       </div>
     </div>
   </header>
-  <p class="tagline">Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.</p>
+
 
   <div class="topbar">
     <div class="seg" id="seg-emp">
@@ -241,6 +254,7 @@
   <div id="loading" class="loading">carregando o mapa… (pode levar até 30s)</div>
 
   <div id="content" hidden>
+    <div class="resumo-linha">
     <div class="resumo" id="resumo"></div>
     <div class="legenda">
       <span><i style="background:var(--pin-cli)"></i>Cliente</span>
@@ -248,8 +262,14 @@
       <span><i style="background:var(--pin-cli);box-shadow:0 0 0 2px var(--pin-atr)"></i>Visita atrasada</span>
       <span><i style="background:#fff;border:2px dashed #888;box-shadow:none"></i>Local aproximado (centro da cidade)</span>
     </div>
-    <div id="mapa" style="margin-top:8px"></div>
+    </div>
+    <div class="mapa-box">
+      <div id="mapa"></div>
+      <div class="mapa-btns"><button class="btn" id="btn-mapa-cheio" type="button" title="Mostrar só o mapa na tela inteira (bom pra tirar print)">⛶ Mapa em tela cheia</button></div>
+      <div class="dica-zoom" id="dica-zoom">Para dar zoom: segure <b>Ctrl</b> e role, ou use os botões + e −</div>
+    </div>
     <div id="lista"></div>
+    <p class="rodape">Rota de Visitas v2 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 </div>
 
@@ -413,7 +433,17 @@ function desenhaSeletor(){
 let mapa = null, camada = null;
 function iniciaMapa(){
   if(mapa) return;
-  mapa = L.map("mapa", { preferCanvas: true, zoomControl: true }).setView([-22.5, -46.5], 6);
+  // rolar a página por cima do mapa NÃO dá zoom (só com Ctrl + rolar, ou os botões + e −)
+  mapa = L.map("mapa", { preferCanvas: true, zoomControl: true, scrollWheelZoom: false }).setView([-22.5, -46.5], 6);
+  const caixa = document.getElementById("mapa"); let tDica;
+  caixa.addEventListener("wheel", e => {
+    if(e.ctrlKey || document.body.classList.contains("mapa-cheio")){
+      e.preventDefault();
+      mapa.setZoomAround(mapa.mouseEventToContainerPoint(e), mapa.getZoom() + (e.deltaY < 0 ? 1 : -1));
+    } else {
+      const d = document.getElementById("dica-zoom"); d.classList.add("on"); clearTimeout(tDica); tDica = setTimeout(() => d.classList.remove("on"), 1200);
+    }
+  }, { passive: false });
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(mapa);
   camada = L.layerGroup().addTo(mapa);
 }
@@ -634,6 +664,13 @@ document.addEventListener("click", e => {
   if(e.target.id === "btn-mais"){ limiteLista += LISTA_PASSO; desenhaLista(filtrados()); }
 });
 $("#btn-limpar-rota").addEventListener("click", () => { rota.clear(); render(); });
+function mapaCheio(ligar){
+  document.body.classList.toggle("mapa-cheio", ligar);
+  $("#btn-mapa-cheio").textContent = ligar ? "✕ Sair da tela cheia" : "⛶ Mapa em tela cheia";
+  setTimeout(() => { mapa.invalidateSize(); const l = filtrados().filter(i => i.lat && i.lng).map(i => [i.lat, i.lng]); if(l.length) mapa.fitBounds(l, { padding: [30, 30], maxZoom: 12 }); }, 80);
+}
+$("#btn-mapa-cheio").addEventListener("click", () => mapaCheio(!document.body.classList.contains("mapa-cheio")));
+document.addEventListener("keydown", e => { if(e.key === "Escape" && document.body.classList.contains("mapa-cheio")) mapaCheio(false); });
 $("#btn-montar-rota").addEventListener("click", montarRota);
 $("#btn-fechar-rota").addEventListener("click", () => $("#dlg-rota").close());
 $("#btn-refresh").addEventListener("click", () => load());
