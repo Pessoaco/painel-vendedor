@@ -120,6 +120,24 @@
   body.mapa-cheio #mapa{height:100vh;max-height:none;border-radius:0;border:0}
   body.mapa-cheio .barra-rota{display:none!important}
   .rodape{margin-top:18px;text-align:right;font-size:.7rem;color:var(--ink-faint)}
+  .versao{display:inline-block;margin-left:8px;padding:1px 7px;border:1px solid var(--hair);border-radius:5px;font-family:"IBM Plex Mono",monospace;font-size:.62em;font-weight:600;color:var(--ink-soft);vertical-align:middle}
+  .so-papel{display:none}
+  @media print{
+    @page{ size:A4 portrait; margin:9mm; @bottom-right{ content:"página " counter(page) " de " counter(pages); font-family:Arial,sans-serif; font-size:8px; color:#888; } }
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+    body{background:#fff;font-size:10.5px}
+    .wrap{max-width:100%;padding:0}
+    .topbar,.seletor,.statusbar,.meta a,.mapa-btns,.dica-zoom,.barra-rota,.login,#loading,.mais,.item input,.item .acoes,.cidade-h .btn,dialog,.toast,.leaflet-control-zoom,.no-print{display:none!important}
+    .so-papel{display:block}
+    .filtros-papel{margin:6px 0 4px;font-size:.8rem;font-weight:600;color:var(--ink)}
+    .mapa-box{break-inside:avoid}
+    #mapa{height:150mm!important;max-height:none;box-shadow:none}
+    .item{break-inside:avoid}
+    .rodape{display:none}
+    /* "Imprimir só o mapa": folha deitada, só o mapa */
+    body.print-mapa #lista{display:none!important}
+    body.print-mapa #mapa{height:170mm!important}
+  }
   .rodape a{color:inherit;font-weight:600;text-decoration:none}
   .leaflet-popup-content{margin:10px 12px;font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:.8rem;line-height:1.4;min-width:200px}
   .pp-nome{font-family:"Archivo",sans-serif;font-weight:700;font-size:.86rem}
@@ -213,13 +231,14 @@
 
 <div class="wrap">
   <header class="masthead">
-    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span></h1>
+    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v3</small></h1>
     <div class="meta">
       <a id="link-clientes" href="../">← Copiloto de Vendas</a>
       <a id="link-prospects" href="../prospects/">Copiloto de Prospects</a>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
         <button class="btn" id="btn-refresh">Atualizar</button>
+        <button class="btn" id="btn-imprimir" title="Imprimir o mapa e a lista (com os filtros escolhidos)">🖨 Imprimir</button>
         <button class="logout" id="btn-logout">sair</button>
       </div>
     </div>
@@ -254,6 +273,7 @@
   <div id="loading" class="loading">carregando o mapa… (pode levar até 30s)</div>
 
   <div id="content" hidden>
+    <div class="so-papel filtros-papel" id="filtros-papel"></div>
     <div class="resumo-linha">
     <div class="resumo" id="resumo"></div>
     <div class="legenda">
@@ -265,11 +285,11 @@
     </div>
     <div class="mapa-box">
       <div id="mapa"></div>
-      <div class="mapa-btns"><button class="btn" id="btn-mapa-cheio" type="button" title="Mostrar só o mapa na tela inteira (bom pra tirar print)">⛶ Mapa em tela cheia</button></div>
+      <div class="mapa-btns"><button class="btn" id="btn-imprimir-mapa" type="button" title="Imprimir só o mapa, numa folha deitada">🖨 Imprimir só o mapa</button><button class="btn" id="btn-mapa-cheio" type="button" title="Mostrar só o mapa na tela inteira (bom pra tirar print)">⛶ Mapa em tela cheia</button></div>
       <div class="dica-zoom" id="dica-zoom">Para dar zoom: segure <b>Ctrl</b> e role, ou use os botões + e −</div>
     </div>
     <div id="lista"></div>
-    <p class="rodape">Rota de Visitas v2 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="rodape">Rota de Visitas v3 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 </div>
 
@@ -664,6 +684,36 @@ document.addEventListener("click", e => {
   if(e.target.id === "btn-mais"){ limiteLista += LISTA_PASSO; desenhaLista(filtrados()); }
 });
 $("#btn-limpar-rota").addEventListener("click", () => { rota.clear(); render(); });
+/* ---- impressão: cabeçalho com os filtros, rodapé com versão + @pessoaco + "página X de Y" ---- */
+const VERSAO = "v3";
+function textoFiltros(){
+  const emp = empresa === "BNZ" ? "BNZ METAIS" : (empresa || "BB · BNZ · CIAPLAC");
+  const tp = tipo === "cliente" ? "Clientes" : (tipo === "prospect" ? "Prospects" : "Clientes e prospects");
+  const lugar = [estadoSel ? (NOME_UF[estadoSel] || estadoSel) : "", [...regioesSel].map(r => r === SEM_REG ? "Sem região" : r).join(", "), destino].filter(Boolean).join(" · ");
+  const hoje = new Date().toLocaleDateString("pt-BR", {day:"2-digit", month:"2-digit", year:"2-digit"});
+  return emp + " · " + tp + (lugar ? " · " + lugar : "") + (busca ? " · busca: " + busca : "") + (soVisita ? " · só com visita marcada" : "") + " · " + filtrados().length + " no filtro · " + hoje;
+}
+const estiloPapel = document.createElement("style"); document.head.appendChild(estiloPapel);
+function preparaPapel(){
+  const f = textoFiltros().replace(/"/g, "'");
+  $("#filtros-papel").textContent = f;
+  const deitada = document.body.classList.contains("print-mapa");
+  estiloPapel.textContent = '@media print{ ' + (deitada ? '@page{ size:A4 landscape; } ' : '') +
+    '@page{ @top-left{ content:"Rota de Visitas — ' + f + '"; font-family:Arial,sans-serif; font-size:8px; color:#555; } } @page :first{ @top-left{ content:""; } } ' +
+    '@page{ @bottom-left{ content:"Rota de Visitas ' + VERSAO + ' · por @pessoaco"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
+  // o mapa muda de tamanho no papel: refaz o enquadramento pra caber todos os pontos
+  if(mapa){ mapa.invalidateSize(); const l = filtrados().filter(i => i.lat && i.lng).map(i => [i.lat, i.lng]); if(l.length) mapa.fitBounds(l, { padding: [20, 20], maxZoom: 12, animate: false }); }
+}
+window.addEventListener("beforeprint", preparaPapel);
+window.addEventListener("afterprint", () => { document.body.classList.remove("print-mapa"); if(mapa) setTimeout(() => mapa.invalidateSize(), 50); });
+function imprimir(soMapa){
+  if(document.body.classList.contains("mapa-cheio")) mapaCheio(false);
+  document.body.classList.toggle("print-mapa", !!soMapa);
+  preparaPapel();
+  setTimeout(() => window.print(), 700);   // dá tempo do mapa carregar as imagens no tamanho novo
+}
+$("#btn-imprimir").addEventListener("click", () => imprimir(false));
+$("#btn-imprimir-mapa").addEventListener("click", () => imprimir(true));
 function mapaCheio(ligar){
   document.body.classList.toggle("mapa-cheio", ligar);
   $("#btn-mapa-cheio").textContent = ligar ? "✕ Sair da tela cheia" : "⛶ Mapa em tela cheia";
