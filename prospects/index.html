@@ -407,7 +407,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v11 (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v12 (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -571,7 +571,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v11 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v12 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -700,6 +700,18 @@ try { localStorage.removeItem("pp_regiao"); } catch(e){}
 // DDD sai do Zap do prospect (wa.me/55 + DDD + número); atividade usa o Zap do prospect dela
 const dddDoZap = z => { const d = String(z || "").replace(/\D/g, ""); if(d.length < 12 || !d.startsWith("55")) return ""; const x = d.slice(2,4); return /^[1-9][1-9]$/.test(x) ? x : ""; };
 let dddPorLead = {};
+
+// v12: mensagem de apresentação da BB que já vem escrita no botão do Zap (sem nome do cliente, sem prometer prazo de entrega)
+const msgBB = lead => {
+  const h = new Date().getHours();
+  const saud = h < 12 ? "Bom dia" : (h < 18 ? "Boa tarde" : "Boa noite");
+  const versoes = [
+    saud + "! Tudo bem? Aqui é a Leidi 👋\nAgora estou atendendo a região de vocês com bobininha de aço galvanizado direto de fábrica.\nÉ com você mesmo que eu falo sobre a compra de bobina aí na loja?",
+    saud + ", tudo bem? Sou a Leidi 👋\nAgora atendo a região de vocês com bobininha de aço galvanizado direto de fábrica.\nÉ com você que eu falo sobre a compra de bobina aí na loja?",
+    "Olá, " + saud.toLowerCase() + "! Aqui é a Leidi 👋\nEstou atendendo agora a região de vocês com bobininha de aço galvanizado direto de fábrica.\nQuem cuida da compra de bobina aí na loja, é você mesmo?"
+  ];
+  return versoes[(parseInt(lead, 10) || 0) % versoes.length];
+};
 const dddDe = r => r.zap ? dddDoZap(r.zap) : (dddPorLead[r.lead] || "");
 const bateFiltro = r => regioesSel.has(r.regiao) || regioesSel.has("ddd:" + dddDe(r));
 
@@ -880,6 +892,9 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             // abre direto no WhatsApp Web, sempre na MESMA aba (target nomeado), sem a tela "Abrir app / Continuar"
             const fone = String(v).replace(/^https?:\/\/[^/]+\//, "").replace(/\D/g, "");
             if(fone.length >= 12) v = "https://web.whatsapp.com/send?phone=" + fone;
+            // BB: a conversa já abre com a mensagem de apresentação escrita (saudação pela hora; 3 versões que se alternam pra não ir tudo igual)
+            const ehBB = empresa === "BB" || /\bBB\b/.test(String(r.empresa || "")) || /\bBB\b/.test(String(r.marcadores || ""));
+            if(ehBB && fone.length >= 12) v += "&text=" + encodeURIComponent(msgBB(r.lead));
             v = '<a class="wa" href="'+v+'" target="whatsapp-web" title="abrir no WhatsApp Web (mesma aba)"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
           if(c[0]==="cliente" && r.lead) v = '<button type="button" class="btn-ficha no-print" data-lead="'+r.lead+'" data-cliente="'+esc(String(r.cliente||""))+'" data-empresa="'+esc(String(r.empresa||""))+'" title="Ver as anotações e o histórico deste prospect">📋</button>' + v;
