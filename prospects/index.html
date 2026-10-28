@@ -735,9 +735,9 @@ const msgBB = lead => {
   const h = new Date().getHours();
   const saud = h < 12 ? "Bom dia" : (h < 18 ? "Boa tarde" : "Boa noite");
   const versoes = [
-    saud + "! Tudo bem? Aqui é a Leidi 👋\nAgora estou atendendo a região de vocês com bobininha de aço galvanizado direto de fábrica.\nÉ com você mesmo que eu falo sobre a compra de bobina aí na loja?",
-    saud + ", tudo bem? Sou a Leidi 👋\nAgora atendo a região de vocês com bobininha de aço galvanizado direto de fábrica.\nÉ com você que eu falo sobre a compra de bobina aí na loja?",
-    "Olá, " + saud.toLowerCase() + "! Aqui é a Leidi 👋\nEstou atendendo agora a região de vocês com bobininha de aço galvanizado direto de fábrica.\nQuem cuida da compra de bobina aí na loja, é você mesmo?"
+    saud + "! Tudo bem? Aqui é a Leidi 👋\nAgora estou atendendo a região de vocês com bobininha de aço galvanizado direto de fábrica.\nÉ com você mesmo que eu falo sobre a compra de bobina para a loja?",
+    saud + ", tudo bem? Sou a Leidi 👋\nAgora atendo a região de vocês com bobininha de aço galvanizado direto de fábrica.\nÉ com você que eu falo sobre a compra de bobina para a loja?",
+    "Olá, " + saud.toLowerCase() + "! Aqui é a Leidi 👋\nEstou atendendo agora a região de vocês com bobininha de aço galvanizado direto de fábrica.\nQuem cuida da compra de bobina para a loja, é você mesmo?"
   ];
   return versoes[(parseInt(lead, 10) || 0) % versoes.length];
 };
