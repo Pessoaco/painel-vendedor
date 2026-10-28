@@ -407,7 +407,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v12 (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v14 (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -503,6 +503,35 @@
       </div>
     </div>
 
+    <!-- v14: placar do mês (contatados sai das listas, cotações e pedidos vêm do fluxo v3) -->
+    <div class="kpi-strip" id="placar-mes">
+      <div class="kpi blue">
+        <span class="k">Contatados no mês</span>
+        <span class="v" data-k="pm_contatados">–</span>
+        <span class="note">Prospects com conversa no Zap em <span data-k="pm_mes">–</span></span>
+      </div>
+      <div class="kpi green">
+        <span class="k">Pediram cotação no mês</span>
+        <span class="v" data-k="pm_clientes_cotacao">–</span>
+        <span class="note"><span data-k="pm_cotacoes">–</span> cotações feitas</span>
+      </div>
+      <div class="kpi green">
+        <span class="k">Pedidos fechados no mês</span>
+        <span class="v" data-k="pm_pedidos">–</span>
+        <span class="note"><span data-k="pm_clientes_pedido">–</span> clientes compraram</span>
+      </div>
+      <div class="kpi green">
+        <span class="k">Vendido no mês</span>
+        <span class="v" data-k="pm_valor">–</span>
+        <span class="note">Soma dos pedidos confirmados</span>
+      </div>
+      <div class="kpi amber">
+        <span class="k">Conversão</span>
+        <span class="v" data-k="pm_conversao">–</span>
+        <span class="note">Clientes que compraram ÷ contatados</span>
+      </div>
+    </div>
+
     <div class="kpi-strip">
       <div class="kpi green" data-goto="pediram_cotacao" style="cursor:pointer">
         <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
@@ -571,7 +600,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v12 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v14 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -639,12 +668,12 @@ const LISTAS = [
   {k:"carteira",            titulo:"Carteira completa de prospects (por estágio)",                           cor:"slate"}
 ];
 const COLS = {
-  padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   atividades: [["cliente","Prospect"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["cidade","Cidade"],["estagio","Estágio"]],
-  novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["prox_atividade","Próx. atividade"]],
+  novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["ultima_conversa_zap","Últ. conversa Zap"],["prox_atividade","Próx. atividade"]],
   sem_contato_60: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   nunca_contatados: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"]],
-  grupo_regiao: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  grupo_regiao: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   por_regiao: [["regiao","Região"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]],
   por_estagio:[["estagio","Estágio"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]]
 };
@@ -788,6 +817,19 @@ function renderListas(listas){
   for(const [k,v] of Object.entries(map)){
     $$('[data-k="'+k+'"]').forEach(el => el.textContent = fmtInt(v));
   }
+  // v14: placar do mês. Contatados respeita o filtro de região; cotações e pedidos são da empresa inteira (fluxo v3)
+  const pm = ((ULTIMA_DATA || {}).kpis || {}).placar_mes;
+  const mesIni = (pm && pm.mes) ? pm.mes + "-01" : new Date().toISOString().slice(0,8) + "01";
+  const contatados = cart.filter(r => String(r.ultima_conversa_zap || "") >= mesIni).length;
+  const [ano, mes] = mesIni.split("-");
+  const pmTxt = {
+    pm_contatados: fmtInt(contatados), pm_mes: mes + "/" + ano.slice(2),
+    pm_clientes_cotacao: pm ? fmtInt(pm.clientes_cotacao) : "–", pm_cotacoes: pm ? fmtInt(pm.cotacoes) : "–",
+    pm_pedidos: pm ? fmtInt(pm.pedidos) : "–", pm_clientes_pedido: pm ? fmtInt(pm.clientes_pedido) : "–",
+    pm_valor: pm ? fmtBRL(pm.valor_pedidos) : "–",
+    pm_conversao: (pm && contatados) ? (100 * pm.clientes_pedido / contatados).toLocaleString("pt-BR", {maximumFractionDigits:1}) + "%" : "–"
+  };
+  for(const [k,v] of Object.entries(pmTxt)) $$('[data-k="'+k+'"]').forEach(el => el.textContent = v);
   // 3º card: a região com MAIS prospects (número grande + nome); "sem região" não conta como região
   const topReg = (L.por_regiao || []).filter(r => r.regiao && (!regioesSel.size || (L.carteira || []).some(c => c.regiao === r.regiao))).sort((a,b) => (b.prospects||0) - (a.prospects||0))[0];
   $$('[data-k="top_regiao_qtd"]').forEach(el => el.textContent = topReg ? fmtInt(topReg.prospects) : "–");
