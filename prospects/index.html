@@ -407,7 +407,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v10 (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v11 (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -571,7 +571,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v10 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v11 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -877,7 +877,10 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           if(typeof v === "string" && !/^</.test(v)) v = esc(v);
           if(c[0]==="zap" && /^https?:\/\//.test(v)){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
-            v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
+            // abre direto no WhatsApp Web, sempre na MESMA aba (target nomeado), sem a tela "Abrir app / Continuar"
+            const fone = String(v).replace(/^https?:\/\/[^/]+\//, "").replace(/\D/g, "");
+            if(fone.length >= 12) v = "https://web.whatsapp.com/send?phone=" + fone;
+            v = '<a class="wa" href="'+v+'" target="whatsapp-web" title="abrir no WhatsApp Web (mesma aba)"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
           if(c[0]==="cliente" && r.lead) v = '<button type="button" class="btn-ficha no-print" data-lead="'+r.lead+'" data-cliente="'+esc(String(r.cliente||""))+'" data-empresa="'+esc(String(r.empresa||""))+'" title="Ver as anotações e o histórico deste prospect">📋</button>' + v;
           if(c[0]==="regiao" && k==="por_regiao") v = '<a href="#lista-'+slugRegiao(r.regiao||"")+'" class="lnk-reg" data-goto="'+slugRegiao(r.regiao||"")+'">'+(v || "(sem região)")+'</a>';
