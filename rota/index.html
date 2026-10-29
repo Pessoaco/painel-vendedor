@@ -177,6 +177,10 @@
   .perto{display:inline-flex;align-items:center;gap:6px}
   .perto .btn.on{background:#2a78d6;color:#fff;border-color:#2a78d6}
   .tag.dist{background:#e8f1fc;color:#1d5fae;font-weight:600}
+  .partida{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .partida input.busca{min-width:220px}
+  .partida .ok{font-size:.72rem;font-weight:600;color:#1d5fae;background:#e8f1fc;border-radius:999px;padding:3px 10px}
+  .partida .ok button{border:0;background:none;color:#1d5fae;font-weight:700;cursor:pointer;padding:0 0 0 4px}
   .ic:active{transform:translateY(1px)}
   .vazio{padding:24px;text-align:center;color:var(--ink-faint);font-size:.82rem}
   .mais{text-align:center;margin:10px 0}
@@ -240,7 +244,7 @@
 
 <div class="wrap">
   <header class="masthead">
-    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v5</small></h1>
+    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v6</small></h1>
     <div class="meta">
       <a id="link-clientes" href="../">← Copiloto de Vendas</a>
       <a id="link-prospects" href="../prospects/">Copiloto de Prospects</a>
@@ -277,6 +281,8 @@
     <label class="chk-linha"><input type="checkbox" id="so-visita"> só com visita marcada</label>
     <!-- v4: perto de mim (usa a localização do aparelho) -->
     <span class="perto"><button class="btn" id="btn-perto" type="button" title="Mostra só quem está perto de onde você está agora">📍 Perto de mim</button><select class="filtro" id="raio-perto" title="Distância em linha reta"><option value="5">5 km</option><option value="10">10 km</option><option value="20">20 km</option><option value="30">30 km</option><option value="50" selected>50 km</option><option value="100">100 km</option></select></span>
+    <!-- v6: Partir de (hotel, escritório, cliente…) - vale para o Perto de mim e para Montar rota -->
+    <span class="partida" id="partida-box"><input type="search" id="partida-txt" class="busca" placeholder="🏁 Partir de: endereço, hotel, cidade…" autocomplete="off" title="Deixe vazio para usar onde você está agora (GPS)"><button class="btn" id="btn-partida" type="button">Usar</button><span class="ok" id="partida-ok" hidden></span></span>
   </div>
   <!-- 1º escolhe o estado, depois marca as regiões dele (botões) -->
   <div class="seletor" id="seletor"></div>
@@ -300,7 +306,7 @@
       <div class="dica-zoom" id="dica-zoom">Para dar zoom: segure <b>Ctrl</b> e role, ou use os botões + e −</div>
     </div>
     <div id="lista"></div>
-    <p class="rodape">Rota de Visitas v5 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="rodape">Rota de Visitas v6 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 </div>
 
@@ -349,6 +355,8 @@ let busca = "";
 let soVisita = false;
 // v4: Perto de mim = { pos:[lat,lng], raio:km } ou null
 let perto = null;
+// v6: ponto de partida digitado { pos:[lat,lng], nome } - fica salvo neste aparelho; vazio = GPS
+let partida = null; try { partida = JSON.parse(ler("rv_partida", "null")); } catch(e){ partida = null; }
 let agrupa = ler("rv_agrupa", "cidade");          // lista "Por cidade" ou "Por região"
 // seletor clicável: 1 estado (ex. "RJ") e, dentro dele, as regiões marcadas (ninguém precisa decorar o nome da região)
 let estadoSel = ler("rv_estado", "");
@@ -525,6 +533,9 @@ function desenhaMapa(lista, enquadrar = true){
     m.addTo(camada);
     pts.push([i.lat, i.lng]);
   });
+  // v6: ponto de partida (bandeira preta) quando houver
+  const ini = partida ? partida.pos : (perto ? perto.pos : null);
+  if(ini){ L.circleMarker(ini, { radius: 9, color: "#ffffff", weight: 3, fillColor: "#111111", fillOpacity: 1 }).bindTooltip("🏁 " + (partida ? partida.nome : "Você está aqui")).addTo(camada); pts.push(ini); }
   if(enquadrar && pts.length) mapa.fitBounds(pts, { padding: [30, 30], maxZoom: 12 });
   setTimeout(() => mapa.invalidateSize(), 50);
 }
@@ -591,7 +602,7 @@ function desenhaLista(lista){
 // v4: 'Perto de mim' = lista única do mais perto para o mais longe, com a distância de cada um
 function desenhaListaPerto(lista){
   const ord = lista.map(i => ({ i, d: distKm(perto.pos, [i.lat, i.lng]) })).sort((a, b) => a.d - b.d);
-  let html = '<div class="grupo"><h2 class="grupo-h">📍 Perto de você (até ' + perto.raio + ' km) <span class="n">' + ord.length + '</span></h2><div class="cidade">';
+  let html = '<div class="grupo"><h2 class="grupo-h">📍 Perto de ' + esc(partida ? partida.nome : "você") + ' (até ' + perto.raio + ' km) <span class="n">' + ord.length + '</span></h2><div class="cidade">';
   ord.slice(0, limiteLista).forEach(({ i, d }) => {
     const v = i.visita;
     html += '<div class="item"><input type="checkbox" data-id="' + i.id + '"' + (rota.has(i.id) ? " checked" : "") + ' title="colocar na rota">' +
@@ -656,6 +667,23 @@ function ondeEstou(){
     navigator.geolocation.getCurrentPosition(p => res([p.coords.latitude, p.coords.longitude]), () => res(null), { timeout: 8000, maximumAge: 300000 });
   });
 }
+// v6: de onde sai: o 'Partir de' digitado ou, se vazio, o GPS do aparelho
+async function posicaoInicial(){ return partida ? partida.pos : await ondeEstou(); }
+const nomeInicio = () => partida ? partida.nome : "onde você está";
+async function acharLugar(txt){
+  const s = String(txt || "").trim(); if(!s) return null;
+  const m = s.match(/^\s*(-?\d+(?:[.,]\d+)?)\s*[,; ]\s*(-?\d+(?:[.,]\d+)?)\s*$/);   // aceita tambem 'latitude, longitude'
+  if(m) return { pos: [Number(m[1].replace(",", ".")), Number(m[2].replace(",", "."))], nome: s };
+  const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&accept-language=pt-BR&q=" + encodeURIComponent(s));
+  const j = await r.json();
+  if(!j || !j.length) return null;
+  return { pos: [Number(j[0].lat), Number(j[0].lon)], nome: s };
+}
+function mostraPartida(){
+  const ok = $("#partida-ok");
+  if(partida){ ok.innerHTML = '🏁 Partindo de: ' + esc(partida.nome) + '<button type="button" id="btn-partida-x" title="Voltar a usar onde estou (GPS)">✕</button>'; ok.hidden = false; $("#partida-txt").value = ""; }
+  else { ok.hidden = true; ok.innerHTML = ""; }
+}
 function ordenaProximos(paradas, inicio){
   const comPos = paradas.filter(i => i.lat && i.lng), semPos = paradas.filter(i => !(i.lat && i.lng));
   const ordem = []; let atual = inicio || (comPos[0] ? [comPos[0].lat, comPos[0].lng] : null), total = 0;
@@ -673,7 +701,7 @@ async function montarRota(){
   const paradas = DADOS.itens.filter(i => rota.has(i.id));
   if(!paradas.length) return;
   $("#btn-montar-rota").disabled = true; $("#btn-montar-rota").textContent = "localizando…";
-  const aqui = await ondeEstou();
+  const aqui = await posicaoInicial();
   $("#btn-montar-rota").disabled = false; $("#btn-montar-rota").textContent = "Montar rota";
   const r = ordenaProximos(paradas, aqui);
   // links do Google Maps em partes de até MAX_PARADAS_POR_LINK paradas
@@ -686,7 +714,7 @@ async function montarRota(){
     partes.push("https://www.google.com/maps/dir/?api=1&travelmode=driving" + (origem ? "&origin=" + encodeURIComponent(origem) : "") +
       "&destination=" + encodeURIComponent(dest) + (meio ? "&waypoints=" + encodeURIComponent(meio) : ""));
   }
-  $("#rota-sub").textContent = r.ordem.length + " paradas · ordem pelos mais próximos" + (aqui ? " a partir de onde você está" : " (sem sua localização: começa pelo 1º)") +
+  $("#rota-sub").textContent = r.ordem.length + " paradas · ordem pelos mais próximos" + (aqui ? " a partir de " + nomeInicio() : " (sem sua localização: começa pelo 1º)") +
     (r.km ? " · ~" + Math.round(r.km * 1.3) + " km de estrada" : "") + (r.semPos ? " · " + r.semPos + " sem ponto no mapa vão no fim" : "");
   $("#rota-partes").innerHTML = partes.map((u, k) => '<a class="btn forte" href="' + esc(u) + '" target="_blank" rel="noopener">🗺️ Abrir no Google Maps' +
     (partes.length > 1 ? " — parte " + (k + 1) + " de " + partes.length : "") + '</a>').join("") +
@@ -726,7 +754,7 @@ $("#btn-perto").addEventListener("click", async () => {
   const b = $("#btn-perto");
   if(perto){ perto = null; b.classList.remove("on"); b.textContent = "📍 Perto de mim"; render(); return; }
   b.disabled = true; b.textContent = "localizando…";
-  const pos = await ondeEstou();
+  const pos = await posicaoInicial();
   b.disabled = false;
   if(!pos){ b.textContent = "📍 Perto de mim"; alert("Não consegui sua localização. Libere a localização para esta página no navegador (ícone de cadeado ao lado do endereço) e tente de novo."); return; }
   perto = { pos, raio: Number($("#raio-perto").value) || 50 };
@@ -734,6 +762,25 @@ $("#btn-perto").addEventListener("click", async () => {
   render();
 });
 $("#raio-perto").addEventListener("change", e => { if(perto){ perto.raio = Number(e.target.value) || 50; render(); } });
+// v6: Partir de
+async function usarPartida(){
+  const txt = $("#partida-txt").value.trim();
+  if(!txt){ return; }
+  const b = $("#btn-partida"); b.disabled = true; b.textContent = "procurando…";
+  let achou = null; try { achou = await acharLugar(txt); } catch(e){ achou = null; }
+  b.disabled = false; b.textContent = "Usar";
+  if(!achou){ alert("Não achei esse lugar. Tente com a cidade junto (ex.: Hotel Ibis, Campinas SP) ou cole a latitude, longitude."); return; }
+  partida = achou; gravar("rv_partida", JSON.stringify(partida)); mostraPartida();
+  if(perto) perto.pos = partida.pos;
+  render();
+}
+$("#btn-partida").addEventListener("click", usarPartida);
+$("#partida-txt").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); usarPartida(); } });
+document.addEventListener("click", async e => { if(e.target && e.target.id === "btn-partida-x"){
+  partida = null; gravar("rv_partida", "null"); mostraPartida();
+  if(perto){ const p = await ondeEstou(); if(p) perto.pos = p; else { perto = null; const b = $("#btn-perto"); b.classList.remove("on"); b.textContent = "📍 Perto de mim"; } }
+  render(); } });
+mostraPartida();
 document.addEventListener("change", e => { const c = e.target; if(c.matches && c.matches('#lista input[data-id]')){ alternaRota(c.dataset.id, c.checked); desenhaMapa(filtrados(), false); toast(c.checked ? "✓ Adicionado à rota (" + rota.size + ")" : "Tirado da rota"); } });
 document.addEventListener("click", e => {
   const r = e.target.closest("[data-rota]");
@@ -746,7 +793,7 @@ document.addEventListener("click", e => {
 });
 $("#btn-limpar-rota").addEventListener("click", () => { rota.clear(); render(); });
 /* ---- impressão: cabeçalho com os filtros, rodapé com versão + @pessoaco + "página X de Y" ---- */
-const VERSAO = "v5";
+const VERSAO = "v6";
 function textoFiltros(){
   const emp = empresa === "BNZ" ? "BNZ METAIS" : (empresa || "BB · BNZ · CIAPLAC");
   const tp = tipo === "cliente" ? "Clientes" : (tipo === "prospect" ? "Prospects" : "Clientes e prospects");
