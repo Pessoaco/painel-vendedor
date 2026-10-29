@@ -365,6 +365,10 @@
   .fi-acoes{display:flex;gap:8px;flex:none}
   .fi-corpo{padding:10px 18px 16px;overflow:auto}
   .fi-cards{font-size:.8rem;color:var(--ink-soft);margin-bottom:4px}
+  .fi-resumo{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px 10px;margin:2px 0 10px;font-size:.8rem}
+  .fi-resumo div{display:flex;flex-direction:column;gap:1px;padding:4px 9px;border-left:3px solid var(--blue-edge);border-radius:4px;background:var(--blue-bg)}
+  .fi-resumo span{color:var(--ink-soft);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase}
+  .fi-resumo b{font-weight:600;color:var(--ink);word-break:break-word}
   .fi-tag{display:inline-block;padding:0 7px;border:1px solid var(--hair);border-radius:10px;font-size:.68rem;background:var(--slate-bg);color:var(--slate-ink)}
   .fi-ativ{margin:0 0 6px;padding-left:0;list-style:none;font-size:.8rem}
   .fi-ativ li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;padding:6px 0;border-bottom:1px dashed var(--hair)}
@@ -418,7 +422,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v18 (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v19 (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -613,7 +617,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v18 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v19 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -1064,6 +1068,30 @@ function notaHTML(n){
 }
 const FICHA_ATIV = {};      // atividades abertas mostradas na ficha (o pop-up de Feito/Editar/Cancelar acha elas aqui)
 let ULTIMA_FICHA = null;    // pra recarregar a ficha depois de concluir/editar/cancelar uma atividade
+// v19: "🧠 Resumo" no topo da ficha — os campos de inteligência do card (com quem compra, preço, material, volume, recompra,
+// pagamento, perfil, estratégia…) + a última compra. Vem do fluxo de Ações v6 (ficha_ler devolve leads[].intel).
+const fmtR = v => Number(v).toLocaleString("pt-BR", {style:"currency", currency:"BRL", minimumFractionDigits:2, maximumFractionDigits:2});
+function resumoFichaHTML(x){
+  if(!x) return "";
+  const linhas = [
+    ["Última compra", x.ultima_compra ? fmtDateBR(x.ultima_compra.data) + " · " + fmtR(x.ultima_compra.valor) + " · " + x.ultima_compra.pedido : ""],
+    ["Comprou por último de", x.comprou_de],
+    ["Último preço do concorrente", x.preco_conco ? fmtR(x.preco_conco) : ""],
+    ["Material", x.material],
+    ["Volume por compra", x.volume_kg ? Number(x.volume_kg).toLocaleString("pt-BR") + " kg" : ""],
+    ["Recompra a cada", x.recompra_dias ? x.recompra_dias + " dias" : ""],
+    ["Condição de pagamento", x.pagto],
+    ["Perfil", x.perfil],
+    ["Estratégia", x.estrategia],
+    ["Comprador", x.comprador],
+    ["Resultado do último contato", x.resultado],
+    ["Última interação", x.ultima_interacao ? fmtDateBR(x.ultima_interacao) : ""],
+    ["Última conversa no Zap", x.ultima_conversa ? fmtQuandoBR(x.ultima_conversa) : ""]
+  ].filter(l => l[1]);
+  return '<p class="band-label">🧠 Resumo do prospect</p>' + (linhas.length
+    ? '<div class="fi-resumo">' + linhas.map(l => '<div><span>' + esc(l[0]) + '</span><b>' + esc(l[1]) + '</b></div>').join("") + '</div>'
+    : '<div class="lc-empty">— os campos do resumo ainda não foram preenchidos no CRM —</div>');
+}
 async function abrirFicha(lead, cliente, emp){
   ULTIMA_FICHA = { lead, cliente, emp };
   const dlg = $("#dlg-ficha"); if(!dlg) return;
@@ -1081,6 +1109,9 @@ async function abrirFicha(lead, cliente, emp){
   if(!lead && cards[0]){ crm.hidden = false; crm.href = ODOO_URL + "/odoo/crm/" + cards[0].id; }
   const hoje = new Date().toLocaleDateString("en-CA");
   let h = '<div class="fi-cards">' + cards.map(c => esc(c.nome)+' <span class="fi-tag">'+esc(c.empresa)+'</span> <span class="fi-tag">'+esc(c.estagio)+'</span>').join(" &nbsp;·&nbsp; ") + '</div>';
+  // resumo do card aberto (ou do 1º, quando a ficha foi aberta pelo nome)
+  const cardResumo = cards.find(c => String(c.id) === String(lead)) || cards[0];
+  h += resumoFichaHTML(cardResumo && cardResumo.intel);
   h += '<p class="band-label">Atividades abertas</p>';
   // cada atividade aberta tem os mesmos botões do Check-list (✔ Feito / ✎ editar-reprogramar / ✕ cancelar)
   (r.abertas || []).forEach(a => { if(a.id) FICHA_ATIV[String(a.id)] = { id: a.id, lead: a.lead || lead, tipo_id: a.tipo_id, cliente: nomeLimpo, empresa: emp, tipo: a.tipo, resumo: a.resumo, vencimento: a.vencimento }; });
