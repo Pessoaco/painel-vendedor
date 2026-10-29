@@ -259,6 +259,10 @@
   .fi-acoes{display:flex;gap:8px;flex:none}
   .fi-corpo{padding:10px 18px 16px;overflow:auto}
   .fi-cards{font-size:.8rem;color:var(--ink-soft);margin-bottom:4px}
+  .fi-resumo{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px 10px;margin:2px 0 10px;font-size:.8rem}
+  .fi-resumo div{display:flex;flex-direction:column;gap:1px;padding:4px 9px;border-left:3px solid var(--blue-edge);border-radius:4px;background:var(--blue-bg)}
+  .fi-resumo span{color:var(--ink-soft);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase}
+  .fi-resumo b{font-weight:600;color:var(--ink);word-break:break-word}
   .fi-tag{display:inline-block;padding:0 7px;border:1px solid var(--hair);border-radius:10px;font-size:.68rem;background:var(--slate-bg);color:var(--slate-ink)}
   .fi-ativ{margin:0 0 6px;padding-left:0;list-style:none;font-size:.8rem}
   .fi-ativ li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;padding:6px 0;border-bottom:1px dashed var(--hair)}
@@ -445,7 +449,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v38 (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v39 (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v38 = (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -635,7 +639,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v38 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v39 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -1206,6 +1210,30 @@ function notaHTML(n){
 }
 const FICHA_ATIV = {};      // atividades abertas mostradas na ficha (o pop-up de Feito/Editar/Cancelar acha elas aqui)
 let ULTIMA_FICHA = null;    // pra recarregar a ficha depois de concluir/editar/cancelar uma atividade
+// v39: "🧠 Resumo" no topo da ficha — os campos de inteligência do card (com quem compra, preço, material, volume, recompra,
+// pagamento, perfil, estratégia…) + a última compra. Vem do fluxo de Ações v6 (ficha_ler devolve leads[].intel).
+const fmtR = v => Number(v).toLocaleString("pt-BR", {style:"currency", currency:"BRL", minimumFractionDigits:2, maximumFractionDigits:2});
+function resumoFichaHTML(x){
+  if(!x) return "";
+  const linhas = [
+    ["Última compra", x.ultima_compra ? fmtDateBR(x.ultima_compra.data) + " · " + fmtR(x.ultima_compra.valor) + " · " + x.ultima_compra.pedido : ""],
+    ["Comprou por último de", x.comprou_de],
+    ["Último preço do concorrente", x.preco_conco ? fmtR(x.preco_conco) : ""],
+    ["Material", x.material],
+    ["Volume por compra", x.volume_kg ? Number(x.volume_kg).toLocaleString("pt-BR") + " kg" : ""],
+    ["Recompra a cada", x.recompra_dias ? x.recompra_dias + " dias" : ""],
+    ["Condição de pagamento", x.pagto],
+    ["Perfil", x.perfil],
+    ["Estratégia", x.estrategia],
+    ["Comprador", x.comprador],
+    ["Resultado do último contato", x.resultado],
+    ["Última interação", x.ultima_interacao ? fmtDateBR(x.ultima_interacao) : ""],
+    ["Última conversa no Zap", x.ultima_conversa ? fmtQuandoBR(x.ultima_conversa) : ""]
+  ].filter(l => l[1]);
+  return '<p class="band-label">🧠 Resumo do cliente</p>' + (linhas.length
+    ? '<div class="fi-resumo">' + linhas.map(l => '<div><span>' + esc(l[0]) + '</span><b>' + esc(l[1]) + '</b></div>').join("") + '</div>'
+    : '<div class="lc-empty">— os campos do resumo ainda não foram preenchidos no CRM —</div>');
+}
 async function abrirFicha(lead, cliente, emp){
   const dlg = $("#dlg-ficha"); if(!dlg) return;
   ULTIMA_FICHA = { lead, cliente, emp };
@@ -1223,6 +1251,9 @@ async function abrirFicha(lead, cliente, emp){
   if(!lead && cards[0]){ crm.hidden = false; crm.href = ODOO_URL + "/odoo/crm/" + cards[0].id; }
   const hoje = new Date().toLocaleDateString("en-CA");
   let h = '<div class="fi-cards">' + cards.map(c => esc(c.nome)+' <span class="fi-tag">'+esc(c.empresa)+'</span> <span class="fi-tag">'+esc(c.estagio)+'</span>').join(" &nbsp;·&nbsp; ") + '</div>';
+  // resumo do card aberto (ou do 1º, quando a ficha foi aberta pelo nome)
+  const cardResumo = cards.find(c => String(c.id) === String(lead)) || cards[0];
+  h += resumoFichaHTML(cardResumo && cardResumo.intel);
   h += '<p class="band-label">Atividades abertas</p>';
   // cada atividade aberta tem os mesmos botões do Check-list (✔ Feito / ✎ editar-reprogramar / ✕ cancelar): o vendedor concluiu a visita aqui mesmo
   (r.abertas || []).forEach(a => { if(a.id) FICHA_ATIV[String(a.id)] = { id: a.id, lead: a.lead || lead, tipo_id: a.tipo_id, cliente: nomeLimpo, empresa: emp, tipo: a.tipo, resumo: a.resumo, vencimento: a.vencimento }; });
