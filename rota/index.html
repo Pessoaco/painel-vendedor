@@ -177,6 +177,8 @@
   .perto{display:inline-flex;align-items:center;gap:6px}
   .perto .btn.on{background:#2a78d6;color:#fff;border-color:#2a78d6}
   .tag.dist{background:#e8f1fc;color:#1d5fae;font-weight:600}
+  .raio-km{font:inherit;font-size:.76rem;width:78px;padding:6px 8px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);color:var(--ink)}   /* v11: km livre */
+  .raio-un{font-size:.76rem;color:var(--ink-soft);margin-left:-2px}
   .partida{display:inline-flex;align-items:center;gap:6px;flex-wrap:nowrap;flex:0 1 auto}   /* v7: campo e botao Usar na mesma linha */
   .partida input.busca{min-width:180px;flex:0 1 260px}
   .partida .btn{white-space:nowrap}
@@ -246,7 +248,7 @@
 
 <div class="wrap">
   <header class="masthead">
-    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v8</small></h1>
+    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v11</small></h1>
     <div class="meta">
       <a id="link-clientes" href="../">← Copiloto de Vendas</a>
       <a id="link-prospects" href="../prospects/">Copiloto de Prospects</a>
@@ -282,9 +284,9 @@
     <input type="search" id="busca" class="busca" placeholder="🔎 Buscar cliente…" autocomplete="off">
     <label class="chk-linha"><input type="checkbox" id="so-visita"> só com visita marcada</label>
     <!-- v4: perto de mim (usa a localização do aparelho) -->
-    <span class="perto"><button class="btn" id="btn-perto" type="button" title="Mostra só quem está perto de onde você está agora">📍 Perto de mim</button><select class="filtro" id="raio-perto" title="Distância em linha reta"><option value="5">5 km</option><option value="10">10 km</option><option value="20">20 km</option><option value="30">30 km</option><option value="50" selected>50 km</option><option value="100">100 km</option></select></span>
+    <span class="perto"><button class="btn" id="btn-perto" type="button" title="Mostra só quem está perto de onde você está agora">📍 Perto de mim</button><input type="number" class="raio-km" id="raio-perto" list="raio-sugestoes" min="1" max="1000" step="1" value="50" title="Distância em linha reta: digite os km ou escolha da lista"><span class="raio-un">km</span><datalist id="raio-sugestoes"><option value="20"><option value="30"><option value="40"><option value="50"><option value="60"><option value="80"><option value="100"><option value="150"><option value="200"></datalist></span>
     <!-- v6: Partir de (hotel, escritório, cliente…) - vale para o Perto de mim e para Montar rota -->
-    <span class="partida" id="partida-box"><input type="search" id="partida-txt" class="busca" placeholder="🏁 Partir de: endereço, hotel, cidade…" autocomplete="off" title="Deixe vazio para usar onde você está agora (GPS)"><button class="btn" id="btn-partida" type="button">Usar</button><span class="ok" id="partida-ok" hidden></span></span>
+    <span class="partida" id="partida-box"><input type="search" id="partida-txt" class="busca" list="partida-sugestoes" placeholder="🏁 Partir de: endereço, hotel, cidade…" autocomplete="off" title="Deixe vazio para usar onde você está agora (GPS)"><datalist id="partida-sugestoes"></datalist><button class="btn" id="btn-partida" type="button">Usar</button><span class="ok" id="partida-ok" hidden></span></span>
   </div>
   <!-- 1º escolhe o estado, depois marca as regiões dele (botões) -->
   <div class="seletor" id="seletor"></div>
@@ -308,7 +310,7 @@
       <div class="dica-zoom" id="dica-zoom">Para dar zoom: segure <b>Ctrl</b> e role, ou use os botões + e −</div>
     </div>
     <div id="lista"></div>
-    <p class="rodape">Rota de Visitas v8 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="rodape">Rota de Visitas v11 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 </div>
 
@@ -675,10 +677,25 @@ function ondeEstou(){
 // v6: de onde sai: o 'Partir de' digitado ou, se vazio, o GPS do aparelho
 async function posicaoInicial(){ return partida ? partida.pos : await ondeEstou(); }
 const nomeInicio = () => partida ? partida.nome : "onde você está";
+// v9: sugestoes enquanto digita - guarda as coordenadas de cada sugestao para usar direto
+let SUGESTOES = {};
+let timerSug = null;
+async function sugerirLugares(txt){
+  const s = String(txt || "").trim(); if(s.length < 4 || SUGESTOES[s]) return;
+  try {
+    const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=6&countrycodes=br&accept-language=pt-BR&q=" + encodeURIComponent(s));
+    const j = await r.json();
+    const dl = $("#partida-sugestoes"); if(!dl) return;
+    SUGESTOES = {};
+    // mostra só nome + bairro + cidade, sem repetir (a ponte vem em vários trechos com o mesmo nome)
+    dl.innerHTML = (j || []).map(x => { const nome = String(x.display_name).split(", ").slice(0, 3).join(", "); if(SUGESTOES[nome]) return ""; SUGESTOES[nome] = [Number(x.lat), Number(x.lon)]; return '<option value="' + esc(nome) + '">'; }).join("");
+  } catch(e){}
+}
 async function acharLugar(txt){
   const s = String(txt || "").trim(); if(!s) return null;
   const m = s.match(/^\s*(-?\d+(?:[.,]\d+)?)\s*[,; ]\s*(-?\d+(?:[.,]\d+)?)\s*$/);   // aceita tambem 'latitude, longitude'
   if(m) return { pos: [Number(m[1].replace(",", ".")), Number(m[2].replace(",", "."))], nome: s };
+  if(SUGESTOES[s]) return { pos: SUGESTOES[s], nome: s };   // v9: escolheu da lista de sugestoes
   const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&accept-language=pt-BR&q=" + encodeURIComponent(s));
   const j = await r.json();
   if(!j || !j.length) return null;
@@ -766,7 +783,11 @@ $("#btn-perto").addEventListener("click", async () => {
   b.classList.add("on"); b.textContent = "📍 Perto de mim ✕";
   render();
 });
-$("#raio-perto").addEventListener("change", e => { if(perto){ perto.raio = Number(e.target.value) || 50; render(); } });
+// v11: km digitado livre - atualiza ao digitar (com pausa) e ao sair do campo
+let timerRaio = null;
+const aplicaRaio = v => { const k = Math.max(1, Math.round(Number(v) || 50)); if(perto && perto.raio !== k){ perto.raio = k; render(); } };
+$("#raio-perto").addEventListener("change", e => aplicaRaio(e.target.value));
+$("#raio-perto").addEventListener("input", e => { clearTimeout(timerRaio); timerRaio = setTimeout(() => aplicaRaio(e.target.value), 600); });
 // v6: Partir de
 async function usarPartida(){
   const txt = $("#partida-txt").value.trim();
@@ -776,10 +797,15 @@ async function usarPartida(){
   b.disabled = false; b.textContent = "Usar";
   if(!achou){ alert("Não achei esse lugar. Tente com a cidade junto (ex.: Hotel Ibis, Campinas SP) ou cole a latitude, longitude."); return; }
   partida = achou; gravar("rv_partida", JSON.stringify(partida)); mostraPartida();
-  if(perto) perto.pos = partida.pos;
+  // v9: escolher o ponto de partida ja mostra a lista por distancia a partir dali
+  perto = { pos: partida.pos, raio: Number($("#raio-perto").value) || 50 };
+  { const bp = $("#btn-perto"); bp.classList.add("on"); bp.textContent = "📍 Perto de mim ✕"; }
   render();
 }
 $("#btn-partida").addEventListener("click", usarPartida);
+$("#partida-txt").addEventListener("input", e => { clearTimeout(timerSug); const v = e.target.value;
+  if(SUGESTOES[v.trim()]) { usarPartida(); return; }   // clicou numa sugestao: usa direto
+  timerSug = setTimeout(() => sugerirLugares(v), 700); });
 $("#partida-txt").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); usarPartida(); } });
 document.addEventListener("click", async e => { if(e.target && e.target.id === "btn-partida-x"){
   partida = null; gravar("rv_partida", "null"); mostraPartida();
@@ -798,7 +824,7 @@ document.addEventListener("click", e => {
 });
 $("#btn-limpar-rota").addEventListener("click", () => { rota.clear(); render(); });
 /* ---- impressão: cabeçalho com os filtros, rodapé com versão + @pessoaco + "página X de Y" ---- */
-const VERSAO = "v8";
+const VERSAO = "v11";
 function textoFiltros(){
   const emp = empresa === "BNZ" ? "BNZ METAIS" : (empresa || "BB · BNZ · CIAPLAC");
   const tp = tipo === "cliente" ? "Clientes" : (tipo === "prospect" ? "Prospects" : "Clientes e prospects");
