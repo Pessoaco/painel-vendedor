@@ -334,7 +334,10 @@
   #lista-por_regiao{width:fit-content;min-width:380px;max-width:100%}
   #lista-por_regiao table.lc{width:100%}
   table.lc tr.tot td{font-weight:700;color:var(--ink);border-top:2px solid var(--slate-edge)}
-  table.lc td.c-fantasia{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  table.lc td.c-fantasia{max-width:none;white-space:nowrap}
+  .fant-wrap{display:flex;align-items:center;gap:4px;max-width:230px}
+  .fant-txt{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fant-ic{flex:none;display:inline-flex;align-items:center;gap:4px}
   .legenda{display:block;margin-top:6px;font-size:.68rem;color:var(--ink-faint);font-style:normal;line-height:1.4}
   .hero-main .breakdown b[data-goto]{cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
   .callout{
@@ -422,7 +425,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v19 (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v20 (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -617,7 +620,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v19 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v20 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -974,6 +977,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             const qm = [String(r.fantasia || r.cliente).replace(/ - (BB|BNZ METAIS|CIAPLAC)$/i, "").trim(), r.endereco, r.cidade, r.uf].filter(x => x && String(x).trim()).join(", ");
             v += ' <a class="maps no-print" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(qm) + '" target="_blank" rel="noopener" title="ver a loja no Google Maps (fachada, endereço, rota)"><svg class="ico"><use href="#i-mapa"/></svg></a>';
           }
+          // v20: nome fantasia grande escondia a lupa/@/📍 -> o nome é cortado com … e os ícones ficam sempre visíveis
+          if(c[0]==="fantasia"){ const k2 = v.indexOf(' <'); const txt = k2 >= 0 ? v.slice(0, k2) : v; const ics = k2 >= 0 ? v.slice(k2) : ""; v = '<span class="fant-wrap"><span class="fant-txt" title="'+txt+'">'+txt+'</span>'+(ics ? '<span class="fant-ic">'+ics+'</span>' : '')+'</span>'; }
           if(c[0]==="cliente" && r.lead) v ='<button type="button" class="btn-ficha no-print" data-lead="'+r.lead+'" data-cliente="'+esc(String(r.cliente||""))+'" data-empresa="'+esc(String(r.empresa||""))+'" title="Ver as anotações e o histórico deste prospect">📋</button>' + v;
           if(c[0]==="regiao" && k==="por_regiao") v = '<a href="#lista-'+slugRegiao(r.regiao||"")+'" class="lnk-reg" data-goto="'+slugRegiao(r.regiao||"")+'">'+(v || "(sem região)")+'</a>';
           if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
