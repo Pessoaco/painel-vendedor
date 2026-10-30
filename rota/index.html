@@ -196,6 +196,10 @@
 
   dialog.painel{border:1px solid var(--hair);border-radius:12px;padding:16px 18px;width:min(560px,94vw);max-height:86vh;overflow:auto;background:var(--surface);color:var(--ink)}
   dialog.painel::backdrop{background:rgba(0,0,0,.4)}
+  /* v13: 'Sua rota' flutua (sem escurecer a tela) e arrasta pelo titulo */
+  #dlg-rota{position:fixed;margin:0;z-index:2000;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  #dlg-rota h3{cursor:move;user-select:none;touch-action:none}
+  #dlg-rota h3 .arraste{font-size:.7rem;font-weight:400;color:var(--ink-soft);margin-left:6px}
   .painel h3{margin:0 0 4px;font-family:"Archivo",sans-serif;font-size:1.05rem}
   .painel .sub{font-size:.76rem;color:var(--ink-soft);margin:0 0 10px}
   .parada{display:grid;grid-template-columns:26px 1fr auto;gap:2px 10px;align-items:center;padding:8px 0;border-top:1px solid var(--hair)}
@@ -248,7 +252,7 @@
 
 <div class="wrap">
   <header class="masthead">
-    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v11</small></h1>
+    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v13</small></h1>
     <div class="meta">
       <a id="link-clientes" href="../">← Copiloto de Vendas</a>
       <a id="link-prospects" href="../prospects/">Copiloto de Prospects</a>
@@ -283,6 +287,7 @@
     <datalist id="lista-destinos"></datalist>
     <input type="search" id="busca" class="busca" placeholder="🔎 Buscar cliente…" autocomplete="off">
     <label class="chk-linha"><input type="checkbox" id="so-visita"> só com visita marcada</label>
+    <label class="chk-linha"><input type="checkbox" id="so-atrasada"> só visita atrasada</label>
     <!-- v4: perto de mim (usa a localização do aparelho) -->
     <span class="perto"><button class="btn" id="btn-perto" type="button" title="Mostra só quem está perto de onde você está agora">📍 Perto de mim</button><input type="number" class="raio-km" id="raio-perto" list="raio-sugestoes" min="1" max="1000" step="1" value="50" title="Distância em linha reta: digite os km ou escolha da lista"><span class="raio-un">km</span><datalist id="raio-sugestoes"><option value="20"><option value="30"><option value="40"><option value="50"><option value="60"><option value="80"><option value="100"><option value="150"><option value="200"></datalist></span>
     <!-- v6: Partir de (hotel, escritório, cliente…) - vale para o Perto de mim e para Montar rota -->
@@ -300,7 +305,7 @@
     <div class="legenda">
       <span><i style="background:var(--pin-cli)"></i>Cliente</span>
       <span><i style="background:var(--pin-pro)"></i>Prospect</span>
-      <span><i style="background:var(--pin-cli);box-shadow:0 0 0 2px var(--pin-atr)"></i>Visita atrasada</span>
+      <span><i style="background:var(--pin-atr);width:13px;height:13px"></i>Visita atrasada</span>
       <span><i style="background:#fff;border:2px dashed #888;box-shadow:none"></i>Local aproximado (centro da cidade)</span>
     </div>
     </div>
@@ -310,7 +315,7 @@
       <div class="dica-zoom" id="dica-zoom">Para dar zoom: segure <b>Ctrl</b> e role, ou use os botões + e −</div>
     </div>
     <div id="lista"></div>
-    <p class="rodape">Rota de Visitas v11 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="rodape">Rota de Visitas v13 · por <a href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 </div>
 
@@ -326,7 +331,7 @@
 </div>
 
 <dialog class="painel" id="dlg-rota">
-  <h3>🧭 Sua rota</h3>
+  <h3 id="dlg-rota-titulo">🧭 Sua rota <span class="arraste">✥ arraste por aqui</span></h3>
   <p class="sub" id="rota-sub"></p>
   <div class="partes" id="rota-partes"></div>
   <div id="rota-paradas"></div>
@@ -357,10 +362,12 @@ let tipo = ler("rv_tipo", "cliente");            // padrão: só clientes (regra
 let destino = ler("rv_destino", "");              // "Rio de Janeiro" · "Região dos Lagos, Baixada" · "Campinas, Valinhos, Louveira"
 let busca = "";
 let soVisita = false;
+let soAtrasada = false;   // v13
 // v4: Perto de mim = { pos:[lat,lng], raio:km } ou null
 let perto = null;
 // v6: ponto de partida digitado { pos:[lat,lng], nome } - fica salvo neste aparelho; vazio = GPS
-let partida = null; try { partida = JSON.parse(ler("rv_partida", "null")); } catch(e){ partida = null; }
+// v12: o ponto de partida NAO fica salvo - toda vez que a pagina abre, comeca pelo GPS (evita achar que "nao funciona" por causa de uma busca antiga)
+let partida = null; gravar("rv_partida", "null");
 let agrupa = ler("rv_agrupa", "cidade");          // lista "Por cidade" ou "Por região"
 // seletor clicável: 1 estado (ex. "RJ") e, dentro dele, as regiões marcadas (ninguém precisa decorar o nome da região)
 let estadoSel = ler("rv_estado", "");
@@ -450,6 +457,7 @@ function base(){
     (!empresa || i.empresa === nomeEmp) &&
     (tipo === "todos" || i.tipo === tipo) &&
     (!soVisita || i.visita) &&
+    (!soAtrasada || (i.visita && i.visita.atrasada)) &&
     (!perto || (i.lat && i.lng && distKm(perto.pos, [i.lat, i.lng]) <= perto.raio)) &&
     (!termos.length || termos.some(t => semAcento(i.nome + " " + i.fantasia).includes(t)))
   );
@@ -524,14 +532,14 @@ function desenhaMapa(lista, enquadrar = true){
   const ordem = [...lista].sort((a, b) => rota.has(a.id) - rota.has(b.id));
   ordem.forEach(i => {
     if(!i.lat || !i.lng) return;
-    const cor = i.tipo === "cliente" ? "#f07800" : "#7b52c9";
+    const cor = (i.visita && i.visita.atrasada) ? "#d13b4b" : (i.tipo === "cliente" ? "#f07800" : "#7b52c9");   // v13: atrasada = vermelha
     const atrasada = i.visita && i.visita.atrasada;
     const naRota = rota.has(i.id);
     const m = naRota
       ? L.circleMarker([i.lat, i.lng], { radius: 11, color: "#111111", weight: 4, fillColor: cor, fillOpacity: 1 })
       : L.circleMarker([i.lat, i.lng], {
-          radius: 7,
-          color: i.aprox ? cor : (atrasada ? "#d13b4b" : "#ffffff"),
+          radius: atrasada ? 10 : 7,
+          color: i.aprox ? cor : "#ffffff",
           weight: atrasada ? 3 : 2,
           fillColor: i.aprox ? "#ffffff" : cor, fillOpacity: i.aprox ? .85 : .95,
           dashArray: i.aprox ? "3 3" : null
@@ -635,7 +643,7 @@ function resumo(lista){
   $("#resumo").innerHTML = '<span><b>' + lista.length + '</b> no filtro</span>' +
     (tipo !== "prospect" ? '<span><b>' + cli + '</b> clientes</span>' : '') +
     (tipo !== "cliente" ? '<span><b>' + pro + '</b> prospects</span>' : '') +
-    (atr ? '<span><b>' + atr + '</b> com visita atrasada</span>' : '') +
+    (atr ? '<span><a href="#" id="lnk-atrasada" title="Mostrar só as visitas atrasadas" style="color:var(--pin-atr);font-weight:600"><b>' + atr + '</b> com visita atrasada</a></span>' : '') +
     (sem ? '<span title="aparecem só na lista, com Maps/Waze pelo endereço"><b>' + sem + '</b> sem ponto no mapa</span>' : '');
 }
 
@@ -744,7 +752,7 @@ async function montarRota(){
   $("#rota-paradas").innerHTML = r.ordem.map((i, k) => '<div class="parada"><span class="num">' + (k + 1) + '</span>' +
     '<div class="nm">' + esc(i.nome) + '</div><div class="acoes">' + botoes(i) + '</div>' +
     '<p class="sub">' + esc(i.cidade) + ' · ' + (i.tipo === "cliente" ? "Cliente" : "Prospect") + (i.visita ? " · visita " + ddmmaa(i.visita.data) : "") + '</p></div>').join("");
-  $("#dlg-rota").showModal();
+  { const d = $("#dlg-rota"); if(!d.open){ d.show(); const w = d.offsetWidth; d.style.left = Math.max(8, (innerWidth - w) / 2) + "px"; d.style.top = "80px"; } }   // v13: janela solta (nao bloqueia o mapa)
 }
 
 /* ---- eventos ---- */
@@ -771,6 +779,8 @@ $("#seg-tipo").addEventListener("click", e => { const b = e.target.closest("butt
 let tDest; $("#destino").addEventListener("input", e => { clearTimeout(tDest); tDest = setTimeout(() => { destino = e.target.value; gravar("rv_destino", destino); limiteLista = LISTA_PASSO; render(); }, 350); });
 let tBusca; $("#busca").addEventListener("input", e => { clearTimeout(tBusca); tBusca = setTimeout(() => { busca = e.target.value; limiteLista = LISTA_PASSO; render(); }, 250); });
 $("#so-visita").addEventListener("change", e => { soVisita = e.target.checked; render(); });
+$("#so-atrasada").addEventListener("change", e => { soAtrasada = e.target.checked; render(); });
+document.addEventListener("click", e => { if(e.target.closest && e.target.closest("#lnk-atrasada")){ e.preventDefault(); soAtrasada = true; $("#so-atrasada").checked = true; render(); $("#lista").scrollIntoView({ behavior: "smooth" }); } });
 // v4: Perto de mim - pede a localização; ao ligar, ignora estado/região/cidades escolhidos (vale o raio)
 $("#btn-perto").addEventListener("click", async () => {
   const b = $("#btn-perto");
@@ -796,7 +806,7 @@ async function usarPartida(){
   let achou = null; try { achou = await acharLugar(txt); } catch(e){ achou = null; }
   b.disabled = false; b.textContent = "Usar";
   if(!achou){ alert("Não achei esse lugar. Tente com a cidade junto (ex.: Hotel Ibis, Campinas SP) ou cole a latitude, longitude."); return; }
-  partida = achou; gravar("rv_partida", JSON.stringify(partida)); mostraPartida();
+  partida = achou; mostraPartida();
   // v9: escolher o ponto de partida ja mostra a lista por distancia a partir dali
   perto = { pos: partida.pos, raio: Number($("#raio-perto").value) || 50 };
   { const bp = $("#btn-perto"); bp.classList.add("on"); bp.textContent = "📍 Perto de mim ✕"; }
@@ -808,7 +818,7 @@ $("#partida-txt").addEventListener("input", e => { clearTimeout(timerSug); const
   timerSug = setTimeout(() => sugerirLugares(v), 700); });
 $("#partida-txt").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); usarPartida(); } });
 document.addEventListener("click", async e => { if(e.target && e.target.id === "btn-partida-x"){
-  partida = null; gravar("rv_partida", "null"); mostraPartida();
+  partida = null; mostraPartida();
   if(perto){ const p = await ondeEstou(); if(p) perto.pos = p; else { perto = null; const b = $("#btn-perto"); b.classList.remove("on"); b.textContent = "📍 Perto de mim"; } }
   render(); } });
 mostraPartida();
@@ -824,7 +834,7 @@ document.addEventListener("click", e => {
 });
 $("#btn-limpar-rota").addEventListener("click", () => { rota.clear(); render(); });
 /* ---- impressão: cabeçalho com os filtros, rodapé com versão + @pessoaco + "página X de Y" ---- */
-const VERSAO = "v11";
+const VERSAO = "v13";
 function textoFiltros(){
   const emp = empresa === "BNZ" ? "BNZ METAIS" : (empresa || "BB · BNZ · CIAPLAC");
   const tp = tipo === "cliente" ? "Clientes" : (tipo === "prospect" ? "Prospects" : "Clientes e prospects");
@@ -862,6 +872,16 @@ $("#btn-mapa-cheio").addEventListener("click", () => mapaCheio(!document.body.cl
 document.addEventListener("keydown", e => { if(e.key === "Escape" && document.body.classList.contains("mapa-cheio")) mapaCheio(false); });
 $("#btn-montar-rota").addEventListener("click", montarRota);
 $("#btn-fechar-rota").addEventListener("click", () => $("#dlg-rota").close());
+// v13: arrastar a janela 'Sua rota' pelo titulo (mouse ou dedo)
+(function(){
+  const d = $("#dlg-rota"), h = $("#dlg-rota-titulo"); let dx = 0, dy = 0, arrastando = false;
+  h.addEventListener("pointerdown", e => { arrastando = true; const r = d.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top; h.setPointerCapture(e.pointerId); });
+  h.addEventListener("pointermove", e => { if(!arrastando) return;
+    const x = Math.min(Math.max(0, e.clientX - dx), innerWidth - 60), y = Math.min(Math.max(0, e.clientY - dy), innerHeight - 40);
+    d.style.left = x + "px"; d.style.top = y + "px"; });
+  const solta = () => { arrastando = false; };
+  h.addEventListener("pointerup", solta); h.addEventListener("pointercancel", solta);
+})();
 $("#btn-refresh").addEventListener("click", () => load());
 $("#btn-logout").addEventListener("click", () => { try { localStorage.removeItem("pv_auth"); } catch(e){} creds = null; mostraLogin(""); });
 
