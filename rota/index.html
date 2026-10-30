@@ -252,7 +252,7 @@
 
 <div class="wrap">
   <header class="masthead">
-    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v13</small></h1>
+    <h1 title="Escolha a região, marque quem visitar e abra a rota no Google Maps ou no Waze.">Rota de Visitas <span>— quem está no caminho</span><small class="versao">v14</small></h1>
     <div class="meta">
       <a id="link-clientes" href="../">← Copiloto de Vendas</a>
       <a id="link-prospects" href="../prospects/">Copiloto de Prospects</a>
@@ -260,6 +260,8 @@
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
         <button class="btn" id="btn-refresh">Atualizar</button>
         <button class="btn" id="btn-imprimir" title="Imprimir o mapa e a lista (com os filtros escolhidos)">🖨 Imprimir</button>
+<!-- v14: link que abre sem login com a foto desta tela (30 dias) -->
+<button class="btn" id="btn-compartilhar" type="button" onclick="IALinkCompartilhar({ painel:'rota' })" title="Compartilhar link (abre sem login, vale 30 dias)">🔗 Compartilhar</button>
         <button class="logout" id="btn-logout">sair</button>
       </div>
     </div>
@@ -834,7 +836,7 @@ document.addEventListener("click", e => {
 });
 $("#btn-limpar-rota").addEventListener("click", () => { rota.clear(); render(); });
 /* ---- impressão: cabeçalho com os filtros, rodapé com versão + @pessoaco + "página X de Y" ---- */
-const VERSAO = "v13";
+const VERSAO = "v14";
 function textoFiltros(){
   const emp = empresa === "BNZ" ? "BNZ METAIS" : (empresa || "BB · BNZ · CIAPLAC");
   const tp = tipo === "cliente" ? "Clientes" : (tipo === "prospect" ? "Prospects" : "Clientes e prospects");
@@ -930,5 +932,7 @@ async function load(){
 aplicaUI();
 load();
 </script>
+<!-- botao "Compartilhar link" (IALINK, igual em todos os paineis) -->
+<script src="https://pessoaco.github.io/Kpis/link/compartilhar.js?v=1"></script>
 </body>
 </html>
