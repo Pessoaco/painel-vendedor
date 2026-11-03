@@ -209,6 +209,10 @@
   .pf-chip{display:inline-block;margin:1px 3px 1px 0;padding:1px 8px;border-radius:10px;border:1px solid var(--blue-edge);background:var(--blue-bg);color:var(--blue-ink);font-size:.68rem;line-height:1.35;white-space:normal;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pf-n{font-variant-numeric:tabular-nums}
   .pf-n.ok{color:var(--green-ink)} .pf-n.meio{color:var(--amber-ink)} .pf-n.baixo{color:var(--clay-ink)}
+  /* v42: número da versão no cabeçalho + "Clientes por perfil" no placar da carteira ativa */
+  .masthead h1 small.ver{font-family:"IBM Plex Mono",monospace;font-size:.5em;font-weight:600;color:var(--ink-faint);margin-left:6px;letter-spacing:0;vertical-align:middle}
+  .hero-main .perfil-resumo{font-size:.72rem;color:var(--ink-soft);line-height:1.4}
+  .hero-main .perfil-resumo b{color:var(--ink);text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
   table.lc a.wa{color:#1fa855;display:inline-flex}
   table.lc a.wa .ico{width:17px;height:17px}
   table.lc .wa-num{display:none;font-variant-numeric:tabular-nums}
@@ -461,7 +465,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v41 (lista 🧠 "Perfil da carteira ativa": os 9 campos da ficha de compra do card do CRM viram colunas, vazio = ⬜, etiquetas sempre inteiras (quebram linha); atalho no título da Carteira ativa; n8n v53) v40 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; script compartilhar.js do portal; fluxo n8n Compartilhar_Link_Paineis_v1) v39 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v38 = (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v42 (número da versão também no cabeçalho; "Clientes por perfil" no placar da carteira ativa com link pra lista do Perfil; colunas do Perfil na MESMA ORDEM da tela do card no CRM) v41 = (lista 🧠 "Perfil da carteira ativa": os 9 campos da ficha de compra do card do CRM viram colunas, vazio = ⬜, etiquetas sempre inteiras (quebram linha); atalho no título da Carteira ativa; n8n v53) v40 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; script compartilhar.js do portal; fluxo n8n Compartilhar_Link_Paineis_v1) v39 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v38 = (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -490,7 +494,7 @@
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Copiloto de Vendas <span>— Missões</span></h1>
+    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v42</small></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
@@ -547,6 +551,11 @@
         <div class="regiao-link" data-goto="por_regiao">
           <span class="sub">Clientes por região</span>
           <span class="lnk">↗ abrir resumo por região</span>
+        </div>
+        <div class="regiao-link" data-goto="perfil_carteira">
+          <span class="sub">Clientes por perfil</span>
+          <span class="perfil-resumo" id="perfil-resumo"></span>
+          <span class="lnk">↗ abrir perfil da carteira (o que falta preencher)</span>
         </div>
       </div>
       <div class="hero-main plain" data-goto="pedidos_sem_entrega" style="cursor:pointer">
@@ -652,7 +661,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v41 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v42 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -738,7 +747,7 @@ const COLS = {
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.carteira;
 // v41: perfil da carteira ativa = a "ficha de compra" do card do CRM (mesma ordem da tela do CRM); o que estiver em branco aparece com ⬜
-COLS.perfil_carteira = [["cliente","Cliente"],["fantasia","Nome Fantasia"],["estagio","Estágio"],["comprou_de","Comprou por último de"],["perfil","Perfil do cliente"],["materiais","Material"],["volume_kg","Volume por compra"],["recompra_dias","Recompra a cada"],["preco_conco","Último preço conco"],["condicao_pagto","Condição de pagto"],["ritmo_dias","Ritmo de contato"],["potencial","Potencial e relacionamento"],["preenchidos","Preenchido"]];
+COLS.perfil_carteira = [["cliente","Cliente"],["fantasia","Nome Fantasia"],["estagio","Estágio"],["perfil","Perfil do Cliente"],["potencial","Potencial e Relacionamento"],["materiais","Material"],["volume_kg","Volume por compra (kg)"],["recompra_dias","Frequência - Recompra a cada (dias)"],["ritmo_dias","Ritmo de Contato (dias)"],["preco_conco","Último preço conco"],["comprou_de","Comprou por último de"],["condicao_pagto","Condição de pagto q faz"],["preenchidos","Preenchido"]];   // v42: mesma ordem da tela do card no CRM
 const PERFIL_CAMPOS = new Set(["comprou_de","perfil","materiais","volume_kg","recompra_dias","preco_conco","condicao_pagto","ritmo_dias","potencial"]);
 const perfilVazio = x => Array.isArray(x) ? x.length === 0 : (typeof x === "number" ? !(x > 0) : !String(x == null ? "" : x).trim());
 COLS.contato_preventivo = COLS.recuperacao = COLS.em_formacao = COLS.missao;
@@ -1012,6 +1021,13 @@ function renderListas(listas){
   // com filtro, os números de cima saem das próprias listas: assim batem com o que está marcado
   const kpis = regioesSel.size ? kpisDasListas(L, DADOS.kpis || {}) : (DADOS.kpis || {});
   pintaKpis(kpis);
+  // v42: "Clientes por perfil" no placar da carteira ativa (conta o campo Perfil do Cliente do card; sem perfil = ainda não preenchido)
+  const prf = $("#perfil-resumo");
+  if(prf){
+    const pc = L.perfil_carteira || [], cont = {};
+    pc.forEach(r => { const p = r.perfil || "Sem perfil"; cont[p] = (cont[p] || 0) + 1; });
+    prf.innerHTML = Object.keys(cont).sort((a,b) => (a === "Sem perfil") - (b === "Sem perfil") || cont[b] - cont[a]).map(p => "<b>"+cont[p]+"</b> "+esc(p)).join(" · ");
+  }
   const fa = $("#filtro-aviso");
   if(fa){
     fa.hidden = !regioesSel.size;
