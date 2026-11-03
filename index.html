@@ -197,6 +197,18 @@
   table.lc th:first-child{max-width:160px}
   table.lc .col-marc{white-space:normal;max-width:190px;line-height:1.3}
   .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
+  /* v41: Perfil da carteira ativa - etiquetas (Material, Potencial) NUNCA cortadas: quebram em varias linhas; vazio = ⬜ com fundo suave */
+  .cab-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .pf-resumo{padding:7px 12px;font-size:.74rem;color:var(--ink-soft);border-top:1px solid var(--hair);background:var(--surface)}
+  .pf-resumo b{color:var(--ink)}
+  .t-perfil_carteira td{vertical-align:top}
+  table.lc td.pf-wrap{white-space:normal;min-width:84px;max-width:230px;line-height:1.4;overflow:visible;text-overflow:clip}
+  table.lc td.pf-vazio-td{background:var(--amber-bg);text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pf-vazio{opacity:.75}
+  table.lc td.c-potencial{min-width:210px} table.lc td.c-materiais{min-width:130px} table.lc td.c-comprou_de,table.lc td.c-perfil,table.lc td.c-condicao_pagto{min-width:96px}
+  .pf-chip{display:inline-block;margin:1px 3px 1px 0;padding:1px 8px;border-radius:10px;border:1px solid var(--blue-edge);background:var(--blue-bg);color:var(--blue-ink);font-size:.68rem;line-height:1.35;white-space:normal;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pf-n{font-variant-numeric:tabular-nums}
+  .pf-n.ok{color:var(--green-ink)} .pf-n.meio{color:var(--amber-ink)} .pf-n.baixo{color:var(--clay-ink)}
   table.lc a.wa{color:#1fa855;display:inline-flex}
   table.lc a.wa .ico{width:17px;height:17px}
   table.lc .wa-num{display:none;font-variant-numeric:tabular-nums}
@@ -449,7 +461,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v40 (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; script compartilhar.js do portal; fluxo n8n Compartilhar_Link_Paineis_v1) v39 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v38 = (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v41 (lista 🧠 "Perfil da carteira ativa": os 9 campos da ficha de compra do card do CRM viram colunas, vazio = ⬜, etiquetas sempre inteiras (quebram linha); atalho no título da Carteira ativa; n8n v53) v40 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; script compartilhar.js do portal; fluxo n8n Compartilhar_Link_Paineis_v1) v39 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v38 = (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -640,7 +652,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v40 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v41 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -707,6 +719,7 @@ const LISTAS = [
   {k:"carteira_negociacao", titulo:"Carteira · Em Negociação",                                               cor:"amber"},
   {k:"carteira_semmov",     titulo:"Carteira · Sem Movimentação",                                            cor:"clay"},
   {k:"carteira_inativos",   titulo:"Carteira · Inativos (fora do placar)",                                  cor:"slate"},
+  {k:"perfil_carteira",     titulo:"🧠 Perfil da carteira ativa · o que falta preencher na ficha do CRM",   cor:"purple"},
   {k:"por_regiao",          titulo:"Clientes por Região",                                                   cor:"blue"},
   {k:"vendas_por_regiao",   titulo:"Vendas do Mês por Região (pedidos confirmados no mês atual)",           cor:"green"},
   {k:"pedidos_sem_entrega", titulo:"Pedidos a Entregar (sem entrega ou com entrega parcial: mostra só o que falta)", cor:"blue"}
@@ -724,6 +737,10 @@ const COLS = {
   pedidos_sem_entrega: [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["situacao","Situação"],["a_entregar","A entregar"],["valor","Valor a entregar"],["data_pedido","Data Emissão"],["pedido","Pedido"]]
 };
 COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.carteira_inativos = COLS.carteira;
+// v41: perfil da carteira ativa = a "ficha de compra" do card do CRM (mesma ordem da tela do CRM); o que estiver em branco aparece com ⬜
+COLS.perfil_carteira = [["cliente","Cliente"],["fantasia","Nome Fantasia"],["estagio","Estágio"],["comprou_de","Comprou por último de"],["perfil","Perfil do cliente"],["materiais","Material"],["volume_kg","Volume por compra"],["recompra_dias","Recompra a cada"],["preco_conco","Último preço conco"],["condicao_pagto","Condição de pagto"],["ritmo_dias","Ritmo de contato"],["potencial","Potencial e relacionamento"],["preenchidos","Preenchido"]];
+const PERFIL_CAMPOS = new Set(["comprou_de","perfil","materiais","volume_kg","recompra_dias","preco_conco","condicao_pagto","ritmo_dias","potencial"]);
+const perfilVazio = x => Array.isArray(x) ? x.length === 0 : (typeof x === "number" ? !(x > 0) : !String(x == null ? "" : x).trim());
 COLS.contato_preventivo = COLS.recuperacao = COLS.em_formacao = COLS.missao;
 COLS.conversa_zap = COLS.sem_movimentacao = COLS.inativos = COLS.alerta;
 
@@ -929,7 +946,7 @@ let ULTIMA_LISTAS = {};   // listas como vieram do n8n (a busca por cliente e as
 const sortState = {};
 const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
 let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
-const NUM_COLS_COPILOTO = new Set(["ciclo_dias","dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao"]);
+const NUM_COLS_COPILOTO = new Set(["ciclo_dias","dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao","volume_kg","recompra_dias","preco_conco","ritmo_dias","preenchidos"]);
 /* quanto falta entregar num pedido, na unidade de cada empresa (BNZ peças, CIAPLAC m/un., BB kg); parcial já vem só com o saldo */
 function textoAEntregar(r){
   const p = [];
@@ -1011,7 +1028,7 @@ function renderListas(listas){
       const cab = document.createElement("div"); cab.className = "cab-carteira" + (alvosImpressao.includes("cab-carteira") ? " print-alvo" : ""); cab.id = "cab-carteira";
       cab.innerHTML = '<div><b>Carteira ativa — '+nAtiva+' cliente'+(nAtiva === 1 ? '' : 's')+'</b>'+
         '<small>É o número do placar “Minha carteira ativa”: Ativos + Em Negociação + Sem Movimentação, nas 3 listas abaixo.</small></div>'+
-        (nAtiva ? '<button class="btn-print no-print" data-print="cab-carteira" title="Imprimir a carteira ativa inteira (as 3 listas)">🖨 Imprimir a carteira ativa</button>' : '');
+        (nAtiva ? '<span class="cab-btns">'+'<button class="btn-print no-print" data-vai="lista-perfil_carteira" title="Ir para a lista que mostra o que falta preencher na ficha de compra de cada cliente">🧠 Perfil da carteira (o que falta preencher)</button>'+'<button class="btn-print no-print" data-print="cab-carteira" title="Imprimir a carteira ativa inteira (as 3 listas)">🖨 Imprimir a carteira ativa</button>'+'</span>' : '');
       box.appendChild(cab);
     } else if(k === "carteira_inativos"){
       const cab = document.createElement("div"); cab.className = "cab-carteira fora" + (alvosImpressao.includes("cab-fora") ? " print-alvo" : ""); cab.id = "cab-fora";
@@ -1044,6 +1061,16 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
       (pre === "lista-" && rows.length ? '<button class="btn-print no-print" data-print="'+pre+k+'" title="Imprimir só esta lista">🖨 Imprimir esta lista</button>' : '')+
       '<span class="n">'+rows.length+'</span></span>';
     card.appendChild(h);
+    if(k==="perfil_carteira" && sortavel){
+      const bar = document.createElement("div"); bar.className = "pf-resumo";
+      if(DADOS && DADOS.perfil_ok === false){ bar.innerHTML = "⚠ Não consegui ler a ficha de compra do CRM agora. Atualize a tela em instantes."; }
+      else if(rows.length){
+        const campos = COLS.perfil_carteira.filter(c => PERFIL_CAMPOS.has(c[0]));
+        const falta = campos.map(c => [c[1], rows.filter(r => perfilVazio(r[c[0]])).length]).filter(x => x[1]).sort((a,b) => b[1]-a[1]).map(x => x[0]+" ("+x[1]+")").join(" · ");
+        bar.innerHTML = "<b>"+rows.filter(r => r.preenchidos >= 9).length+" de "+rows.length+"</b> clientes com a ficha completa. Mais vazios primeiro. <span>Em branco: "+(falta || "nada")+"</span>";
+      }
+      if(bar.innerHTML) card.appendChild(bar);
+    }
     if(comAcoes && sortavel){
       const bar = document.createElement("div"); bar.className = "lc-bar no-print";
       bar.innerHTML = '<span>Selecionadas: <b id="sel-n">'+selAtiv.size+'</b></span>'+
@@ -1100,6 +1127,18 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             v = '<a class="wa" href="'+v+'" target="_blank" rel="noopener" title="abrir no WhatsApp"><svg class="ico"><use href="#i-whats"/></svg></a><span class="wa-num">'+n+'</span>';
           }
           if(c[0]==="regiao" && !v) v = "(sem região)";
+          let _pfVazio = false;
+          if(k==="perfil_carteira" && PERFIL_CAMPOS.has(c[0])){
+            const x = r[c[0]]; _pfVazio = perfilVazio(x);
+            if(_pfVazio) v = '<span class="pf-vazio" title="falta preencher">⬜</span>';
+            else if(Array.isArray(x)) v = x.map(i => '<span class="pf-chip">'+esc(i)+'</span>').join(" ");
+            else if(c[0]==="volume_kg") v = fmtInt(x)+" kg";
+            else if(c[0]==="recompra_dias" || c[0]==="ritmo_dias") v = x+" dias";
+            else if(c[0]==="preco_conco") v = "R$ "+Number(x).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+            else v = esc(x);
+          }
+          if(k==="perfil_carteira" && c[0]==="preenchidos") v = '<b class="pf-n '+(r.preenchidos >= 9 ? "ok" : (r.preenchidos <= 3 ? "baixo" : "meio"))+'">'+(r.preenchidos||0)+'/9</b>';
+          if(k==="perfil_carteira" && c[0]==="cliente" && r.lead) v = '<a class="lk" href="'+ODOO_URL+'/odoo/crm/'+r.lead+'" target="_blank" rel="noopener" title="abrir o card no CRM">'+v+'</a>';
           if(k==="pedidos_sem_entrega" && c[0]==="a_entregar") v = textoAEntregar(r);
           if(k==="pedidos_sem_entrega" && c[0]==="valor") v = fmtBRL(v);
           if(k==="vendas_por_regiao" && c[0]==="valor") v = fmtBRL(v);
@@ -1116,7 +1155,7 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           const alertaEst = (k==="curva_a" && c[0]==="estagio" && /Sem Movimenta|Inativ/.test(r.estagio||"")) ? " est-alerta" : "";
           // Check-list: texto cortado com "…" quando a coluna é estreita; o texto inteiro aparece ao passar o mouse
           let dica = (k==="atividades" && (c[0]==="cliente"||c[0]==="resumo"||c[0]==="tipo")) ? ' title="'+esc(String(r[c[0]]||""))+'"' : "";
-          let extra = alertaEst;
+          let extra = alertaEst + ((k==="perfil_carteira" && PERFIL_CAMPOS.has(c[0])) ? " pf-wrap"+(_pfVazio ? " pf-vazio-td" : "") : "");
           if(c[0]==="ciclo_dias") dica = ' title="'+(Number(r.ciclo_dias) > 0 ? "Ritmo HISTÓRICO do cliente: mediana dos intervalos entre as últimas compras (sem pedidos complementares/troca). Não quer dizer que ele esteja comprando assim agora." : "Ainda sem ritmo: poucas compras, ou intervalos muito irregulares entre elas")+'"';
           if(c[0]==="proxima_compra"){
             dica = ' title="PREVISÃO: data do último pedido + o ritmo de compra do cliente. Em vermelho = a previsão já passou."';
@@ -1438,7 +1477,7 @@ function syncPrintPageStyle(){
   const el = $("#print-page-style");
   // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
   // listas largas (11 a 13 colunas) impressas sozinhas saem em paisagem; o resto continua em retrato
-  const PAISAGEM = ["lista-alvos","lista-contato_preventivo","lista-recuperacao","lista-em_formacao","lista-conversa_zap","lista-sem_movimentacao","lista-inativos"];
+  const PAISAGEM = ["lista-alvos","lista-contato_preventivo","lista-recuperacao","lista-em_formacao","lista-conversa_zap","lista-sem_movimentacao","lista-inativos","lista-perfil_carteira"];
   const paisagem = alvosImpressao.some(id => PAISAGEM.includes(id));
   if(el) el.textContent = '@media print{ '+(paisagem ? '@page{ size:A4 landscape; } ' : '')+'@page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
 }
@@ -1477,8 +1516,12 @@ document.addEventListener("click", e => {
   const b = e.target.closest("button[data-print]");
   if(b){ e.stopPropagation(); imprimirCard(b.dataset.print); }
 }, true);
-function setEmpresa(v){
-  empresa = v || "";
+// v41: botão "🧠 Perfil da carteira" (no título da Carteira ativa) leva até a lista do perfil
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-vai]");
+  if(b){ const el = document.getElementById(b.dataset.vai); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
+});
+function setEmpresa(v){  empresa = v || "";
   try { localStorage.setItem("pv_empresa", empresa); } catch(e){}
   applyEmpresaUI();
   load();
