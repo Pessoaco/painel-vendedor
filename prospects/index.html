@@ -438,7 +438,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v29 (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v30 (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -471,7 +471,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v29</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v30</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -642,7 +642,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v29 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v30 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -741,7 +741,7 @@ function setStatus(state, text){
   sb.classList.remove("stale","err");
   if(state) sb.classList.add(state);
   // enquanto recarrega (ex.: trocou Total/BNZ/CIAPLAC) o resultado da busca fica apagado, pra não parecer atual
-  $("#busca-resultado")?.classList.toggle("atualizando", String(text).startsWith("atualizando"));
+  $("#busca-resultado")?.classList.toggle("atualizando", trocandoEmpresa && String(text).startsWith("atualizando"));
   $("#status-text").textContent = text;
 }
 
@@ -1491,6 +1491,7 @@ function setEmpresa(v){
   empresa = v || "";
   try { localStorage.setItem("pp_empresa", empresa); } catch(e){}
   applyEmpresaUI();
+  trocandoEmpresa = true;
   load();
 }
 
@@ -1513,7 +1514,18 @@ function logout(){
   showLogin("");
 }
 
-async function load(){
+// v30: a busca automática não pode atrapalhar. "silencioso" = não escurece, não mexe na rolagem; quem manda buscar de verdade é Atualizar ou a troca de empresa
+let trocandoEmpresa = false, carregando = false, ultimaCarga = 0, cargaN = 0;
+const VOLTOU_MIN = 2;   // ao voltar para a aba, só busca de novo se os dados têm mais de 2 min
+function buscaAutomatica(minutos){
+  if(imprimindo || !creds || !creds.user || carregando) return;
+  if(document.querySelector("dialog[open]")) return;
+  if(Date.now() - ultimaCarga < minutos*60000) return;
+  load(true);
+}
+async function load(opcao){
+  const silencioso = opcao === true;
+  const meu = ++cargaN;
   if(WEBHOOK_URL.startsWith("COLE_AQUI")){
     setStatus("stale","DEMONSTRAÇÃO — configure WEBHOOK_URL no arquivo pra ligar no Odoo");
     fill(DEMO); $("#loading").hidden = true; $("#content").hidden = false; return;
@@ -1523,6 +1535,7 @@ async function load(){
   if($("#content").hidden){ $("#loading").hidden = false; $("#loading").textContent = "carregando o painel… (pode levar até 30s)"; }
   const ctrl = new AbortController();
   const to = setTimeout(()=>ctrl.abort(), 45000);
+  carregando = true;
   try{
     setStatus(null,"atualizando…");
     let url = WEBHOOK_URL + (WEBHOOK_URL.includes("?") ? "&" : "?")
@@ -1533,19 +1546,26 @@ async function load(){
     if(r.status === 401 || r.status === 403){ logout(); showLogin("Usuário ou senha errado."); return; }
     if(!r.ok) throw new Error("HTTP "+r.status);
     const data = await r.json();
+    if(meu !== cargaN) return;   // chegou resposta de uma busca antiga (ex.: trocou de empresa no meio)
     if(data && data.erro){ logout(); showLogin("Usuário ou senha errado."); return; }
     // mostra o painel PRIMEIRO — se fill() quebrar, pelo menos aparece
     $("#login").hidden = true;
     $("#loading").hidden = true;
     $("#content").hidden = false;
+    const rolagem = window.scrollY;
     try { fill(data); }
     catch(e){ setStatus("err","erro ao desenhar: " + (e && e.message || e)); }
+    if(silencioso) window.scrollTo(0, rolagem);
+    ultimaCarga = Date.now();
+    trocandoEmpresa = false;
     const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
     // data e empresa já aparecem ao lado (selo + data do cabeçalho): aqui só a hora da atualização
     const hora = new Date(data.atualizado_em||Date.now()).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
     setStatus(age>20 ? "stale" : null, "ao vivo · " + hora);
   }catch(err){
     clearTimeout(to);
+    if(meu !== cargaN) return;
+    trocandoEmpresa = false;
     const demorou = err.name === "AbortError";
     // fetch() sozinho (sem resposta nenhuma do servidor) lança TypeError quando não tem internet,
     // DNS falha, etc — diferente de um erro HTTP (que já tem resposta e cai no throw lá em cima.
@@ -1561,7 +1581,9 @@ async function load(){
       return;
     }
     setStatus("err", semNet ? "📡 sem internet — este painel é só online" : servidorOff ? "⚠️ servidor não respondeu — tentando de novo em 1 min" : "erro ao atualizar — tentando de novo em 1 min");
-    setTimeout(load, 60000);
+    setTimeout(()=>load(true), 60000);
+  }finally{
+    if(meu === cargaN) carregando = false;
   }
 }
 
@@ -1609,8 +1631,8 @@ $("#seg").addEventListener("click", e => { const b = e.target.closest("button[da
 applyEmpresaUI();
 
 if(creds && creds.user){ load(); } else { showLogin(); }
-setInterval(()=>{ if(!imprimindo && creds && creds.user) load(); }, REFRESH_MIN*60000);
-document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && !imprimindo && creds && creds.user) load(); });
+setInterval(()=>buscaAutomatica(0), REFRESH_MIN*60000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) buscaAutomatica(VOLTOU_MIN); });
 </script>
 <!-- botao "Compartilhar link" (IALINK, igual em todos os paineis) -->
 <script src="https://pessoaco.github.io/Kpis/link/compartilhar.js?v=1"></script>
