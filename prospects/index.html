@@ -196,6 +196,16 @@
   table.lc td:first-child{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   table.lc th:first-child{max-width:160px}
   table.lc .col-marc{white-space:normal;max-width:190px;line-height:1.3}
+  /* v27: Perfil dos prospects - etiquetas nunca cortadas; vazio = ⬜ com fundo suave */
+  .pf-resumo{padding:7px 12px;font-size:.74rem;color:var(--ink-soft);border-top:1px solid var(--hair);background:var(--surface)}
+  .pf-resumo b{color:var(--ink)}
+  .t-perfil_prospects td{vertical-align:top}
+  table.lc td.pf-wrap{white-space:normal;min-width:84px;max-width:230px;line-height:1.4;overflow:visible;text-overflow:clip}
+  table.lc td.pf-vazio-td{background:var(--amber-bg);text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pf-vazio{opacity:.75}
+  .pf-chip{display:inline-block;margin:1px 3px 1px 0;padding:1px 8px;border-radius:10px;border:1px solid var(--blue-edge);background:var(--blue-bg);color:var(--blue-ink);font-size:.68rem;line-height:1.35;white-space:normal;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pf-n{font-variant-numeric:tabular-nums}
+  .pf-n.ok{color:var(--green-ink)} .pf-n.meio{color:var(--amber-ink)} .pf-n.baixo{color:var(--clay-ink)}
   .lc-empty{padding:10px 12px;font-size:.75rem;color:var(--ink-faint)}
   table.lc a.wa{color:#1fa855;display:inline-flex}
   table.lc a.wa .ico{width:17px;height:17px}
@@ -428,7 +438,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v26 (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v28 (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -461,7 +471,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v26</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v28</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -517,6 +527,10 @@
         </span>
         <div class="regiao-link" data-goto="por_regiao">
           <span class="sub">Prospects por região · por estágio</span>
+          <span class="lnk">↗ abrir lista</span>
+        </div>
+        <div class="regiao-link" data-goto="perfil_prospects">
+          <span class="sub">🧠 Perfil · o que falta na ficha</span>
           <span class="lnk">↗ abrir lista</span>
         </div>
       </div>
@@ -628,7 +642,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v26 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v28 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -683,6 +697,7 @@ const LINK_CLIENTES = "../";  // Copiloto de Vendas (clientes) — esta página 
 const LISTAS = [
   {k:"atividades",          titulo:"Check-list de Atividades — prospects",                                   cor:"amber"},
   {k:"leads_qualificados",  titulo:"Leads Qualificados (coluna LEAD do funil)",                             cor:"amber"},
+  {k:"perfil_prospects",    titulo:"🧠 Perfil dos prospects · o que falta preencher na ficha do CRM",        cor:"purple"},
   {k:"pediram_cotacao",     titulo:"Pediram cotação (marcador COTAÇÃO)",                                     cor:"green"},
   {k:"cotacao_sem_passo",   titulo:"Radar · Pediram cotação e estão sem próximo passo",                      cor:"clay"},
   {k:"novos_mes",           titulo:"Novos este mês — fazer o 1º contato",                                    cor:"amber"},
@@ -705,6 +720,10 @@ const COLS = {
   por_regiao: [["regiao","Região"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]],
   por_estagio:[["estagio","Estágio"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]]
 };
+// v27: mesma ficha de compra do Copiloto de Vendas (mesma ordem da tela do CRM); o que estiver em branco aparece com ⬜
+COLS.perfil_prospects = [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ficha","Ficha Cadastral"],["perfil","Perfil do Cliente"],["potencial","Potencial e Relacionamento"],["materiais","Material"],["volume_kg","Volume por compra (kg)"],["recompra_dias","Frequência - Recompra a cada (dias)"],["ritmo_dias","Ritmo de Contato (dias)"],["preco_conco","Último preço conco"],["comprou_de","Comprou por último de"],["condicao_pagto","Condição de pagto q faz"],["preenchidos","Preenchido"]];
+const PERFIL_CAMPOS = new Set(["comprou_de","perfil","materiais","volume_kg","recompra_dias","preco_conco","condicao_pagto","ritmo_dias","potencial"]);
+const perfilVazio = x => Array.isArray(x) ? x.length === 0 : (typeof x === "number" ? !(x > 0) : !String(x == null ? "" : x).trim());
 // listas de prospect (uma linha = uma oportunidade) ganham o botão "＋ Agendar"
 const LISTAS_RESUMO = new Set(["por_regiao","por_estagio","atividades"]);
 
@@ -801,10 +820,16 @@ const temCot = r => /\bCOT(AÇÃO|ACAO)?\b/i.test(r.marcadores || "");
 // v26: filtro de contato. Soma com o de região. Linha de atividade não traz Zap nem datas: usa as do prospect dela
 let contatoSel = "";
 let cartPorLead = {};
+let fichaPorLead = {};   // v28: Ficha Cadastral do card, vem na lista do Perfil
+const fichaAprovada = f => /^aprovad/i.test(f || "");
+const fichaEmAnalise = f => /nos enviou|recebida|f.brica/i.test(f || "");
+const corFicha = f => /restri|vista/i.test(f || "") ? "meio" : (fichaAprovada(f) ? "ok" : (/reprovad/i.test(f || "") ? "baixo" : ""));
 const DIAS_SEM_CONTATO = 20;
 const FILTROS_CONTATO = {
   sem_conversa: { rotulo: "Tem Zap e sem conversa", bate: c => !!c.zap && !c.ultima_conversa_zap },
-  mais_20: { rotulo: "Mais de " + DIAS_SEM_CONTATO + " dias sem contato", bate: c => (c.dias_sem_contato ?? -1) > DIAS_SEM_CONTATO }
+  mais_20: { rotulo: "Mais de " + DIAS_SEM_CONTATO + " dias sem contato", bate: c => (c.dias_sem_contato ?? -1) > DIAS_SEM_CONTATO },
+  ficha_aprovada: { rotulo: "Ficha aprovada", bate: c => fichaAprovada(fichaPorLead[c.lead]) },
+  ficha_analise: { rotulo: "Ficha em análise", bate: c => fichaEmAnalise(fichaPorLead[c.lead]) }
 };
 const bateContato = r => !contatoSel || FILTROS_CONTATO[contatoSel].bate(cartPorLead[r.lead] || r);
 function montaOpcoesContato(listas){
@@ -821,6 +846,7 @@ function listasFiltradas(listas){
   (listas.carteira || []).forEach(r => { const d = dddDoZap(r.zap); if(d) dddPorLead[r.lead] = d; });
   zapPorLead = {}; (listas.carteira || []).forEach(r => { if(r.zap) zapPorLead[r.lead] = r.zap; });
   cartPorLead = {}; (listas.carteira || []).forEach(r => { cartPorLead[r.lead] = r; });
+  fichaPorLead = {}; (listas.perfil_prospects || []).forEach(r => { if(r.ficha) fichaPorLead[r.lead] = r.ficha; });
   if(!regioesSel.size && !contatoSel) return listas;
   const out = {};
   for(const k of Object.keys(listas)){
@@ -837,7 +863,7 @@ let LISTAS_BRUTAS = {};   // como vieram do n8n
 const sortState = {};
 const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
 let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
-const NUM_COLS_COPILOTO = new Set(["dias_sem_contato","prospects","com_zap","cotacao"]);
+const NUM_COLS_COPILOTO = new Set(["dias_sem_contato","prospects","com_zap","cotacao","volume_kg","recompra_dias","ritmo_dias","preco_conco","preenchidos"]);
 function ordenarLinhasCopiloto(rows, col, dir){
   return [...rows].sort((a,b) => {
     if(NUM_COLS_COPILOTO.has(col)){
@@ -948,6 +974,18 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
       (pre === "lista-" && rows.length ? '<button class="btn-print no-print" data-print="'+pre+k+'" title="Imprimir só esta lista">🖨 Imprimir esta lista</button>' : '')+
       '<span class="n">'+rows.length+'</span></span>';
     card.appendChild(h);
+    if(k==="perfil_prospects" && sortavel){
+      const bar = document.createElement("div"); bar.className = "pf-resumo";
+      const dados = ULTIMA_DATA || {};
+      if(dados.perfil_ok === false) bar.innerHTML = "⚠ Não consegui ler a ficha de compra do CRM agora. Atualize a tela em instantes.";
+      else if(dados.perfil_ok === undefined) bar.innerHTML = "⚠ Falta publicar o fluxo do n8n v8 para esta lista aparecer.";
+      else if(rows.length){
+        const campos = COLS.perfil_prospects.filter(c => PERFIL_CAMPOS.has(c[0]));
+        const falta = campos.map(c => [c[1], rows.filter(r => perfilVazio(r[c[0]])).length]).filter(x => x[1]).sort((a,b) => b[1]-a[1]).map(x => x[0]+" ("+x[1]+")").join(" · ");
+        bar.innerHTML = "<b>"+rows.filter(r => r.preenchidos >= 9).length+" de "+rows.length+"</b> prospects com a ficha completa. Conversas mais recentes primeiro. <span>Em branco: "+(falta || "nada")+"</span> · <b>Fichas:</b> "+rows.filter(r => fichaAprovada(r.ficha)).length+" aprovadas, "+rows.filter(r => fichaEmAnalise(r.ficha)).length+" em análise, "+rows.filter(r => !r.ficha).length+" sem ficha.";
+      }
+      if(bar.innerHTML) card.appendChild(bar);
+    }
     if(comAcoes && sortavel){
       const bar = document.createElement("div"); bar.className = "lc-bar no-print";
       bar.innerHTML = '<span>Selecionadas: <b id="sel-n">'+selAtiv.size+'</b></span>'+
@@ -1013,11 +1051,27 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           if(c[0]==="fantasia"){ const k2 = v.indexOf(' <'); const txt = k2 >= 0 ? v.slice(0, k2) : v; const ics = k2 >= 0 ? v.slice(k2) : ""; v = '<span class="fant-wrap"><span class="fant-txt" title="'+txt+'">'+txt+'</span>'+(ics ? '<span class="fant-ic">'+ics+'</span>' : '')+'</span>'; }
           if(c[0]==="cliente" && r.lead) v ='<button type="button" class="btn-ficha no-print" data-lead="'+r.lead+'" data-cliente="'+esc(String(r.cliente||""))+'" data-empresa="'+esc(String(r.empresa||""))+'" title="Ver as anotações e o histórico deste prospect">📋</button>' + v;
           if(c[0]==="regiao" && k==="por_regiao") v = '<a href="#lista-'+slugRegiao(r.regiao||"")+'" class="lnk-reg" data-goto="'+slugRegiao(r.regiao||"")+'">'+(v || "(sem região)")+'</a>';
+          let extraPf = "";
+          if(k==="perfil_prospects" && PERFIL_CAMPOS.has(c[0])){
+            const x = r[c[0]], vazio = perfilVazio(x);
+            extraPf = " pf-wrap" + (vazio ? " pf-vazio-td" : "");
+            if(vazio) v = '<span class="pf-vazio" title="falta preencher">⬜</span>';
+            else if(Array.isArray(x)) v = x.map(i => '<span class="pf-chip">'+esc(i)+'</span>').join(" ");
+            else if(c[0]==="volume_kg") v = fmtInt(x)+" kg";
+            else if(c[0]==="recompra_dias" || c[0]==="ritmo_dias") v = x+" dias";
+            else if(c[0]==="preco_conco") v = "R$ "+Number(x).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+            else v = esc(x);
+          }
+          if(k==="perfil_prospects" && c[0]==="ficha"){
+            extraPf = " pf-wrap" + (r.ficha ? "" : " pf-vazio-td");
+            v = r.ficha ? '<b class="pf-n '+corFicha(r.ficha)+'">'+esc(r.ficha)+'</b>' : '<span class="pf-vazio" title="ainda sem ficha">⬜</span>';
+          }
+          if(k==="perfil_prospects" && c[0]==="preenchidos") v = '<b class="pf-n '+(r.preenchidos >= 9 ? "ok" : (r.preenchidos <= 3 ? "baixo" : "meio"))+'">'+(r.preenchidos||0)+'/9</b>';
           if(c[0]==="_sel") v = r.id ? '<input type="checkbox" class="sel-ativ" data-id="'+r.id+'"'+(selAtiv.has(String(r.id))?" checked":"")+'>' : "";
           if(c[0]==="_acoes") v = r.id
             ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'">✎ Editar</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'">✕ Cancelar</button>'
             : "";
-          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+"\">"+v+"</td>";
+          return "<td class=\"c-"+c[0]+(c[0]==="marcadores"?" col-marc":"")+extraPf+"\">"+v+"</td>";
         }).join("")+"</tr>";
       }
       if(k==="por_regiao" || k==="por_estagio"){
@@ -1048,7 +1102,7 @@ function renderBusca(){
   const casa = r => { const alvo = semAcento((r.cliente||"")+" "+(r.fantasia||"")); const fone = foneDaLinha(r); return termos.some(t => alvo.includes(t) || (ehTelefone(t) && fone.includes(digitos(t).slice(-8)))); };
   const achados = [];
   for(const {k,titulo,cor} of LISTAS){
-    if(k==="por_regiao" || k==="por_estagio") continue;
+    if(k==="por_regiao" || k==="por_estagio" || k==="perfil_prospects") continue;
     const rows = (ULTIMA_LISTAS[k]||[]).filter(casa);
     if(rows.length) achados.push({k,titulo,cor,rows});
   }
@@ -1112,9 +1166,10 @@ let ULTIMA_FICHA = null;    // pra recarregar a ficha depois de concluir/editar/
 // v19: "🧠 Resumo" no topo da ficha — os campos de inteligência do card (com quem compra, preço, material, volume, recompra,
 // pagamento, perfil, estratégia…) + a última compra. Vem do fluxo de Ações v6 (ficha_ler devolve leads[].intel).
 const fmtR = v => Number(v).toLocaleString("pt-BR", {style:"currency", currency:"BRL", minimumFractionDigits:2, maximumFractionDigits:2});
-function resumoFichaHTML(x){
+function resumoFichaHTML(x, lead){
   if(!x) return "";
   const linhas = [
+    ["Ficha Cadastral", fichaPorLead[lead] || ""],
     ["Última compra", x.ultima_compra ? fmtDateBR(x.ultima_compra.data) + " · " + fmtR(x.ultima_compra.valor) + " · " + x.ultima_compra.pedido : ""],
     ["Comprou por último de", x.comprou_de],
     ["Último preço do concorrente", x.preco_conco ? fmtR(x.preco_conco) : ""],
@@ -1152,7 +1207,7 @@ async function abrirFicha(lead, cliente, emp){
   let h = '<div class="fi-cards">' + cards.map(c => esc(c.nome)+' <span class="fi-tag">'+esc(c.empresa)+'</span> <span class="fi-tag">'+esc(c.estagio)+'</span>').join(" &nbsp;·&nbsp; ") + '</div>';
   // resumo do card aberto (ou do 1º, quando a ficha foi aberta pelo nome)
   const cardResumo = cards.find(c => String(c.id) === String(lead)) || cards[0];
-  h += resumoFichaHTML(cardResumo && cardResumo.intel);
+  h += resumoFichaHTML(cardResumo && cardResumo.intel, cardResumo && cardResumo.id);
   h += '<p class="band-label">Atividades abertas</p>';
   // cada atividade aberta tem os mesmos botões do Check-list (✔ Feito / ✎ editar-reprogramar / ✕ cancelar)
   (r.abertas || []).forEach(a => { if(a.id) FICHA_ATIV[String(a.id)] = { id: a.id, lead: a.lead || lead, tipo_id: a.tipo_id, cliente: nomeLimpo, empresa: emp, tipo: a.tipo, resumo: a.resumo, vencimento: a.vencimento }; });
