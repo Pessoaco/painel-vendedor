@@ -348,7 +348,8 @@
   #lista-por_regiao table.lc{width:100%}
   table.lc tr.tot td{font-weight:700;color:var(--ink);border-top:2px solid var(--slate-edge)}
   table.lc td.c-fantasia{max-width:none;white-space:nowrap}
-  .fant-wrap{display:flex;align-items:center;gap:4px;max-width:230px}
+  .fant-wrap{display:flex;align-items:center;gap:4px;max-width:290px}
+  a.rede{display:inline-flex;align-items:center;font-size:.72rem;font-weight:700;text-decoration:none;white-space:nowrap}
   .fant-txt{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .fant-ic{flex:none;display:inline-flex;align-items:center;gap:4px}
   .legenda{display:block;margin-top:6px;font-size:.68rem;color:var(--ink-faint);font-style:normal;line-height:1.4}
@@ -438,7 +439,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v30 (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v32 (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -471,7 +472,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v30</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v32</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -642,7 +643,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v30 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v32 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -725,6 +726,12 @@ COLS.perfil_prospects = [["cliente","Prospect"],["fantasia","Nome Fantasia"],["z
 const PERFIL_CAMPOS = new Set(["comprou_de","perfil","materiais","volume_kg","recompra_dias","preco_conco","condicao_pagto","ritmo_dias","potencial"]);
 const perfilVazio = x => Array.isArray(x) ? x.length === 0 : (typeof x === "number" ? !(x > 0) : !String(x == null ? "" : x).trim());
 // listas de prospect (uma linha = uma oportunidade) ganham o botão "＋ Agendar"
+// v31: letra T = TikTok, f = Facebook. Sozinha e colorida = já gravada no Contato; com 🔍 = procurar
+const REDES = [
+  {campo:"tiktok", nome:"TikTok", letra:"T", site:"tiktok.com", cor:"#111", base:"https://www.tiktok.com/@"},
+  {campo:"facebook", nome:"Facebook", letra:"f", site:"facebook.com", cor:"#1877f2", base:"https://www.facebook.com/"}
+];
+const linkRede = (rd, h) => /^https?:\/\//i.test(h) ? h : (/^(www\.)?[a-z]+\.com\//i.test(h) ? "https://" + h : rd.base + encodeURIComponent(h.replace(/^@/, "")));
 const LISTAS_RESUMO = new Set(["por_regiao","por_estagio","atividades"]);
 
 /* ---- helpers ---- */
@@ -1040,8 +1047,16 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           }
           // v17: botão @ -> cola o @ (ou o link) achado pela lupa e grava no Contato do Odoo
           if(c[0]==="fantasia" && r.lead){
-            v += ' <button type="button" class="btn-ig no-print" data-ig-lead="'+r.lead+'" data-ig="'+esc(r.instagram || "")+'" data-ig-nome="'+esc(String(r.fantasia || r.cliente || ""))+'" title="'+(r.instagram ? "trocar ou apagar o @ do Instagram" : "colar o @ do Instagram achado na lupa e gravar no Odoo")+'" style="border:1px solid var(--hair);background:transparent;border-radius:999px;padding:0 6px;font-size:.72rem;font-weight:700;color:#c13584;cursor:pointer;line-height:1.4">@</button>';
+            v += ' <button type="button" class="btn-ig no-print" data-ig-lead="'+r.lead+'" data-ig="'+esc(r.instagram || "")+'" data-ig-nome="'+esc(String(r.fantasia || r.cliente || ""))+'" title="'+(r.instagram ? "trocar ou apagar o @ do Instagram" : "colar o link do Instagram, TikTok ou Facebook e gravar no Odoo")+'" style="border:1px solid var(--hair);background:transparent;border-radius:999px;padding:0 6px;font-size:.72rem;font-weight:700;color:#c13584;cursor:pointer;line-height:1.4">@</button>';
           }
+          // v31: TikTok e Facebook. Gravado no Contato abre direto; sem gravar, a lupa procura no Google (nome fantasia + cidade)
+          if(c[0]==="fantasia" && (r.fantasia || r.cliente)) REDES.forEach(rd => {
+            const h = String(r[rd.campo] || "").trim();
+            const q = "site:" + rd.site + ' "' + String(r.fantasia || r.cliente).trim() + '" ' + String(r.cidade || "").trim();
+            v += h
+              ? ' <a class="rede no-print" href="' + esc(linkRede(rd, h)) + '" target="_blank" rel="noopener" title="abrir o ' + rd.nome + '" style="color:' + rd.cor + '">' + rd.letra + '</a>'
+              : ' <a class="rede no-print" href="https://www.google.com/search?q=' + encodeURIComponent(q) + '" target="_blank" rel="noopener" title="procurar o ' + rd.nome + ' desta loja">🔍' + rd.letra + '</a>';
+          });
           // v18: alfinete do Google Maps -> procura a loja pelo nome + rua + cidade (abre a ficha com fotos da fachada e o botão Rotas)
           if(c[0]==="fantasia" && (r.fantasia || r.cliente)){
             const qm = [String(r.fantasia || r.cliente).replace(/ - (BB|BNZ METAIS|CIAPLAC)$/i, "").trim(), r.endereco, r.cidade, r.uf].filter(x => x && String(x).trim()).join(", ");
@@ -1241,8 +1256,11 @@ $("#dlg-ficha").addEventListener("click", async e => {
 /* v17: botão @ — grava o Instagram da loja no Contato do Odoo (fluxo de Ações v5, acao=ficha_instagram); vazio apaga */
 async function gravarInstagram(bt){
   const lead = Number(bt.dataset.igLead); const atual = bt.dataset.ig || "";
-  const txt = prompt("Instagram de " + (bt.dataset.igNome || "esta loja") + "\nCole o @ ou o link do perfil (deixe vazio para apagar):", atual ? "@" + atual : "");
+  const txt = prompt("Redes sociais de " + (bt.dataset.igNome || "esta loja") + "\nCole o link do Instagram, TikTok ou Facebook. Cada um vai para o seu campo.\n@nome sozinho vai para o Instagram. Vazio apaga o Instagram:", atual ? "@" + atual : "");
   if(txt === null) return;
+  // v32: link de TikTok ou Facebook vai para o campo da rede (fluxo de Ações v8, acao=ficha_rede)
+  const rede = /tiktok\.com/i.test(txt) ? "tiktok" : (/(facebook\.com|fb\.com|fb\.me)/i.test(txt) ? "facebook" : "");
+  if(rede){ gravarRede(bt, lead, rede, txt); return; }
   const ig = txt.trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i, "").replace(/^@/, "").replace(/[\/?#].*$/, "").toLowerCase();
   if(ig === atual) return;
   if(ig && !/^[a-z0-9._]{1,30}$/.test(ig)){ toast("Esse @ não parece um Instagram (só letras, números, ponto e _).", true); return; }
@@ -1260,6 +1278,25 @@ async function gravarInstagram(bt){
   }));
   renderListas(LISTAS_BRUTAS);
   toast(r.instagram ? "Instagram @" + r.instagram + " gravado no Odoo ✔" : "Instagram apagado do contato");
+}
+async function gravarRede(bt, lead, rede, txt){
+  const nome = rede === "tiktok" ? "TikTok" : "Facebook";
+  let valor = txt.trim();
+  if(!/^https?:\/\//i.test(valor)) valor = "https://" + valor.replace(/^\/+/, "");
+  if(rede === "tiktok") valor = valor.replace(/[?#].*$/, "");
+  bt.disabled = true; bt.textContent = "…";
+  const r = await chamarFicha({acao:"rede", lead, rede, valor});
+  bt.disabled = false; bt.textContent = "@";
+  // fluxo de Ações antigo não conhece "rede": cai na leitura da ficha e volta sem o campo
+  if(r && r.ok && !("valor" in r)){ toast("Falta atualizar o fluxo “Copiloto de Vendas - Ações” para a v8 no n8n.", true); return; }
+  if(!r || !r.ok){ toast((r && r.erro) || "Não consegui gravar.", true); return; }
+  const base = Object.values(LISTAS_BRUTAS).flat().find(x => x && String(x.lead) === String(lead));
+  const parc = base && base.parceiro;
+  Object.values(LISTAS_BRUTAS).forEach(lst => Array.isArray(lst) && lst.forEach(x => {
+    if(x && (String(x.lead) === String(lead) || (parc && String(x.parceiro) === String(parc)))) x[rede] = r.valor;
+  }));
+  renderListas(LISTAS_BRUTAS);
+  toast(nome + " gravado no Odoo ✔");
 }
 const atividadePorId = id => (ULTIMA_LISTAS.atividades || []).find(a => String(a.id) === String(id)) || FICHA_ATIV[String(id)];
 function atualizaSel(){ $$("#sel-n").forEach(n => n.textContent = selAtiv.size); }
