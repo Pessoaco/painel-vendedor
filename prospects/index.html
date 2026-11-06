@@ -182,12 +182,12 @@
   /* v15: no computador, o título da lista e o cabeçalho das colunas ficam congelados no topo enquanto rola (igual Excel).
      overflow:clip no lugar de hidden/auto, senão o sticky gruda na caixa da lista e não na tela */
   @media screen and (min-width:821px){
-    .listcard{overflow:clip}
+    .listcard{overflow:clip;width:fit-content;min-width:100%;box-sizing:border-box}   /* v34: coluna alargada aumenta a caixa e a página rola para o lado */
     .lc-wrap{overflow:visible}
     .lc-h{position:sticky;top:0;z-index:3;height:40px;box-sizing:border-box}
     table.lc th{top:40px;z-index:2;box-shadow:0 1px 0 var(--hair)}
   }
-  table.lc th{position:relative}
+  @media screen{ body.sem-placar .placar-bloco{display:none} }
   .col-solta{position:absolute;top:0;right:0;bottom:0;width:8px;cursor:col-resize;touch-action:none;border-right:2px solid transparent}
   .col-solta:hover,.col-solta.ativa{border-right-color:var(--blue-edge)}
   table.lc th.sortable{cursor:pointer;user-select:none}
@@ -442,7 +442,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v33 (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v34 (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -475,7 +475,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v33</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v34</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -502,7 +502,8 @@
       <option value="">💬 Todos os contatos</option>
     </select>
     <div class="busca-grupo no-print"><input type="search" id="busca-cliente" class="busca-cliente no-print" placeholder="🔎 Nome ou telefone… (vírgula p/ vários)" autocomplete="off">
-    <button class="btn no-print" id="busca-tira-filtro" style="display:none" title="Tira o filtro de região e procura em todas, sem apagar o nome digitado">✕ limpar filtro</button></div>
+    <button class="btn no-print" id="busca-tira-filtro" style="display:none" title="Tira o filtro de região e procura em todas, sem apagar o nome digitado">✕ limpar filtro</button>
+    <button class="btn no-print" id="btn-placar" title="Esconde os cards de cima e vai direto para a lista. Fica lembrado neste navegador">🙈 Ocultar placar</button></div>
   </div>
 
   <div id="content" hidden>
@@ -511,6 +512,7 @@
     <div id="filtro-aviso" class="filtro-aviso" hidden></div>
     <section id="busca-resultado" class="busca-resultado" hidden></section>
 
+    <div class="placar-bloco"><!-- v34: tudo daqui até as listas some com "Ocultar placar" (na impressão continua saindo) -->
     <div class="hero">
       <div class="hero-main amber" data-goto="leads_qualificados" style="cursor:pointer">
         <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
@@ -640,13 +642,14 @@
         </div>
       </div>
     </section>
+    </div><!-- /placar-bloco -->
 
     <section id="listas">
       <p class="band-label">Minha Carteira de Prospects — listas dos números acima</p>
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v33 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v34 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -912,6 +915,7 @@ function renderListas(listas){
   LISTAS_BRUTAS = listas;
   const L = listasFiltradas(listas);
   ULTIMA_LISTAS = L;
+  guardaFiltros();
   montaOpcoesContato(listas);
   // números de cima saem das próprias listas: assim batem com a região escolhida
   const n = k => (L[k] || []).length;
@@ -1623,7 +1627,9 @@ async function load(opcao){
     const rolagem = window.scrollY;
     try { fill(data); }
     catch(e){ setStatus("err","erro ao desenhar: " + (e && e.message || e)); }
-    if(silencioso) window.scrollTo(0, rolagem);
+    // v34: atualizou? fica onde estava. posSalva = o Chrome recarregou a aba enquanto ela estava em outra tela
+    const volta = posSalva || rolagem, voltaX = window.scrollX; posSalva = 0;
+    if(!trocandoEmpresa) window.scrollTo(voltaX, volta);
     ultimaCarga = Date.now();
     trocandoEmpresa = false;
     const age = (Date.now() - new Date(data.atualizado_em||Date.now()).getTime())/60000;
@@ -1674,6 +1680,7 @@ $("#filtro-regiao").addEventListener("change", e => {
   selAtiv.clear();
   montaOpcoesRegiao(LISTAS_BRUTAS);
   renderListas(LISTAS_BRUTAS);
+  if(semPlacar) irParaLista();
 });
 document.addEventListener("click", e => {
   const tira = e.target.closest("button[data-tira-reg]");
@@ -1691,12 +1698,47 @@ $("#filtro-contato").addEventListener("change", e => {
   contatoSel = e.target.value || "";
   selAtiv.clear();
   renderListas(LISTAS_BRUTAS);
+  if(semPlacar) irParaLista();
+});
+$("#btn-placar").addEventListener("click", () => {
+  semPlacar = !semPlacar;
+  try { localStorage.setItem("pp_sem_placar", semPlacar ? "1" : "0"); } catch(e){}
+  aplicaPlacar();
+  if(semPlacar) irParaLista(); else window.scrollTo(0, 0);
 });
 $("#busca-cliente").addEventListener("input", e => { buscaCliente = e.target.value; renderBusca(); });
 $("#btn-refresh").addEventListener("click", load);
 $("#btn-logout").addEventListener("click", logout);
 $("#seg").addEventListener("click", e => { const b = e.target.closest("button[data-emp]"); if(b) setEmpresa(b.dataset.emp); });
 applyEmpresaUI();
+
+/* v34: "Ocultar placar" fica lembrado no navegador. Filtro e posição da tela ficam guardados só nesta aba:
+   se o Chrome recarregar a aba enquanto ela está em outra tela, volta igual. Fechou a aba, abre limpo (regra da região) */
+function guardaFiltros(){
+  try { sessionStorage.setItem("pp_filtros", JSON.stringify({regioes:[...regioesSel], contato:contatoSel})); } catch(e){}
+}
+function aplicaPlacar(){
+  document.body.classList.toggle("sem-placar", semPlacar);
+  $("#btn-placar").textContent = semPlacar ? "👁 Mostrar placar" : "🙈 Ocultar placar";
+}
+function irParaLista(){
+  const L = ULTIMA_LISTAS || {};
+  const k = LISTAS.map(l => l.k).find(k => k !== "atividades" && (L[k] || []).length);
+  const el = (k && $("#lista-"+k)) || $("#listas");
+  if(el) el.scrollIntoView({block:"start"});
+}
+var semPlacar = false, posSalva = 0;
+try { semPlacar = localStorage.getItem("pp_sem_placar") === "1"; } catch(e){}
+try {
+  const f = JSON.parse(sessionStorage.getItem("pp_filtros") || "null");
+  if(f){ (f.regioes || []).forEach(r => regioesSel.add(r)); contatoSel = f.contato || ""; atualizaTextoRegioes(); }
+  posSalva = Number(sessionStorage.getItem("pp_rolagem")) || 0;
+} catch(e){}
+try { history.scrollRestoration = "manual"; } catch(e){}
+const guardaRolagem = () => { try { sessionStorage.setItem("pp_rolagem", String(window.scrollY)); } catch(e){} };
+window.addEventListener("pagehide", guardaRolagem);
+document.addEventListener("visibilitychange", () => { if(document.hidden) guardaRolagem(); });
+aplicaPlacar();
 
 if(creds && creds.user){ load(); } else { showLogin(); }
 setInterval(()=>buscaAutomatica(0), REFRESH_MIN*60000);
