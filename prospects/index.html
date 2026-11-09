@@ -83,7 +83,7 @@
   .chip-co.ciaplac{background:var(--ciaplac-bg);color:var(--ciaplac-ink);border-color:var(--ciaplac-edge)}
   .chip-co.bb{background:var(--bb-bg);color:var(--bb-ink);border-color:var(--bb-edge)}
 
-  .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:8px}
+  .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px 10px;margin-top:8px}   /* v36: filtros em sequência, limpar logo depois */
   .seg{display:inline-flex;border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:var(--surface)}
   .seg button{font:inherit;font-family:"Archivo",sans-serif;font-weight:600;font-size:.76rem;padding:6px 14px;border:0;border-left:1px solid var(--hair);background:transparent;color:var(--ink-soft);cursor:pointer}
   .seg button:first-child{border-left:0}
@@ -106,7 +106,7 @@
   .band-hint b{color:var(--ink);font-weight:600}
 
   /* hero */
-  .hero{margin-top:12px;display:grid;grid-template-columns:.8fr 1.3fr 1fr;gap:10px}
+  .hero{margin-top:12px;display:grid;grid-template-columns:1.3fr 1fr;gap:10px}   /* v36: sem o card Leads Qualificados */
   .hero-main.plain{background:var(--surface);border-color:var(--hair);border-top:3px solid var(--blue-edge)}
   .hero-main.plain .k{color:var(--blue-ink)}
   .hero-main.plain .v{color:var(--blue-ink)}
@@ -198,12 +198,14 @@
   .pp-temp{display:flex;flex-direction:column;gap:2px;margin:2px 0}
   .pp-t{all:unset;cursor:pointer;font-size:.78rem;color:var(--ink-soft)} .pp-t b{font-family:"IBM Plex Mono",monospace;font-size:1rem;color:var(--ink)}
   .pp-t:hover,.pp-t.on{color:var(--ink);text-decoration:underline}
-  .pp-quem{margin-top:8px;font-size:.75rem;color:var(--ink-soft)} .pp-quem summary{cursor:pointer;font-weight:600;color:var(--ink)}
-  .pp-quem div{margin-top:6px;line-height:1.6}
   .pp-rodape{margin:6px 0 0;font-size:.68rem;color:var(--ink-faint)}
   .pp-box.carregando .v{opacity:.35}
   table.lc td.c-temperatura{white-space:nowrap}
-  @media print{ .pp-quem{display:none} }
+  .lc-filtro{font:inherit;font-size:.7rem;font-weight:700;margin-left:8px;padding:1px 8px;border-radius:999px;border:1px solid currentColor;background:var(--surface);color:var(--clay-ink);cursor:pointer}
+  .lc-filtro:hover{background:var(--clay-bg)}
+  .kpi-strip.pp-strip{grid-template-columns:repeat(6,1fr)} .kpi-strip.pp-strip3{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:820px){ .kpi-strip.pp-strip,.kpi-strip.pp-strip3{grid-template-columns:1fr 1fr} }
+  @media print{ .kpi-strip.pp-strip{grid-template-columns:repeat(6,1fr)!important} .kpi-strip.pp-strip3{grid-template-columns:repeat(3,1fr)!important} }
   .col-solta{position:absolute;top:0;right:0;bottom:0;width:8px;cursor:col-resize;touch-action:none;border-right:2px solid transparent}
   .col-solta:hover,.col-solta.ativa{border-right-color:var(--blue-edge)}
   table.lc th.sortable{cursor:pointer;user-select:none}
@@ -300,7 +302,7 @@
     .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
     .chip-co.bb{background:var(--bb-edge);border-color:var(--bb-edge);color:#fff}
     .hero-main{padding:12px 14px}
-    .hero{grid-template-columns:.8fr 1.3fr 1fr!important}
+    .hero{grid-template-columns:1.3fr 1fr!important}
     .kpi-strip{grid-template-columns:repeat(5,1fr)!important}
     .rows{grid-template-columns:1fr 1fr 1fr!important}
     .hero,.hero-main,.kpi,.agenda,.row{break-inside:avoid}
@@ -458,7 +460,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v35 (placar da prospecção por período: hoje/semana/quinzena/mês/datas; temperatura quente/morno/frio em coluna, filtro e placar) v34 = (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v36 (sem card Leads Qualificados e lista vira Leads; placar com Temperatura primeiro e Viraram clientes + conversão; sem Quem respondeu; temperatura e fichas contam sem o filtro; filtro aparece no título das listas; números de Prospects por Região clicáveis; colunas Origem e Chegou em; saem Contatados no mês, Pedidos, Vendido, Conversão, Novos este mês, Esfriando e Clientes; Em Negociação com marcador PROSPECT entra [n8n v12]) v35 = (placar da prospecção por período: hoje/semana/quinzena/mês/datas; temperatura quente/morno/frio em coluna, filtro e placar) v34 = (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -491,7 +493,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v35</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v36</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -530,20 +532,13 @@
 
     <div class="placar-bloco"><!-- v34: tudo daqui até as listas some com "Ocultar placar" (na impressão continua saindo) -->
     <div class="hero">
-      <div class="hero-main amber" data-goto="leads_qualificados" style="cursor:pointer">
-        <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
-        <span class="k">▸ 1º &nbsp; Leads Qualificados</span>
-        <span class="v" data-k="leads_qualificados">–</span>
-        <span class="sub">Já mostraram interesse · comece por aqui!</span>
-        <span class="lnk">↗ abrir lista</span>
-      </div>
       <div class="hero-main blue">
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
         <span class="k">Minha carteira de prospects</span>
         <span class="v" data-k="total">–</span>
         <span class="sub">Quem ainda não comprou</span>
         <span class="breakdown">
-          <b data-k="e_lead" data-goto="leads_qualificados">–</b> leads qualificados &nbsp;·&nbsp;
+          <b data-k="e_lead" data-goto="leads_qualificados">–</b> leads &nbsp;·&nbsp;
           <b data-k="e_carteira" data-goto="carteira">–</b> carteira prospect &nbsp;·&nbsp;
           <b data-k="e_regionais" data-goto="por_estagio">–</b> nas colunas por DDD/região
         </span>
@@ -567,7 +562,7 @@
       </div>
     </div>
 
-    <!-- v35: placar da prospecção por período (fluxo Maquina_de_Vendas_Placar_Prospeccao) + temperatura dos prospects -->
+    <!-- v35/v36: placar da prospecção por período (fluxo Maquina_de_Vendas_Placar_Prospeccao) + temperatura dos prospects -->
     <section class="pp-box" id="placar-prosp">
       <div class="pp-topo">
         <p class="band-label" style="margin:0"><svg class="ico"><use href="#i-whats"/></svg> Placar da prospecção · <span id="pp-periodo-txt">hoje</span></p>
@@ -579,7 +574,16 @@
           <span class="pp-datas">de <input type="date" id="pp-de"> até <input type="date" id="pp-ate"> <button class="btn" data-pp="datas">Ver</button></span>
         </div>
       </div>
-      <div class="kpi-strip">
+      <div class="kpi-strip pp-strip">
+        <div class="kpi amber">
+          <span class="k">Temperatura agora</span>
+          <span class="pp-temp">
+            <button type="button" class="pp-t" data-temp="quente" title="filtrar os quentes">🔴 <b data-k="t_quente">–</b> quentes</button>
+            <button type="button" class="pp-t" data-temp="morno" title="filtrar os mornos">🟡 <b data-k="t_morno">–</b> mornos</button>
+            <button type="button" class="pp-t" data-temp="frio" title="filtrar os frios">🔵 <b data-k="t_frio">–</b> frios</button>
+          </span>
+          <span class="note"><span data-k="t_sem">–</span> ainda sem contato</span>
+        </div>
         <div class="kpi blue">
           <span class="k">Mandei mensagem</span>
           <span class="v" id="pp-pessoas">–</span>
@@ -600,78 +604,33 @@
           <span class="v" data-k="pp_fichas">–</span>
           <span class="note"><span data-k="pp_fichas_ok">–</span> aprovadas · <span data-k="pp_fichas_analise">–</span> em análise<br><small>total até hoje</small></span>
         </div>
-        <div class="kpi amber">
-          <span class="k">Temperatura agora</span>
-          <span class="pp-temp">
-            <button type="button" class="pp-t" data-temp="quente" title="filtrar os quentes">🔴 <b data-k="t_quente">–</b> quentes</button>
-            <button type="button" class="pp-t" data-temp="morno" title="filtrar os mornos">🟡 <b data-k="t_morno">–</b> mornos</button>
-            <button type="button" class="pp-t" data-temp="frio" title="filtrar os frios">🔵 <b data-k="t_frio">–</b> frios</button>
-          </span>
-          <span class="note"><span data-k="t_sem">–</span> ainda sem contato</span>
+        <div class="kpi green">
+          <span class="k">Viraram clientes</span>
+          <span class="v" id="pp-clientes">–</span>
+          <span class="note">1º pedido no período · <span id="pp-conv">–</span> de conversão<br><small><span id="pp-valor">–</span> em pedidos no período</small></span>
         </div>
       </div>
-      <details class="pp-quem" id="pp-quem-box" hidden><summary>Quem respondeu (<span id="pp-quem-n">0</span>)</summary><div id="pp-quem"></div></details>
       <p class="pp-rodape" id="pp-rodape">Mensagens do número das bobinas (BB), sem grupos.</p>
     </section>
 
-    <!-- v14: placar do mês (contatados sai das listas, cotações e pedidos vêm do fluxo v3) -->
-    <div class="kpi-strip" id="placar-mes">
-      <div class="kpi blue">
-        <span class="k">Contatados no mês</span>
-        <span class="v" data-k="pm_contatados">–</span>
-        <span class="note">Prospects com conversa no Zap em <span data-k="pm_mes">–</span></span>
-      </div>
+    <div class="kpi-strip pp-strip3" id="placar-mes">
       <div class="kpi green">
+        <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
         <span class="k">Pediram cotação no mês</span>
         <span class="v" data-k="pm_clientes_cotacao">–</span>
         <span class="note"><span data-k="pm_cotacoes">–</span> cotações feitas</span>
       </div>
-      <div class="kpi green">
-        <span class="k">Pedidos fechados no mês</span>
-        <span class="v" data-k="pm_pedidos">–</span>
-        <span class="note"><span data-k="pm_clientes_pedido">–</span> clientes compraram</span>
-      </div>
-      <div class="kpi green">
-        <span class="k">Vendido no mês</span>
-        <span class="v" data-k="pm_valor">–</span>
-        <span class="note">Soma dos pedidos confirmados</span>
-      </div>
-      <div class="kpi amber">
-        <span class="k">Conversão</span>
-        <span class="v" data-k="pm_conversao">–</span>
-        <span class="note">Clientes que compraram ÷ contatados</span>
-      </div>
-    </div>
-
-    <div class="kpi-strip">
       <div class="kpi green" data-goto="pediram_cotacao" style="cursor:pointer">
         <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
-        <span class="k">Pediram cotação</span>
+        <span class="k">Com marcador Cotação</span>
         <span class="v" data-k="pediram_cotacao">–</span>
         <span class="note">Marcador COTAÇÃO · estão perto de comprar<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
-      </div>
-      <div class="kpi amber" data-goto="novos_mes" style="cursor:pointer">
-        <span class="badge amber"><svg class="ico"><use href="#i-pessoas"/></svg></span>
-        <span class="k">Novos este mês</span>
-        <span class="v" data-k="novos_mes">–</span>
-        <span class="note">Cadastrados no mês · fazer o 1º contato<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
-      </div>
-      <div class="kpi amber" data-goto="sem_contato_60" style="cursor:pointer">
-        <span class="badge amber"><svg class="ico"><use href="#i-whats"/></svg></span>
-        <span class="k">Esfriando</span>
-        <span class="v" data-k="sem_contato_60">–</span>
-        <span class="note">Já conversou, mas faz +60 dias<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
       </div>
       <div class="kpi blue" data-goto="nunca_contatados" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
         <span class="k">Nunca contatados</span>
         <span class="v" data-k="nunca_contatados">–</span>
         <span class="note">Sem interação nem conversa no Zap<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
-      </div>
-      <div class="kpi blue">
-        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
-        <span class="k">Clientes</span>
-        <span class="note">Carteira de quem já compra<br><span class="link"><a id="link-clientes" href="../">Copiloto de Vendas ↗</a></span></span>
       </div>
     </div>
 
@@ -712,7 +671,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v35 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v36 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -766,12 +725,10 @@ const LINK_CLIENTES = "../";  // Copiloto de Vendas (clientes) — esta página 
 /* ---- definição das listas que aparecem embaixo ---- */
 const LISTAS = [
   {k:"atividades",          titulo:"Check-list de Atividades — prospects",                                   cor:"amber"},
-  {k:"leads_qualificados",  titulo:"Leads Qualificados (coluna LEAD do funil)",                             cor:"amber"},
+  {k:"leads_qualificados",  titulo:"Leads (coluna LEAD do funil)",                             cor:"amber"},
   {k:"perfil_prospects",    titulo:"🧠 Perfil dos prospects · o que falta preencher na ficha do CRM",        cor:"purple"},
   {k:"pediram_cotacao",     titulo:"Pediram cotação (marcador COTAÇÃO)",                                     cor:"green"},
   {k:"cotacao_sem_passo",   titulo:"Radar · Pediram cotação e estão sem próximo passo",                      cor:"clay"},
-  {k:"novos_mes",           titulo:"Novos este mês — fazer o 1º contato",                                    cor:"amber"},
-  {k:"sem_contato_60",      titulo:"Esfriando · já conversou, mas faz +60 dias",                             cor:"clay"},
   {k:"sem_zap",             titulo:"Radar · Sem Zap nem telefone (completar cadastro)",                      cor:"clay"},
   {k:"sem_cidade",          titulo:"Radar · Sem cidade no cadastro",                                         cor:"slate"},
   {k:"por_regiao",          titulo:"Prospects por Região (clique no nome da região pra ir à lista dela)",   cor:"blue"},
@@ -781,7 +738,7 @@ const LISTAS = [
   {k:"carteira",            titulo:"Carteira completa de prospects (por estágio)",                           cor:"slate"}
 ];
 const COLS = {
-  padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"],["origem","Origem"],["criado_em","Chegou em"]],
   atividades: [["cliente","Prospect"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["cidade","Cidade"],["estagio","Estágio"]],
   novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["ultima_conversa_zap","Últ. conversa Zap"],["prox_atividade","Próx. atividade"]],
   sem_contato_60: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
@@ -1002,7 +959,8 @@ function renderListas(listas){
   const ordemT = { quente: "1 quente", morno: "2 morno", frio: "3 frio" };
   Object.values(L).forEach(lst => Array.isArray(lst) && lst.forEach(r => { if(r && r.lead) r.temperatura = ordemT[temperatura(r)] || "4"; }));
   {
-    const cartT = L.carteira || [];
+    // v36: conta todo mundo da região escolhida, sem o filtro de contato/temperatura (senão "Quentes" zerava os outros)
+    const cartT = (listas.carteira || []).filter(r => !regioesSel.size || bateFiltro(r));
     const qt = t => cartT.filter(r => temperatura(r) === t).length;
     const fichas = cartT.map(r => fichaPorLead[r.lead]).filter(Boolean);
     const tx = { t_quente: qt("quente"), t_morno: qt("morno"), t_frio: qt("frio"), t_sem: qt(""),
@@ -1105,7 +1063,10 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
     const st = sortavel ? sortState[k] : null;
     const card = document.createElement("div"); card.className = "listcard" + (pre+k === alvoImpressao ? " print-alvo" : ""); card.id = pre+k;
     const h = document.createElement("div"); h.className = "lc-h" + (cor ? " lc-h-"+cor : "");
-    h.innerHTML = '<span>'+titulo+'</span><span class="lc-h-dir">'+
+    // v36: filtro ligado aparece no título da lista (que fica grudado no topo ao rolar); clicar tira o filtro
+    const filtroTxt = (pre === "lista-" && !LISTAS_RESUMO.has(k) && (regioesSel.size || contatoSel))
+      ? [...regioesSel].sort(ordemFiltro).map(rotuloFiltro).concat(contatoSel ? [FILTROS_CONTATO[contatoSel].rotulo] : []).join(" + ") : "";
+    h.innerHTML = '<span>'+titulo+(filtroTxt ? ' <button type="button" class="lc-filtro no-print" title="Tirar o filtro">filtro: '+esc(filtroTxt)+' ✕</button>' : '')+'</span><span class="lc-h-dir">'+
       (pre === "lista-" && rows.length ? '<button class="btn-print no-print" data-print="'+pre+k+'" title="Imprimir só esta lista">🖨 Imprimir esta lista</button>' : '')+
       '<span class="n">'+rows.length+'</span></span>';
     card.appendChild(h);
@@ -1197,6 +1158,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           if(c[0]==="fantasia"){ const k2 = v.indexOf(' <'); const txt = k2 >= 0 ? v.slice(0, k2) : v; const ics = k2 >= 0 ? v.slice(k2) : ""; v = '<span class="fant-wrap"><span class="fant-txt" title="'+txt+'">'+txt+'</span>'+(ics ? '<span class="fant-ic">'+ics+'</span>' : '')+'</span>'; }
           if(c[0]==="cliente" && r.lead) v ='<button type="button" class="btn-ficha no-print" data-lead="'+r.lead+'" data-cliente="'+esc(String(r.cliente||""))+'" data-empresa="'+esc(String(r.empresa||""))+'" title="Ver as anotações e o histórico deste prospect">📋</button>' + v;
           if(c[0]==="regiao" && k==="por_regiao") v = '<a href="#lista-'+slugRegiao(r.regiao||"")+'" class="lnk-reg" data-goto="'+slugRegiao(r.regiao||"")+'">'+(v || "(sem região)")+'</a>';
+          // v36: os números da linha também levam para a lista da região (ex.: clicar no 57 de "sem região")
+          if(k==="por_regiao" && ["prospects","com_zap","cotacao"].includes(c[0])) v = '<a href="#lista-'+slugRegiao(r.regiao||"")+'" class="lnk-reg" data-goto="'+slugRegiao(r.regiao||"")+'">'+v+'</a>';
           let extraPf = "";
           if(k==="perfil_prospects" && PERFIL_CAMPOS.has(c[0])){
             const x = r[c[0]], vazio = perfilVazio(x);
@@ -1767,7 +1730,7 @@ $("#login-form").addEventListener("submit", e => {
   load();
 });
 
-if(LINK_CLIENTES) { $("#link-clientes").href = LINK_CLIENTES; }
+if(LINK_CLIENTES && $("#link-clientes")) { $("#link-clientes").href = LINK_CLIENTES; }
 $("#filtro-regiao").addEventListener("change", e => {
   const v = e.target.value || "";
   if(!v) return;
@@ -1781,7 +1744,7 @@ $("#filtro-regiao").addEventListener("change", e => {
 document.addEventListener("click", e => {
   const tira = e.target.closest("button[data-tira-reg]");
   const tiraContato = e.target.closest("button[data-tira-contato]");
-  if(!tira && !tiraContato && !e.target.closest("#filtro-limpar, #busca-tira-filtro")) return;
+  if(!tira && !tiraContato && !e.target.closest("#filtro-limpar, #busca-tira-filtro, .lc-filtro")) return;
   if(tira) regioesSel.delete(tira.dataset.tiraReg);
   else if(tiraContato) contatoSel = "";
   else { regioesSel.clear(); contatoSel = ""; }
@@ -1875,12 +1838,13 @@ async function buscaPlacarProsp(){
   $("#pp-msgs").textContent = ok ? fmtInt(d.mensagens) : "–";
   $("#pp-novos").textContent = ok ? fmtInt(d.primeiro_contato) : "–";
   $("#pp-resp").textContent = ok ? fmtInt(d.responderam) : "–";
-  const quem = ok ? (d.quem_respondeu || []) : [];
-  $("#pp-quem-box").hidden = !quem.length;
-  $("#pp-quem-n").textContent = quem.length;
-  $("#pp-quem").textContent = quem.join(" · ");
+  // v36: viraram clientes = 1º pedido confirmado na BB dentro do período; conversão = viraram ÷ pessoas contatadas no período
+  const vc = ok && typeof d.viraram_clientes === "number";
+  $("#pp-clientes").textContent = vc ? fmtInt(d.viraram_clientes) : "–";
+  $("#pp-conv").textContent = (vc && d.pessoas) ? (100 * d.viraram_clientes / d.pessoas).toLocaleString("pt-BR", {maximumFractionDigits:1}) + "%" : "–";
+  $("#pp-valor").textContent = vc ? fmtBRL(d.valor_primeiro_pedido || 0) : "–";
   $("#pp-rodape").textContent = falha ? "⚠ " + falha
-    : "Mensagens do número das bobinas (BB), sem grupos. Respondeu = escreveu no período depois de receber mensagem nossa, mesmo de outro dia." + (d && d.historico_desde ? " Histórico desde " + fmtDateBR(d.historico_desde) + "." : "");
+    : "Mensagens do número das bobinas (BB), sem grupos. Respondeu = escreveu no período depois de receber mensagem nossa, mesmo de outro dia. Viraram clientes = 1º pedido confirmado na BB no período." + (d && d.historico_desde ? " Histórico desde " + fmtDateBR(d.historico_desde) + "." : "");
 }
 $("#pp-periodos").addEventListener("click", e => {
   const b = e.target.closest("[data-pp]"); if(!b) return;
