@@ -188,6 +188,22 @@
     table.lc th{top:40px;z-index:2;box-shadow:0 1px 0 var(--hair)}
   }
   @media screen{ body.sem-placar .placar-bloco{display:none} }
+  /* v35: placar da prospecção por período + temperatura */
+  .pp-box{margin-top:14px}
+  .pp-topo{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+  .pp-periodos{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .pp-periodos .btn.on{background:var(--blue-bg);border-color:var(--blue-edge);color:var(--blue-ink);font-weight:700}
+  .pp-datas{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--ink-soft)}
+  .pp-datas input{font:inherit;font-size:.72rem;padding:3px 4px;border:1px solid var(--hair);border-radius:6px;background:var(--surface);color:var(--ink)}
+  .pp-temp{display:flex;flex-direction:column;gap:2px;margin:2px 0}
+  .pp-t{all:unset;cursor:pointer;font-size:.78rem;color:var(--ink-soft)} .pp-t b{font-family:"IBM Plex Mono",monospace;font-size:1rem;color:var(--ink)}
+  .pp-t:hover,.pp-t.on{color:var(--ink);text-decoration:underline}
+  .pp-quem{margin-top:8px;font-size:.75rem;color:var(--ink-soft)} .pp-quem summary{cursor:pointer;font-weight:600;color:var(--ink)}
+  .pp-quem div{margin-top:6px;line-height:1.6}
+  .pp-rodape{margin:6px 0 0;font-size:.68rem;color:var(--ink-faint)}
+  .pp-box.carregando .v{opacity:.35}
+  table.lc td.c-temperatura{white-space:nowrap}
+  @media print{ .pp-quem{display:none} }
   .col-solta{position:absolute;top:0;right:0;bottom:0;width:8px;cursor:col-resize;touch-action:none;border-right:2px solid transparent}
   .col-solta:hover,.col-solta.ativa{border-right-color:var(--blue-edge)}
   table.lc th.sortable{cursor:pointer;user-select:none}
@@ -442,7 +458,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v34 (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v35 (placar da prospecção por período: hoje/semana/quinzena/mês/datas; temperatura quente/morno/frio em coluna, filtro e placar) v34 = (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -475,7 +491,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v34</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v35</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -550,6 +566,53 @@
         <span class="lnk">↗ abrir lista</span>
       </div>
     </div>
+
+    <!-- v35: placar da prospecção por período (fluxo Maquina_de_Vendas_Placar_Prospeccao) + temperatura dos prospects -->
+    <section class="pp-box" id="placar-prosp">
+      <div class="pp-topo">
+        <p class="band-label" style="margin:0"><svg class="ico"><use href="#i-whats"/></svg> Placar da prospecção · <span id="pp-periodo-txt">hoje</span></p>
+        <div class="pp-periodos no-print" id="pp-periodos">
+          <button class="btn" data-pp="hoje">Hoje</button>
+          <button class="btn" data-pp="semana">Semana</button>
+          <button class="btn" data-pp="quinzena">Quinzena</button>
+          <button class="btn" data-pp="mes">Mês</button>
+          <span class="pp-datas">de <input type="date" id="pp-de"> até <input type="date" id="pp-ate"> <button class="btn" data-pp="datas">Ver</button></span>
+        </div>
+      </div>
+      <div class="kpi-strip">
+        <div class="kpi blue">
+          <span class="k">Mandei mensagem</span>
+          <span class="v" id="pp-pessoas">–</span>
+          <span class="note">pessoas · <span id="pp-msgs">–</span> mensagens</span>
+        </div>
+        <div class="kpi blue">
+          <span class="k">Primeiro contato</span>
+          <span class="v" id="pp-novos">–</span>
+          <span class="note">nunca tinham falado com a gente</span>
+        </div>
+        <div class="kpi green">
+          <span class="k">Responderam</span>
+          <span class="v" id="pp-resp">–</span>
+          <span class="note">escreveram depois de receber mensagem nossa</span>
+        </div>
+        <div class="kpi green">
+          <span class="k">Fichas cadastrais</span>
+          <span class="v" data-k="pp_fichas">–</span>
+          <span class="note"><span data-k="pp_fichas_ok">–</span> aprovadas · <span data-k="pp_fichas_analise">–</span> em análise<br><small>total até hoje</small></span>
+        </div>
+        <div class="kpi amber">
+          <span class="k">Temperatura agora</span>
+          <span class="pp-temp">
+            <button type="button" class="pp-t" data-temp="quente" title="filtrar os quentes">🔴 <b data-k="t_quente">–</b> quentes</button>
+            <button type="button" class="pp-t" data-temp="morno" title="filtrar os mornos">🟡 <b data-k="t_morno">–</b> mornos</button>
+            <button type="button" class="pp-t" data-temp="frio" title="filtrar os frios">🔵 <b data-k="t_frio">–</b> frios</button>
+          </span>
+          <span class="note"><span data-k="t_sem">–</span> ainda sem contato</span>
+        </div>
+      </div>
+      <details class="pp-quem" id="pp-quem-box" hidden><summary>Quem respondeu (<span id="pp-quem-n">0</span>)</summary><div id="pp-quem"></div></details>
+      <p class="pp-rodape" id="pp-rodape">Mensagens do número das bobinas (BB), sem grupos.</p>
+    </section>
 
     <!-- v14: placar do mês (contatados sai das listas, cotações e pedidos vêm do fluxo v3) -->
     <div class="kpi-strip" id="placar-mes">
@@ -649,7 +712,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v34 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v35 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -718,17 +781,17 @@ const LISTAS = [
   {k:"carteira",            titulo:"Carteira completa de prospects (por estágio)",                           cor:"slate"}
 ];
 const COLS = {
-  padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  padrao:     [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   atividades: [["cliente","Prospect"],["tipo","Tipo"],["resumo","Resumo"],["vencimento","Vencimento"],["estado","Estado"],["cidade","Cidade"],["estagio","Estágio"]],
-  novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["ultima_conversa_zap","Últ. conversa Zap"],["prox_atividade","Próx. atividade"]],
-  sem_contato_60: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  novos_mes:  [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"],["ultima_conversa_zap","Últ. conversa Zap"],["prox_atividade","Próx. atividade"]],
+  sem_contato_60: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   nunca_contatados: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["regiao","Região"],["estagio","Estágio"],["marcadores","Marcadores"],["criado_em","Cadastrado em"]],
-  grupo_regiao: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
+  grupo_regiao: [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["dias_sem_contato","Dias sem contato"],["prox_atividade","Próx. atividade"]],
   por_regiao: [["regiao","Região"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]],
   por_estagio:[["estagio","Estágio"],["prospects","Prospects"],["com_zap","Com Zap"],["cotacao","Pediram cotação"]]
 };
 // v27: mesma ficha de compra do Copiloto de Vendas (mesma ordem da tela do CRM); o que estiver em branco aparece com ⬜
-COLS.perfil_prospects = [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ficha","Ficha Cadastral"],["perfil","Perfil do Cliente"],["potencial","Potencial e Relacionamento"],["materiais","Material"],["volume_kg","Volume por compra (kg)"],["recompra_dias","Frequência - Recompra a cada (dias)"],["ritmo_dias","Ritmo de Contato (dias)"],["preco_conco","Último preço conco"],["comprou_de","Comprou por último de"],["condicao_pagto","Condição de pagto q faz"],["preenchidos","Preenchido"]];
+COLS.perfil_prospects = [["cliente","Prospect"],["fantasia","Nome Fantasia"],["zap","Zap"],["temperatura","Temp."],["estagio","Estágio"],["ultima_conversa_zap","Últ. conversa Zap"],["ficha","Ficha Cadastral"],["perfil","Perfil do Cliente"],["potencial","Potencial e Relacionamento"],["materiais","Material"],["volume_kg","Volume por compra (kg)"],["recompra_dias","Frequência - Recompra a cada (dias)"],["ritmo_dias","Ritmo de Contato (dias)"],["preco_conco","Último preço conco"],["comprou_de","Comprou por último de"],["condicao_pagto","Condição de pagto q faz"],["preenchidos","Preenchido"]];
 const PERFIL_CAMPOS = new Set(["comprou_de","perfil","materiais","volume_kg","recompra_dias","preco_conco","condicao_pagto","ritmo_dias","potencial"]);
 const perfilVazio = x => Array.isArray(x) ? x.length === 0 : (typeof x === "number" ? !(x > 0) : !String(x == null ? "" : x).trim());
 // listas de prospect (uma linha = uma oportunidade) ganham o botão "＋ Agendar"
@@ -799,6 +862,7 @@ function fill(data){
   TIPOS = data.tipos_atividade || [];
   montaOpcoesRegiao(data.listas || {});
   renderListas(data.listas || {});
+  buscaPlacarProsp();   // v35
 }
 
 /* ---- filtro por região e por DDD (pra planejar visita: "vou pra Campinas, quem está lá?" / "me dá o DDD 14") ---- */
@@ -868,8 +932,27 @@ const FILTROS_CONTATO = {
   sem_conversa: { rotulo: "Tem Zap e sem conversa", bate: c => !!c.zap && !c.ultima_conversa_zap },
   mais_20: { rotulo: "Mais de " + DIAS_SEM_CONTATO + " dias sem contato", bate: c => (c.dias_sem_contato ?? -1) > DIAS_SEM_CONTATO },
   ficha_aprovada: { rotulo: "Ficha aprovada", bate: c => fichaAprovada(fichaPorLead[c.lead]) },
-  ficha_analise: { rotulo: "Ficha em análise", bate: c => fichaEmAnalise(fichaPorLead[c.lead]) }
+  ficha_analise: { rotulo: "Ficha em análise", bate: c => fichaEmAnalise(fichaPorLead[c.lead]) },
+  quente: { rotulo: "🔴 Quentes (ficha ou cotação)", bate: c => temperatura(c) === "quente" },
+  morno: { rotulo: "🟡 Mornos (responderam em 15 dias)", bate: c => temperatura(c) === "morno" },
+  frio: { rotulo: "🔵 Frios (sem resposta)", bate: c => temperatura(c) === "frio" }
 };
+/* v35: temperatura do prospect, calculada aqui (não é campo no CRM).
+   Quente = mandou ficha (menos reprovada) ou pediu cotação (marcador COTAÇÃO ou estágio de negociação)
+   Morno  = respondeu nos últimos 15 dias (Dt da Última Resposta do Cliente, gravada pelo número das bobinas)
+   Frio   = já recebeu contato e não respondeu, ou a última resposta passou de 15 dias
+   ""     = ainda sem nenhum contato */
+const DIAS_MORNO = 15;
+const TEMPS = { quente: "🔴 Quente", morno: "🟡 Morno", frio: "🔵 Frio" };
+const diasDesde = d => { const t = Date.parse(String(d).slice(0,10) + "T12:00:00"); return isNaN(t) ? 9999 : Math.floor((Date.now() - t) / 86400000); };
+function temperatura(r){
+  const c = cartPorLead[r.lead] || r;
+  const f = fichaPorLead[c.lead];
+  if((f && !/reprovad/i.test(f)) || temCot(c) || /negocia/i.test(c.estagio || "")) return "quente";
+  if(c.ultima_resposta && diasDesde(c.ultima_resposta) <= DIAS_MORNO) return "morno";
+  if(c.ultima_conversa_zap || c.ultima_interacao || c.ultima_resposta) return "frio";
+  return "";
+}
 const bateContato = r => !contatoSel || FILTROS_CONTATO[contatoSel].bate(cartPorLead[r.lead] || r);
 function montaOpcoesContato(listas){
   const sel = $("#filtro-contato"); if(!sel) return;
@@ -915,6 +998,18 @@ function renderListas(listas){
   LISTAS_BRUTAS = listas;
   const L = listasFiltradas(listas);
   ULTIMA_LISTAS = L;
+  // v35: temperatura vira campo da linha (para ordenar a coluna) e conta no placar
+  const ordemT = { quente: "1 quente", morno: "2 morno", frio: "3 frio" };
+  Object.values(L).forEach(lst => Array.isArray(lst) && lst.forEach(r => { if(r && r.lead) r.temperatura = ordemT[temperatura(r)] || "4"; }));
+  {
+    const cartT = L.carteira || [];
+    const qt = t => cartT.filter(r => temperatura(r) === t).length;
+    const fichas = cartT.map(r => fichaPorLead[r.lead]).filter(Boolean);
+    const tx = { t_quente: qt("quente"), t_morno: qt("morno"), t_frio: qt("frio"), t_sem: qt(""),
+      pp_fichas: fichas.filter(f => !/reprovad/i.test(f)).length, pp_fichas_ok: fichas.filter(fichaAprovada).length, pp_fichas_analise: fichas.filter(fichaEmAnalise).length };
+    for(const [k,v] of Object.entries(tx)) $$('[data-k="'+k+'"]').forEach(el => el.textContent = fmtInt(v));
+    $$(".pp-t").forEach(b => b.classList.toggle("on", b.dataset.temp === contatoSel));
+  }
   guardaFiltros();
   montaOpcoesContato(listas);
   // números de cima saem das próprias listas: assim batem com a região escolhida
@@ -1060,6 +1155,7 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           if(c[0]==="empresa") v = v === "BNZ METAIS" ? "BNZ" : v;
           if(c[0]==="_agendar") v = r.lead ? '<button class="btn-ac" data-ac="agendar" data-lead="'+r.lead+'">＋ Agendar</button>' : "";
           if(c[0]==="estagio" && !v) v = "–";
+          if(c[0]==="temperatura") v = TEMPS[temperatura(r)] || "–";
           if(typeof v === "string" && !/^</.test(v)) v = esc(v);
           if(c[0]==="zap" && /^https?:\/\//.test(v)){
             const n = (v.match(/(\d[\d]{6,})/)||["",""])[1];
@@ -1704,7 +1800,7 @@ $("#btn-placar").addEventListener("click", () => {
   semPlacar = !semPlacar;
   try { localStorage.setItem("pp_sem_placar", semPlacar ? "1" : "0"); } catch(e){}
   aplicaPlacar();
-  if(semPlacar) irParaLista(); else window.scrollTo(0, 0);
+  if(semPlacar) irParaLista(); else { window.scrollTo(0, 0); buscaPlacarProsp(); }
 });
 $("#busca-cliente").addEventListener("input", e => { buscaCliente = e.target.value; renderBusca(); });
 $("#btn-refresh").addEventListener("click", load);
@@ -1739,6 +1835,67 @@ const guardaRolagem = () => { try { sessionStorage.setItem("pp_rolagem", String(
 window.addEventListener("pagehide", guardaRolagem);
 document.addEventListener("visibilitychange", () => { if(document.hidden) guardaRolagem(); });
 aplicaPlacar();
+
+/* v35: placar da prospecção por período (hoje, semana, quinzena, mês ou datas). Os números vêm do histórico do
+   WhatsApp das bobinas, pelo fluxo "Maquina_de_Vendas_Placar_Prospeccao" (webhook placar-prospeccao, mesmo login) */
+const PLACAR_URL = WEBHOOK_URL.replace(/painel-prospects\b/, "placar-prospeccao");
+let ppPeriodo = "hoje", ppN = 0;
+try { ppPeriodo = localStorage.getItem("pp_placar_periodo") || "hoje"; } catch(e){}
+const isoLocal = d => d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+function periodoDatas(p){
+  const h = new Date(), hoje = isoLocal(h);
+  if(p === "semana"){ const s = new Date(h); s.setDate(h.getDate() - ((h.getDay() + 6) % 7)); return [isoLocal(s), hoje, "semana"]; }   // segunda até hoje
+  if(p === "quinzena"){ const s = new Date(h.getFullYear(), h.getMonth(), h.getDate() <= 15 ? 1 : 16); return [isoLocal(s), hoje, h.getDate() <= 15 ? "1ª quinzena" : "2ª quinzena"]; }
+  if(p === "mes"){ return [isoLocal(new Date(h.getFullYear(), h.getMonth(), 1)), hoje, "mês"]; }
+  if(p === "datas"){ const de = $("#pp-de").value, ate = $("#pp-ate").value; if(de && ate) return [de <= ate ? de : ate, de <= ate ? ate : de, ""]; }
+  return [hoje, hoje, "hoje"];
+}
+async function buscaPlacarProsp(){
+  const box = $("#placar-prosp"); if(!box || !creds || !creds.user) return;
+  if(semPlacar || WEBHOOK_URL.startsWith("COLE_AQUI")) return;
+  const [de, ate, nome] = periodoDatas(ppPeriodo);
+  $$("#pp-periodos [data-pp]").forEach(b => b.classList.toggle("on", b.dataset.pp === ppPeriodo));
+  if(!$("#pp-de").value || ppPeriodo !== "datas"){ $("#pp-de").value = de; $("#pp-ate").value = ate; }
+  $("#pp-de").max = $("#pp-ate").max = isoLocal(new Date());
+  $("#pp-periodo-txt").textContent = (nome ? nome + " · " : "") + (de === ate ? fmtDateBR(de) : fmtDateBR(de) + " a " + fmtDateBR(ate));
+  const meu = ++ppN;
+  box.classList.add("carregando");
+  let d = null, falha = "";
+  try{
+    const url = PLACAR_URL + (PLACAR_URL.includes("?") ? "&" : "?") + "user=" + encodeURIComponent(creds.user) + "&pass=" + encodeURIComponent(creds.pass) + "&de=" + de + "&ate=" + ate;
+    const r = await fetch(url, {cache:"no-store"});
+    if(r.status === 404) falha = "Falta publicar o fluxo do placar no n8n (Maquina_de_Vendas_Placar_Prospeccao).";
+    else d = await r.json();
+  }catch(e){ falha = "Não consegui buscar o placar agora."; }
+  if(meu !== ppN) return;
+  box.classList.remove("carregando");
+  if(d && d.erro && !d.ok) falha = d.erro_permissao ? "Seu login não tem acesso ao placar." : (typeof d.erro === "string" ? d.erro : "Não consegui buscar o placar agora.");
+  const ok = d && d.ok && !falha;
+  $("#pp-pessoas").textContent = ok ? fmtInt(d.pessoas) : "–";
+  $("#pp-msgs").textContent = ok ? fmtInt(d.mensagens) : "–";
+  $("#pp-novos").textContent = ok ? fmtInt(d.primeiro_contato) : "–";
+  $("#pp-resp").textContent = ok ? fmtInt(d.responderam) : "–";
+  const quem = ok ? (d.quem_respondeu || []) : [];
+  $("#pp-quem-box").hidden = !quem.length;
+  $("#pp-quem-n").textContent = quem.length;
+  $("#pp-quem").textContent = quem.join(" · ");
+  $("#pp-rodape").textContent = falha ? "⚠ " + falha
+    : "Mensagens do número das bobinas (BB), sem grupos. Respondeu = escreveu no período depois de receber mensagem nossa, mesmo de outro dia." + (d && d.historico_desde ? " Histórico desde " + fmtDateBR(d.historico_desde) + "." : "");
+}
+$("#pp-periodos").addEventListener("click", e => {
+  const b = e.target.closest("[data-pp]"); if(!b) return;
+  if(b.dataset.pp === "datas" && !($("#pp-de").value && $("#pp-ate").value)){ toast("Escolha as duas datas.", true); return; }
+  ppPeriodo = b.dataset.pp;
+  try { localStorage.setItem("pp_placar_periodo", ppPeriodo === "datas" ? "hoje" : ppPeriodo); } catch(e){}
+  buscaPlacarProsp();
+});
+$("#placar-prosp").addEventListener("click", e => {
+  const b = e.target.closest(".pp-t[data-temp]"); if(!b) return;
+  contatoSel = contatoSel === b.dataset.temp ? "" : b.dataset.temp;   // clicar de novo tira o filtro
+  selAtiv.clear();
+  renderListas(LISTAS_BRUTAS);
+  if(contatoSel) irParaLista();
+});
 
 if(creds && creds.user){ load(); } else { showLogin(); }
 setInterval(()=>buscaAutomatica(0), REFRESH_MIN*60000);
