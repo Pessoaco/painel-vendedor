@@ -201,6 +201,11 @@
   .pp-rodape{margin:6px 0 0;font-size:.68rem;color:var(--ink-faint)}
   .pp-box.carregando .v{opacity:.35}
   table.lc td.c-temperatura{white-space:nowrap}
+  /* v39: lista recolhida = só o título */
+  .lc-h-clicavel{cursor:pointer;user-select:none} .lc-seta{display:inline-block;width:1em;margin-right:4px;transition:transform .15s}
+  .lc-h-clicavel:hover{filter:brightness(.97)}
+  @media screen{ .listcard.recolhida{width:100%!important} .listcard.recolhida > :not(.lc-h){display:none} .listcard.recolhida .lc-seta{transform:rotate(-90deg)} }
+  .lc-todas{float:right;display:inline-flex;gap:6px;text-transform:none;letter-spacing:0} .lc-todas .btn{font-size:.7rem;padding:3px 8px}
   .lc-filtro{font:inherit;font-size:.7rem;font-weight:700;margin-left:8px;padding:1px 8px;border-radius:999px;border:1px solid currentColor;background:var(--surface);color:var(--clay-ink);cursor:pointer}
   .lc-filtro:hover{background:var(--clay-bg)}
   .kpi-strip.pp-strip{grid-template-columns:repeat(6,1fr)} .kpi-strip.pp-strip3{grid-template-columns:repeat(3,1fr)}
@@ -460,7 +465,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v36 (sem card Leads Qualificados e lista vira Leads; placar com Temperatura primeiro e Viraram clientes + conversão; sem Quem respondeu; temperatura e fichas contam sem o filtro; filtro aparece no título das listas; números de Prospects por Região clicáveis; colunas Origem e Chegou em; saem Contatados no mês, Pedidos, Vendido, Conversão, Novos este mês, Esfriando e Clientes; Em Negociação com marcador PROSPECT entra [n8n v12]) v35 = (placar da prospecção por período: hoje/semana/quinzena/mês/datas; temperatura quente/morno/frio em coluna, filtro e placar) v34 = (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v39 (listas recolhem/abrem clicando no título; Recolher todas / Abrir todas; lembrado no navegador) v38 = (números dos cards contam todos da região, sem o filtro de contato/temperatura; carteira separa "em negociação") v37 = (ficha "Aprovada - pagto A vista" conta e aparece como aprovada, verde) v36 = (sem card Leads Qualificados e lista vira Leads; placar com Temperatura primeiro e Viraram clientes + conversão; sem Quem respondeu; temperatura e fichas contam sem o filtro; filtro aparece no título das listas; números de Prospects por Região clicáveis; colunas Origem e Chegou em; saem Contatados no mês, Pedidos, Vendido, Conversão, Novos este mês, Esfriando e Clientes; Em Negociação com marcador PROSPECT entra [n8n v12]) v35 = (placar da prospecção por período: hoje/semana/quinzena/mês/datas; temperatura quente/morno/frio em coluna, filtro e placar) v34 = (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -493,7 +498,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v36</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v39</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -540,6 +545,7 @@
         <span class="breakdown">
           <b data-k="e_lead" data-goto="leads_qualificados">–</b> leads &nbsp;·&nbsp;
           <b data-k="e_carteira" data-goto="carteira">–</b> carteira prospect &nbsp;·&nbsp;
+          <b data-k="e_negociacao" data-goto="por_estagio">–</b> em negociação &nbsp;·&nbsp;
           <b data-k="e_regionais" data-goto="por_estagio">–</b> nas colunas por DDD/região
         </span>
         <div class="regiao-link" data-goto="por_regiao">
@@ -667,11 +673,11 @@
     </div><!-- /placar-bloco -->
 
     <section id="listas">
-      <p class="band-label">Minha Carteira de Prospects — listas dos números acima</p>
+      <p class="band-label">Minha Carteira de Prospects — listas dos números acima <span class="no-print lc-todas"><button type="button" class="btn" data-lc-todas="recolher">▸ Recolher todas</button> <button type="button" class="btn" data-lc-todas="abrir">▾ Abrir todas</button></span></p>
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v36 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v39 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -883,7 +889,7 @@ let cartPorLead = {};
 let fichaPorLead = {};   // v28: Ficha Cadastral do card, vem na lista do Perfil
 const fichaAprovada = f => /^aprovad/i.test(f || "");
 const fichaEmAnalise = f => /nos enviou|recebida|f.brica/i.test(f || "");
-const corFicha = f => /restri|vista/i.test(f || "") ? "meio" : (fichaAprovada(f) ? "ok" : (/reprovad/i.test(f || "") ? "baixo" : ""));
+const corFicha = f => fichaAprovada(f) ? "ok" : (/restri/i.test(f || "") ? "meio" : (/reprovad/i.test(f || "") ? "baixo" : ""));   // v37: "Aprovada - pagto A vista" é aprovada (verde)
 const DIAS_SEM_CONTATO = 20;
 const FILTROS_CONTATO = {
   sem_conversa: { rotulo: "Tem Zap e sem conversa", bate: c => !!c.zap && !c.ultima_conversa_zap },
@@ -953,7 +959,11 @@ function ordenarLinhasCopiloto(rows, col, dir){
 }
 function renderListas(listas){
   LISTAS_BRUTAS = listas;
-  const L = listasFiltradas(listas);
+  // v38: números dos cards contam todo mundo da região escolhida (sem o filtro de contato/temperatura); as listas seguem o filtro
+  const contatoGuardado = contatoSel; contatoSel = "";
+  const Lr = listasFiltradas(listas);
+  contatoSel = contatoGuardado;
+  const L = contatoSel ? listasFiltradas(listas) : Lr;
   ULTIMA_LISTAS = L;
   // v35: temperatura vira campo da linha (para ordenar a coluna) e conta no placar
   const ordemT = { quente: "1 quente", morno: "2 morno", frio: "3 frio" };
@@ -971,16 +981,17 @@ function renderListas(listas){
   guardaFiltros();
   montaOpcoesContato(listas);
   // números de cima saem das próprias listas: assim batem com a região escolhida
-  const n = k => (L[k] || []).length;
-  const cart = L.carteira || [];
+  const n = k => (Lr[k] || []).length;
+  const cart = Lr.carteira || [];
   const qLead = cart.filter(r => r.estagio === "LEAD").length;
   const qCart = cart.filter(r => r.estagio === "Carteira Prospect").length;
+  const qNeg = cart.filter(r => /negocia/i.test(r.estagio || "")).length;   // v38: Em Negociação com marcador PROSPECT
   const map = {
     total: cart.length, leads_qualificados: n("leads_qualificados"),
-    e_lead: qLead, e_carteira: qCart, e_regionais: cart.length - qLead - qCart,
+    e_lead: qLead, e_carteira: qCart, e_negociacao: qNeg, e_regionais: cart.length - qLead - qCart - qNeg,
     pediram_cotacao: n("pediram_cotacao"), novos_mes: n("novos_mes"), sem_contato_60: n("sem_contato_60"),
     nunca_contatados: n("nunca_contatados"), cotacao_sem_passo: n("cotacao_sem_passo"), sem_zap: n("sem_zap"), sem_cidade: n("sem_cidade"),
-    atividades: n("atividades"), atividades_atrasadas: (L.atividades || []).filter(a => a.estado === "atrasada").length
+    atividades: n("atividades"), atividades_atrasadas: (Lr.atividades || []).filter(a => a.estado === "atrasada").length
   };
   for(const [k,v] of Object.entries(map)){
     $$('[data-k="'+k+'"]').forEach(el => el.textContent = fmtInt(v));
@@ -999,7 +1010,7 @@ function renderListas(listas){
   };
   for(const [k,v] of Object.entries(pmTxt)) $$('[data-k="'+k+'"]').forEach(el => el.textContent = v);
   // 3º card: a região com MAIS prospects (número grande + nome); "sem região" não conta como região
-  const topReg = (L.por_regiao || []).filter(r => r.regiao && ((!regioesSel.size && !contatoSel) || (L.carteira || []).some(c => c.regiao === r.regiao))).sort((a,b) => (b.prospects||0) - (a.prospects||0))[0];
+  const topReg = (Lr.por_regiao || []).filter(r => r.regiao && ((!regioesSel.size) || (Lr.carteira || []).some(c => c.regiao === r.regiao))).sort((a,b) => (b.prospects||0) - (a.prospects||0))[0];
   $$('[data-k="top_regiao_qtd"]').forEach(el => el.textContent = topReg ? fmtInt(topReg.prospects) : "–");
   const nomeTop = $("#top-regiao-nome"); if(nomeTop) nomeTop.textContent = topReg ? topReg.regiao : "—";
   const temFiltro = regioesSel.size || contatoSel;
@@ -1010,7 +1021,7 @@ function renderListas(listas){
     fa.innerHTML = temFiltro ? '📍 Mostrando só '+
       [...regioesSel].sort(ordemFiltro).map(r => '<span class="chip-reg"><b>'+esc(rotuloFiltro(r))+'</b><button class="no-print" data-tira-reg="'+esc(r)+'" title="tirar">✕</button></span>').join(" ")+
       (contatoSel ? ' <span class="chip-reg"><b>'+esc(FILTROS_CONTATO[contatoSel].rotulo)+'</b><button class="no-print" data-tira-contato="1" title="tirar">✕</button></span>' : '')+
-      ' — '+cart.length+' prospects, '+n("atividades")+' atividades. <button class="btn no-print" id="filtro-limpar">✕ ver todas</button>' : "";
+      ' — '+(L.carteira || []).length+' prospects, '+(L.atividades || []).length+' atividades. <button class="btn no-print" id="filtro-limpar">✕ ver todas</button>' : "";
   }
   syncPrintPageStyle();
   const box = $("#listbox"); box.innerHTML = "";
@@ -1069,6 +1080,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
     h.innerHTML = '<span>'+titulo+(filtroTxt ? ' <button type="button" class="lc-filtro no-print" title="Tirar o filtro">filtro: '+esc(filtroTxt)+' ✕</button>' : '')+'</span><span class="lc-h-dir">'+
       (pre === "lista-" && rows.length ? '<button class="btn-print no-print" data-print="'+pre+k+'" title="Imprimir só esta lista">🖨 Imprimir esta lista</button>' : '')+
       '<span class="n">'+rows.length+'</span></span>';
+    // v39: recolher/abrir a lista clicando no título (lembrado neste navegador)
+    if(pre === "lista-"){ h.firstElementChild.insertAdjacentHTML("afterbegin", '<span class="lc-seta no-print" aria-hidden="true">▾</span>'); h.classList.add("lc-h-clicavel"); h.title = "clique para recolher ou abrir a lista"; if(listasRecolhidas.has(k)) card.classList.add("recolhida"); }
     card.appendChild(h);
     if(k==="perfil_prospects" && sortavel){
       const bar = document.createElement("div"); bar.className = "pf-resumo";
@@ -1536,7 +1549,7 @@ document.addEventListener("click", e=>{
     return;
   }
   const g = e.target.closest("[data-goto]");
-  if(g){ const el = $("#lista-"+g.dataset.goto); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); }
+  if(g){ const el = $("#lista-"+g.dataset.goto); if(el){ if(el.classList.contains("recolhida")) alternaLista(el, false); el.scrollIntoView({behavior:"smooth",block:"start"}); } }
 });
 
 const DEMO = (function(){
@@ -1780,13 +1793,28 @@ function aplicaPlacar(){
   document.body.classList.toggle("sem-placar", semPlacar);
   $("#btn-placar").textContent = semPlacar ? "👁 Mostrar placar" : "🙈 Ocultar placar";
 }
+// v39: listas recolhidas (ficam só com o título) — lembradas neste navegador
+function alternaLista(card, recolher){
+  const k = card.id.replace(/^lista-/, "");
+  card.classList.toggle("recolhida", recolher);
+  recolher ? listasRecolhidas.add(k) : listasRecolhidas.delete(k);
+  try { localStorage.setItem("pp_recolhidas", JSON.stringify([...listasRecolhidas])); } catch(e){}
+}
+document.addEventListener("click", e => {
+  const todas = e.target.closest("[data-lc-todas]");
+  if(todas){ $$("#listbox .listcard").forEach(c => alternaLista(c, todas.dataset.lcTodas === "recolher")); return; }
+  const h = e.target.closest(".lc-h-clicavel");
+  if(!h || e.target.closest("button, a, input")) return;
+  const card = h.closest(".listcard"); if(card) alternaLista(card, !card.classList.contains("recolhida"));
+});
 function irParaLista(){
   const L = ULTIMA_LISTAS || {};
   const k = LISTAS.map(l => l.k).find(k => k !== "atividades" && (L[k] || []).length);
   const el = (k && $("#lista-"+k)) || $("#listas");
   if(el) el.scrollIntoView({block:"start"});
 }
-var semPlacar = false, posSalva = 0;
+var semPlacar = false, posSalva = 0, listasRecolhidas = new Set();
+try { listasRecolhidas = new Set(JSON.parse(localStorage.getItem("pp_recolhidas") || "[]")); } catch(e){}
 try { semPlacar = localStorage.getItem("pp_sem_placar") === "1"; } catch(e){}
 try {
   const f = JSON.parse(sessionStorage.getItem("pp_filtros") || "null");
