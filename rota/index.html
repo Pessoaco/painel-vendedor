@@ -706,10 +706,29 @@ async function acharLugar(txt){
   const m = s.match(/^\s*(-?\d+(?:[.,]\d+)?)\s*[,; ]\s*(-?\d+(?:[.,]\d+)?)\s*$/);   // aceita tambem 'latitude, longitude'
   if(m) return { pos: [Number(m[1].replace(",", ".")), Number(m[2].replace(",", "."))], nome: s };
   if(SUGESTOES[s]) return { pos: SUGESTOES[s], nome: s };   // v9: escolheu da lista de sugestoes
-  const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&accept-language=pt-BR&q=" + encodeURIComponent(s));
-  const j = await r.json();
-  if(!j || !j.length) return null;
-  return { pos: [Number(j[0].lat), Number(j[0].lon)], nome: s };
+  // v15: endereco completo colado do Google (com bairro, " - " e CEP) o mapa gratuito nao acha.
+  // Tenta do mais completo para o mais simples: completo > sem CEP/bairro > rua+numero+cidade > rua+cidade > so o CEP.
+  for(const q of variacoesEndereco(s)){
+    const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&accept-language=pt-BR&q=" + encodeURIComponent(q));
+    const j = await r.json();
+    if(j && j.length) return { pos: [Number(j[0].lat), Number(j[0].lon)], nome: s };
+    await new Promise(ok => setTimeout(ok, 1100));   // o servico gratuito aceita 1 consulta por segundo
+  }
+  return null;
+}
+function variacoesEndereco(s){
+  const cep = (s.match(/\b\d{5}-?\d{3}\b/) || [""])[0];
+  const partes = s.replace(/\b\d{5}-?\d{3}\b/g, "").split(/\s+-\s+|,/).map(x => x.trim()).filter(Boolean);
+  const uf = partes.find(x => /^[A-Z]{2}$/.test(x)) || "";
+  const iUf = partes.indexOf(uf);
+  const cidade = iUf > 0 ? partes[iUf - 1] : (partes.length > 1 ? partes[partes.length - 1] : "");
+  const rua = partes[0] || "";
+  const num = partes.find((x, k) => k > 0 && /^\d+[A-Za-z]?$/.test(x)) || "";
+  const v = [s, partes.join(", "),
+    [rua + (num ? " " + num : ""), cidade, uf].filter(Boolean).join(", "),
+    [rua, cidade, uf].filter(Boolean).join(", "),
+    cep];
+  return v.filter((x, k) => x && v.indexOf(x) === k);
 }
 function mostraPartida(){
   const ok = $("#partida-ok");
