@@ -199,6 +199,7 @@
   .pp-t{all:unset;cursor:pointer;font-size:.78rem;color:var(--ink-soft)} .pp-t b{font-family:"IBM Plex Mono",monospace;font-size:1rem;color:var(--ink)}
   .pp-t:hover,.pp-t.on{color:var(--ink);text-decoration:underline}
   .pp-rodape{margin:6px 0 0;font-size:.68rem;color:var(--ink-faint)}
+  .pp-legenda{margin:8px 0 0;padding:6px 10px;border:1px dashed var(--hair);border-radius:8px;font-size:.74rem;color:var(--ink-soft);line-height:1.6;background:var(--surface)}
   .pp-box.carregando .v{opacity:.35}
   table.lc td.c-temperatura{white-space:nowrap}
   /* v39: lista recolhida = só o título */
@@ -465,7 +466,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Prospects — v40 (3 cards no topo: Em negociação · Minha carteira · Por região; lista Em negociação = marcador COTAÇÃO ou estágio Em Negociação; Com marcador Cotação e Nunca contatados no Radar; sem coluna Com Zap no Por Estágio) v39 = (listas recolhem/abrem clicando no título; Recolher todas / Abrir todas; lembrado no navegador) v38 = (números dos cards contam todos da região, sem o filtro de contato/temperatura; carteira separa "em negociação") v37 = (ficha "Aprovada - pagto A vista" conta e aparece como aprovada, verde) v36 = (sem card Leads Qualificados e lista vira Leads; placar com Temperatura primeiro e Viraram clientes + conversão; sem Quem respondeu; temperatura e fichas contam sem o filtro; filtro aparece no título das listas; números de Prospects por Região clicáveis; colunas Origem e Chegou em; saem Contatados no mês, Pedidos, Vendido, Conversão, Novos este mês, Esfriando e Clientes; Em Negociação com marcador PROSPECT entra [n8n v12]) v35 = (placar da prospecção por período: hoje/semana/quinzena/mês/datas; temperatura quente/morno/frio em coluna, filtro e placar) v34 = (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
+<!-- Copiloto de Prospects — v41 (legenda da temperatura; Quente = ficha/cotação DESTA representada e ativo em 15 dias, marcador COT não conta; Em negociação = cotação desta representada em 90 dias ou estágio; precisa do n8n v15) v40 = (3 cards no topo: Em negociação · Minha carteira · Por região; lista Em negociação = marcador COTAÇÃO ou estágio Em Negociação; Com marcador Cotação e Nunca contatados no Radar; sem coluna Com Zap no Por Estágio) v39 = (listas recolhem/abrem clicando no título; Recolher todas / Abrir todas; lembrado no navegador) v38 = (números dos cards contam todos da região, sem o filtro de contato/temperatura; carteira separa "em negociação") v37 = (ficha "Aprovada - pagto A vista" conta e aparece como aprovada, verde) v36 = (sem card Leads Qualificados e lista vira Leads; placar com Temperatura primeiro e Viraram clientes + conversão; sem Quem respondeu; temperatura e fichas contam sem o filtro; filtro aparece no título das listas; números de Prospects por Região clicáveis; colunas Origem e Chegou em; saem Contatados no mês, Pedidos, Vendido, Conversão, Novos este mês, Esfriando e Clientes; Em Negociação com marcador PROSPECT entra [n8n v12]) v35 = (placar da prospecção por período: hoje/semana/quinzena/mês/datas; temperatura quente/morno/frio em coluna, filtro e placar) v34 = (botão Ocultar placar; filtro e posição da tela guardados na aba; corrige espaço acima dos títulos das colunas) v33 = (ordem: lupas das 3 redes, depois @, depois alfinete; colunas com largura ajustável arrastando a borda do título) v32 = (botão @ reconhece a rede pelo link: Instagram, TikTok ou Facebook, cada um no seu campo) v31 = (lupa de TikTok e Facebook ao lado do Instagram; com a rede gravada no Contato, abre direto) v30 = (atualização automática sem apagar a tela: só escurece ao trocar de empresa; ao voltar para a aba só busca se passaram 2 min; não mexe com janela aberta nem muda a rolagem) v29 = (busca mostra o Perfil do prospect em primeiro lugar) v28 = (Ficha Cadastral: coluna no Perfil, filtros de ficha e linha no resumo do 📋) v27 = (Perfil dos prospects: lista do que falta preencher na ficha do CRM, como no Copiloto de Vendas) v26 = (filtro de contato: tem Zap e sem conversa / mais de 20 dias sem contato) v25 = (busca também por telefone: 4 ou mais dígitos, em qualquer parte do número, com ou sem o 9) v24 = (botão limpar filtro ao lado da busca: tira a região e mantém o nome digitado) v23 = (nova mensagem de apresentação da BB: Bobina galvanizada CSN logo depois da saudação, para aparecer na prévia) v22 = (última frase da mensagem de apresentação da BB) v21 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; selo do topo acertado para a mesma versão do rodapé) v20 = (nome fantasia grande não esconde mais a lupa/@/📍: o nome é cortado com … e os ícones ficam sempre à mostra) v19 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v18 = (alfinete vermelho do Google Maps ao lado do nome fantasia: abre a loja pelo nome + rua + cidade, com fotos da fachada e rota; mesmo ícone da Rota de Visitas; precisa do fluxo copiloto-prospects-n8n-v5, que traz a rua) v17 = (botão @ ao lado do 📷/🔍: cola o @ ou o link do Instagram achado e grava no Contato do Odoo; precisa do fluxo de Ações v5, acao=ficha_instagram) v16 = (📷 ao lado do nome fantasia abre o Instagram gravado no Odoo; sem @ continua a lupa 🔍; precisa do fluxo copiloto-prospects-n8n-v4) v15 = (título da lista e cabeçalho das colunas congelados ao rolar, no computador) v14 = (Placar do mês: contatados, pediram cotação, pedidos, vendido, conversão; precisa do fluxo copiloto-prospects-n8n-v3; selo de versão no topo; 🔍 ao lado do nome fantasia procura o Instagram da loja) v13 = (coluna Últ. conversa Zap em todas as listas de prospects, ao lado de Últ. interação) v12 = (BB: o botão do Zap já abre com a mensagem de apresentação escrita, 3 versões + saudação pela hora) v11 = (botão do Zap abre direto no WhatsApp Web, sempre na mesma aba) v10 = (na Ficha, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; a ficha recarrega depois; precisa do fluxo de Ações v4) v9 = (Ficha do prospect 📋: anotações do CRM + atividades abertas, ✏️ corrige o texto; usa o fluxo de Ações v3, ficha_ler/ficha_editar; daqui pra frente versão em número inteiro) v1.8 = (filtro também por DDD, tirado do Zap; várias regiões ao mesmo tempo no filtro 📍; 3ª empresa BB = bobinas, cor violeta, webhook v2; nomes de região sem cara de link; botão Imprimir esta lista em cada lista + Imprimir tudo; Carteira por região: uma lista por região aberta na tela; Check-list de Atividades é a 1ª lista; paleta própria: framboesa/jade/oliva/rosa — BNZ azul e CIAPLAC laranja intactos; sem coluna Responsável no Check-list; nasceu da cópia do Copiloto de Vendas v2.21; webhook painel-prospects) -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -498,7 +499,7 @@
     <h1>Copiloto de Prospects <span>— Caça</span></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC&nbsp;·&nbsp;BB</span>
-      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v40</span>
+      <span id="versao-tela" title="versão desta tela (a mesma do rodapé)" style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;color:var(--ink-soft);border:1px solid var(--hair);border-radius:999px;padding:2px 8px">v41</span>
       <span id="hoje">—</span>
       <div class="statusbar" id="statusbar">
         <span><span class="dot"></span><span id="status-text">carregando…</span></span>
@@ -542,7 +543,7 @@
         <span class="badge amber"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
         <span class="k">▸ 1º &nbsp; Em negociação</span>
         <span class="v" data-k="em_negociacao">–</span>
-        <span class="sub">Pediram cotação ou estão no estágio Em Negociação</span>
+        <span class="sub">Cotação desta representada nos últimos 90 dias ou estágio Em Negociação</span>
         <span class="sub" style="margin-top:6px"><b data-k="pm_clientes_cotacao">–</b> pediram cotação no mês · <b data-k="pm_cotacoes">–</b> cotações feitas</span>
         <span class="lnk">↗ abrir lista</span>
       </div>
@@ -625,6 +626,7 @@
           <span class="note">1º pedido no período · <span id="pp-conv">–</span> de conversão<br><small><span id="pp-valor">–</span> em pedidos no período</small></span>
         </div>
       </div>
+      <p class="pp-legenda"><b>Legenda da temperatura:</b> &nbsp;🔴 <b>Quente</b> = tem ficha cadastral ou cotação <u>desta representada</u> <b>e</b> respondeu ou recebeu cotação nos últimos 15 dias &nbsp;·&nbsp; 🟡 <b>Morno</b> = respondeu (mensagem ou ligação) nos últimos 15 dias, ainda sem ficha nem cotação &nbsp;·&nbsp; 🔵 <b>Frio</b> = já teve contato, mas está há mais de 15 dias sem responder (cotação antiga também esfria) &nbsp;·&nbsp; sem cor = ainda não teve nenhum contato. O marcador COT não conta: ele vale para qualquer representada e fica no cliente para sempre.</p>
       <p class="pp-rodape" id="pp-rodape">Mensagens do número das bobinas (BB), sem grupos.</p>
     </section>
 
@@ -656,9 +658,9 @@
           <span class="count" data-k="sem_cidade">–</span>
           <span class="name">Sem cidade no cadastro<small>ficam fora do filtro por região e da rota de visitas</small><span class="lnk">↗ abrir lista</span></span>
         </div>
-        <div class="row g" data-goto="em_negociacao">
+        <div class="row g" style="cursor:default">
           <span class="count" data-k="pediram_cotacao">–</span>
-          <span class="name">Com marcador Cotação<small>marcador COTAÇÃO no card — estão perto de comprar</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Com marcador Cotação<small>marcador COT no card (qualquer representada; não entra na temperatura)</small></span>
         </div>
         <div class="row s" data-goto="nunca_contatados">
           <span class="count" data-k="nunca_contatados">–</span>
@@ -673,7 +675,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Prospects v40 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Prospects v41 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -729,7 +731,7 @@ const LISTAS = [
   {k:"atividades",          titulo:"Check-list de Atividades — prospects",                                   cor:"amber"},
   {k:"leads_qualificados",  titulo:"Leads (coluna LEAD do funil)",                             cor:"amber"},
   {k:"perfil_prospects",    titulo:"🧠 Perfil dos prospects · o que falta preencher na ficha do CRM",        cor:"purple"},
-  {k:"em_negociacao",       titulo:"Em negociação · pediram cotação ou estágio Em Negociação",                cor:"green"},
+  {k:"em_negociacao",       titulo:"Em negociação · cotação desta representada (90 dias) ou estágio Em Negociação",                cor:"green"},
   {k:"cotacao_sem_passo",   titulo:"Radar · Pediram cotação e estão sem próximo passo",                      cor:"clay"},
   {k:"sem_zap",             titulo:"Radar · Sem Zap nem telefone (completar cadastro)",                      cor:"clay"},
   {k:"sem_cidade",          titulo:"Radar · Sem cidade no cadastro",                                         cor:"slate"},
@@ -892,9 +894,9 @@ const FILTROS_CONTATO = {
   mais_20: { rotulo: "Mais de " + DIAS_SEM_CONTATO + " dias sem contato", bate: c => (c.dias_sem_contato ?? -1) > DIAS_SEM_CONTATO },
   ficha_aprovada: { rotulo: "Ficha aprovada", bate: c => fichaAprovada(fichaPorLead[c.lead]) },
   ficha_analise: { rotulo: "Ficha em análise", bate: c => fichaEmAnalise(fichaPorLead[c.lead]) },
-  quente: { rotulo: "🔴 Quentes (ficha ou cotação)", bate: c => temperatura(c) === "quente" },
+  quente: { rotulo: "🔴 Quentes (ficha/cotação e ativos em 15 dias)", bate: c => temperatura(c) === "quente" },
   morno: { rotulo: "🟡 Mornos (responderam em 15 dias)", bate: c => temperatura(c) === "morno" },
-  frio: { rotulo: "🔵 Frios (sem resposta)", bate: c => temperatura(c) === "frio" }
+  frio: { rotulo: "🔵 Frios (+15 dias sem responder)", bate: c => temperatura(c) === "frio" }
 };
 /* v35: temperatura do prospect, calculada aqui (não é campo no CRM).
    Quente = mandou ficha (menos reprovada) ou pediu cotação (marcador COTAÇÃO ou estágio de negociação)
@@ -904,12 +906,18 @@ const FILTROS_CONTATO = {
 const DIAS_MORNO = 15;
 const TEMPS = { quente: "🔴 Quente", morno: "🟡 Morno", frio: "🔵 Frio" };
 const diasDesde = d => { const t = Date.parse(String(d).slice(0,10) + "T12:00:00"); return isNaN(t) ? 9999 : Math.floor((Date.now() - t) / 86400000); };
+/* v41 (16/11, Leidi): o marcador COT não dá temperatura (vale para qualquer representada e fica para sempre).
+   Quente = ficha (menos reprovada) ou cotação DESTA representada (ultima_cotacao, n8n v15) E ativo nos últimos 15 dias
+            (respondeu ou recebeu cotação). Cotação/ficha antiga sem resposta esfria. */
 function temperatura(r){
   const c = cartPorLead[r.lead] || r;
   const f = fichaPorLead[c.lead];
-  if((f && !/reprovad/i.test(f)) || temCot(c) || /negocia/i.test(c.estagio || "")) return "quente";
-  if(c.ultima_resposta && diasDesde(c.ultima_resposta) <= DIAS_MORNO) return "morno";
-  if(c.ultima_conversa_zap || c.ultima_interacao || c.ultima_resposta) return "frio";
+  const temFichaOuCot = (f && !/reprovad/i.test(f)) || !!c.ultima_cotacao;
+  const respondeu = !!c.ultima_resposta && diasDesde(c.ultima_resposta) <= DIAS_MORNO;
+  const cotRecente = !!c.ultima_cotacao && diasDesde(c.ultima_cotacao) <= DIAS_MORNO;
+  if(temFichaOuCot && (respondeu || cotRecente)) return "quente";
+  if(respondeu) return "morno";
+  if(c.ultima_conversa_zap || c.ultima_interacao || c.ultima_resposta || temFichaOuCot) return "frio";
   return "";
 }
 const bateContato = r => !contatoSel || FILTROS_CONTATO[contatoSel].bate(cartPorLead[r.lead] || r);
@@ -961,7 +969,7 @@ function renderListas(listas){
   contatoSel = contatoGuardado;
   const L = contatoSel ? listasFiltradas(listas) : Lr;
   // v40: lista "Em negociação" = marcador COTAÇÃO ou estágio Em Negociação (sai da carteira já filtrada)
-  const comNeg = X => { X.em_negociacao = (X.carteira || []).filter(r => temCot(r) || /negocia/i.test(r.estagio || "")); };
+  const comNeg = X => { X.em_negociacao = (X.carteira || []).filter(r => (!!r.ultima_cotacao && diasDesde(r.ultima_cotacao) <= 90) || /negocia/i.test(r.estagio || "")); };   // v41: cotação desta representada (90 dias), não o marcador COT
   comNeg(Lr); if(L !== Lr) comNeg(L);
   ULTIMA_LISTAS = L;
   // v35: temperatura vira campo da linha (para ordenar a coluna) e conta no placar
@@ -1115,6 +1123,8 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
         if(!sortavel || c[0][0]==="_") return "<th class=\"c-"+c[0]+marc+"\">"+c[1]+"</th>";
         return "<th class=\"sortable c-"+c[0]+(active?" active":"")+marc+"\" data-col=\""+c[0]+"\">"+c[1]+" <span class=\"arrow"+(active?" active":"")+"\">"+arrow+"</span></th>";
       }).join("")+"</tr></thead>";
+      // v41: legenda da temperatura no título da coluna
+      t.querySelectorAll("th.c-temperatura").forEach(th => th.title = "🔴 Quente = ficha ou cotação desta representada e ativo nos últimos 15 dias · 🟡 Morno = respondeu nos últimos 15 dias · 🔵 Frio = +15 dias sem responder · o marcador COT não conta");
       // v33: alça na borda direita do título, para arrastar a largura da coluna
       t.querySelectorAll("th").forEach(th => { const col = (th.className.match(/\bc-(\w+)/) || [])[1]; if(col && col[0] !== "_"){ const s = document.createElement("span"); s.className = "col-solta no-print"; s.dataset.colLarg = col; s.title = "arraste para mudar a largura · dois cliques volta ao normal"; th.appendChild(s); } });
       const tb = document.createElement("tbody");
