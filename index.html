@@ -460,6 +460,7 @@
   .kpi .breakdown .off{color:var(--ink-faint)}
   .kpi .perfil-resumo{font-size:.66rem;color:var(--ink-soft);line-height:1.4}
   .kpi .perfil-resumo b{color:var(--ink);text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
+  #ped-acess{display:none!important}   /* v45: acessórios/arame a entregar saem do card (o vendedor vê na lista) */
   .linha-prosp{margin:8px 2px 0;font-size:.8rem;color:var(--ink-soft)} .linha-prosp a{color:var(--blue-ink);font-weight:600} .linha-prosp .atraso-pros{color:var(--clay-ink);font-weight:600}
   @media print{ .linha-prosp{display:none} .hero-main .v,.hero-main.plain .v{font-size:1.7rem} .hero-main .v.vlr{font-size:1.2rem} }
   .callout{
@@ -510,7 +511,7 @@
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v44</small></h1>
+    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v47</small></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
@@ -576,7 +577,6 @@
         <span class="k">Pedidos a entregar</span>
         <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
         <span class="valor-ped" data-k="pedidos_valor" hidden>–</span>
-        <span class="sub">Confirmados, ainda não entregues por inteiro</span>
         <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
         <span class="nota-miuda" id="ped-acess" hidden>+ <span data-k="pedidos_acessorios">–</span> acessórios · <span data-k="pedidos_arame_kg">–</span> kg de arame</span>
         <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
@@ -591,13 +591,11 @@
         <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
         <span class="k">Minha carteira ativa</span>
         <span class="v" data-k="carteira_ativa">–</span>
-        <span class="note">Placar de clientes<br><span style="color:var(--blue-ink);font-weight:600;cursor:pointer" data-goto="cab-carteira">↗ abrir lista</span></span>
         <span class="breakdown">
-          <b data-k="c_ativos" data-goto="carteira_ativos">–</b> ativos<br>
-          <b data-k="c_negociacao" data-goto="carteira_negociacao">–</b> em negociação<br>
-          <b data-k="c_semmov" data-goto="carteira_semmov">–</b> sem movimentação<br>
+          <b data-k="c_ativos" data-goto="carteira_ativos">–</b> ativos · <b data-k="c_negociacao" data-goto="carteira_negociacao">–</b> em negoc. · <b data-k="c_semmov" data-goto="carteira_semmov">–</b> sem mov.<br>
           <span class="off"><b data-k="c_inativos" data-goto="carteira_inativos">–</b> inativos (fora do placar)</span>
         </span>
+        <span class="note"><span style="color:var(--blue-ink);font-weight:600;cursor:pointer" data-goto="cab-carteira">↗ abrir lista</span></span>
       </div>
       <div class="kpi blue" data-goto="curva_a" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
@@ -619,10 +617,6 @@
         <span class="note"><span style="color:var(--blue-ink);font-weight:600">↗ o que falta preencher</span></span>
       </div>
     </div>
-    <p class="linha-prosp">🔭 Seus prospects: <a id="link-prospeccao" href="#">ver o painel de prospects ↗</a>
-      <span id="pros-ativ" hidden>· <b data-k="prospect_atividades">–</b> atividades de prospect<span class="atraso-pros"> (<span data-k="prospect_atividades_atrasadas">–</span> atrasadas)</span> — <a id="link-prospeccao-ativ" href="#">ver as atividades ↗</a></span>
-    </p>
-
     <section>
       <p class="band-label"><svg class="ico"><use href="#i-agenda"/></svg> Check-list de Atividades</p>
       <p class="band-hint">As atividades programadas, da inteligência comercial e da cadência de relacionamento.</p>
@@ -674,6 +668,10 @@
           <span class="count" data-k="inativos_missao">–</span>
           <span class="name">Inativos<small>60 dias ou mais sem pedido — tratativa especial de recuperação</small><span class="lnk">↗ abrir lista</span></span>
         </div>
+        <div class="row s">
+          <span class="count">🔭</span>
+          <span class="name">Prospects<small>buscar novos clientes<span id="pros-ativ" hidden> · <b data-k="prospect_atividades">–</b> atividades<span class="atraso-pros"> (<span data-k="prospect_atividades_atrasadas">–</span> atrasadas)</span></span></small><a class="lnk" id="link-prospeccao" href="#" target="_blank" rel="noopener">↗ abrir painel de prospects</a><span class="note"> · <a class="lnk" id="link-prospeccao-ativ" href="#" target="_blank" rel="noopener">↗ atividades</a></span></span>
+        </div>
 
       </div>
     </section>
@@ -683,7 +681,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v44 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v47 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -760,7 +758,7 @@ const COLS = {
   padrao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"]],
   alvos:      [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"],["entrega_efetiva","Data de Entrega"],["marcadores","Marcadores"],["estagio","Estágio"]],
   atividades: [["cliente","Cliente"],["ultima_conversa_zap","Últ. conversa Zap"],["tipo","Tipo"],["resumo","Resumo"],["criada_em","Criada em"],["vencimento","Vencimento"],["estado","Estado"]],
-  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"],["faturamento","Faturamento Acum. 12m"]],
+  curva_a:    [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["estagio","Estágio"],["ultimo_pedido","Último pedido"],["ultima_interacao","Últ. interação"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"],["faturamento","Faturamento Acum. 12m"]],
   missao:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["ultima_conversa_zap","Últ. conversa Zap"],["cidade","Cidade"],["uf","UF"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"],["marcadores","Marcadores"]],
   alerta:     [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_conversa_zap","Últ. conversa Zap"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"]],
   carteira:   [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["marcadores","Marcadores"],["ultima_interacao","Últ. interação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ciclo_dias","Compra a cada"],["proxima_compra","Previsão da próxima compra"]],
