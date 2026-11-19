@@ -461,7 +461,11 @@
   .kpi .perfil-resumo{font-size:.66rem;color:var(--ink-soft);line-height:1.4}
   .kpi .perfil-resumo b{color:var(--ink);text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
   #ped-acess{display:none!important}   /* v45: acessórios/arame a entregar saem do card (o vendedor vê na lista) */
-  .linha-prosp{margin:8px 2px 0;font-size:.8rem;color:var(--ink-soft)} .linha-prosp a{color:var(--blue-ink);font-weight:600} .linha-prosp .atraso-pros{color:var(--clay-ink);font-weight:600}
+  /* v49: números clicáveis do resumo por região + lista de clientes que abre embaixo */
+  a.num-reg{color:var(--blue-ink);font-weight:700;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+  tr.reg-det td{background:var(--blue-bg);padding:8px 12px;font-size:.78rem;white-space:normal;max-width:none}
+  tr.reg-det ul{margin:4px 0 0;padding:0;list-style:none} tr.reg-det li{padding:2px 0;color:var(--ink-soft)} tr.reg-det li b{color:var(--ink)} tr.reg-det .reg-emp{font-weight:600;color:var(--blue-ink)}
+  @media print{ a.num-reg{text-decoration:none;color:inherit} }  .linha-prosp{margin:8px 2px 0;font-size:.8rem;color:var(--ink-soft)} .linha-prosp a{color:var(--blue-ink);font-weight:600} .linha-prosp .atraso-pros{color:var(--clay-ink);font-weight:600}
   @media print{ .linha-prosp{display:none} .hero-main .v,.hero-main.plain .v{font-size:1.7rem} .hero-main .v.vlr{font-size:1.2rem} }
   .callout{
     margin:0 0 12px;font-size:.72rem;color:var(--ink-faint)
@@ -511,7 +515,7 @@
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v48</small></h1>
+    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v50</small></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
@@ -681,7 +685,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v48 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v50 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -1192,6 +1196,7 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
           }
           if(k==="perfil_carteira" && c[0]==="preenchidos") v = '<b class="pf-n '+(r.preenchidos >= 9 ? "ok" : (r.preenchidos <= 3 ? "baixo" : "meio"))+'">'+(r.preenchidos||0)+'/9</b>';
           if(k==="perfil_carteira" && c[0]==="cliente" && r.lead) v = '<a class="lk" href="'+ODOO_URL+'/odoo/crm/'+r.lead+'" target="_blank" rel="noopener" title="abrir o card no CRM">'+v+'</a>';
+          if(k==="por_regiao" && (c[0]==="ativos" || c[0]==="inativos") && Number(r[c[0]]) > 0) v = '<a href="#" class="num-reg" data-reg="'+esc(r.regiao||"")+'" data-tipo="'+c[0]+'" title="ver esses clientes na lista da carteira">'+r[c[0]]+'</a>';
           if(k==="pedidos_sem_entrega" && c[0]==="a_entregar") v = textoAEntregar(r);
           if(k==="pedidos_sem_entrega" && c[0]==="valor") v = fmtBRL(v);
           if(k==="vendas_por_regiao" && c[0]==="valor") v = fmtBRL(v);
@@ -1459,7 +1464,16 @@ document.addEventListener("change", e => {
 });
 
 /* clique nos "↗ abrir lista" rola até a lista embaixo; clique no cabeçalho da tabela ordena */
-document.addEventListener("click", e=>{
+// v50: número da tabela "Clientes por Região" clicável: filtra a tela por aquela região e leva pra lista da carteira onde os clientes moram
+// (ativos -> Carteira · Ativos; inativos -> Carteira · Inativos). Pra voltar a ver tudo: "✕ ver todas" no aviso do filtro.
+document.addEventListener("click", e => {
+  const a = e.target.closest && e.target.closest("a.num-reg"); if(!a) return;
+  e.preventDefault();
+  const reg = a.dataset.reg || "";
+  if(reg){ regioesSel.clear(); regioesSel.add(reg); atualizaTextoRegioes(); selAtiv.clear(); renderListas(ULTIMA_LISTAS); }
+  const alvo = a.dataset.tipo === "inativos" ? "carteira_inativos" : "carteira_ativos";
+  setTimeout(() => { const el = document.getElementById("cab-fora") && a.dataset.tipo === "inativos" ? document.getElementById("cab-fora") : (document.getElementById("lista-" + alvo) || document.getElementById(alvo)); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }, 60);
+});document.addEventListener("click", e=>{
   const bf = e.target.closest && e.target.closest("button.btn-ficha");
   if(bf){ e.stopPropagation(); abrirFicha(bf.dataset.lead ? Number(bf.dataset.lead) : null, bf.dataset.cliente, bf.dataset.empresa); return; }
   if(e.target.closest && e.target.closest("i.col-resize")) return;   // soltar a alça de largura não conta como clique pra ordenar
