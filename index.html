@@ -511,7 +511,7 @@
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v47</small></h1>
+    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v48</small></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
@@ -607,7 +607,7 @@
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
         <span class="k">Clientes por região</span>
         <span class="v" data-k="regioes_qtd">–</span>
-        <span class="note">regiões com clientes<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir resumo por região</span></span>
+        <span class="note"><b>regiões atendidas</b><br><span id="reg-top">—</span><br><span style="color:var(--blue-ink);font-weight:600">↗ abrir resumo por região</span></span>
       </div>
       <div class="kpi blue" data-goto="perfil_carteira" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
@@ -681,7 +681,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v47 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v48 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -1047,7 +1047,14 @@ function renderListas(listas){
   pintaKpis(kpis);
   // v42: "Clientes por perfil" no placar da carteira ativa (conta o campo Perfil do Cliente do card; sem perfil = ainda não preenchido)
   const _rq = $('[data-k="regioes_qtd"]'), _pq = $('[data-k="perfil_qtd"]');
-  if(_rq) _rq.textContent = fmtInt((L.por_regiao || []).filter(r => r.regiao).length);
+  // v48: Clientes por região = quantas regiões têm cliente; embaixo, qual região tem MAIS clientes ativos (a lista por_regiao já vem do maior pro menor)
+  const _regs = (L.por_regiao || []).filter(r => r.regiao && ((r.ativos || 0) + (r.inativos || 0)) > 0);
+  if(_rq) _rq.textContent = fmtInt(_regs.length);
+  const _rt = $("#reg-top");
+  if(_rt){
+    const top = [..._regs].sort((a,b) => (b.ativos || 0) - (a.ativos || 0) || (b.inativos || 0) - (a.inativos || 0))[0];
+    _rt.innerHTML = top ? 'Mais clientes: <b>'+esc(top.regiao)+'</b> ('+(top.ativos || 0)+' ativo'+((top.ativos || 0) === 1 ? '' : 's')+')' : '';
+  }
   if(_pq) _pq.textContent = fmtInt((L.perfil_carteira || []).length);
   const prf = $("#perfil-resumo");
   if(prf){
