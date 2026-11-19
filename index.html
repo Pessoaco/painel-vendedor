@@ -110,7 +110,7 @@
   .band-hint b{color:var(--ink);font-weight:600}
 
   /* hero */
-  .hero{margin-top:12px;display:grid;grid-template-columns:.8fr 1.3fr 1fr;gap:10px}
+  .hero{margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   .hero-main.plain{background:var(--surface);border-color:var(--hair);border-top:3px solid var(--blue-edge)}
   .hero-main.plain .k{color:var(--blue-ink)}
   .hero-main.plain .v{color:var(--blue-ink);font-size:clamp(2rem,6vw,2.6rem)}
@@ -342,7 +342,7 @@
 
 
   @media (max-width:820px){
-    .hero{grid-template-columns:1fr}
+    .hero{grid-template-columns:1fr 1fr}
     .kpi-strip{grid-template-columns:1fr 1fr}
     .rows{grid-template-columns:1fr}
   }
@@ -368,7 +368,7 @@
     .chip-co.ciaplac{background:var(--ciaplac-edge);border-color:var(--ciaplac-edge);color:#fff}
     .chip-co.bb{background:var(--bb-edge);border-color:var(--bb-edge);color:#fff}
     .hero-main{padding:12px 14px}
-    .hero{grid-template-columns:.8fr 1.3fr 1fr!important}
+    .hero{grid-template-columns:repeat(4,1fr)!important}
     .kpi-strip{grid-template-columns:repeat(4,1fr)!important}
     .rows{grid-template-columns:1fr 1fr 1fr!important}
     .hero,.hero-main,.kpi,.agenda,.row{break-inside:avoid}
@@ -446,6 +446,22 @@
   table.lc td.c-fantasia{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .legenda{display:block;margin-top:6px;font-size:.68rem;color:var(--ink-faint);font-style:normal;line-height:1.4}
   .hero-main .breakdown b[data-goto]{cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
+  /* v43: cards do topo pequenos (4 em linha) + faixa de baixo com 5 */
+  .hero-main{padding:11px 13px}
+  .hero-main .v,.hero-main.plain .v{font-size:clamp(1.7rem,5.5vw,2.2rem)}
+  .hero-main .v.vlr{font-size:clamp(1.25rem,4vw,1.6rem)}
+  .hero-main .badge{width:26px;height:26px;top:10px;right:10px}
+  .hero-main .badge .ico{width:15px;height:15px}
+  .hero-main .k{font-size:.64rem;padding-right:30px}
+  .hero-main.green{background:var(--green-bg);border-color:var(--green-edge)}
+  .hero-main.green .k,.hero-main.green .v{color:var(--green-ink)}
+  .kpi .breakdown{font-size:.68rem;color:var(--ink-soft);line-height:1.5;font-variant-numeric:tabular-nums;margin-top:4px}
+  .kpi .breakdown b{color:var(--ink);font-family:"IBM Plex Mono",monospace;font-weight:600;cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
+  .kpi .breakdown .off{color:var(--ink-faint)}
+  .kpi .perfil-resumo{font-size:.66rem;color:var(--ink-soft);line-height:1.4}
+  .kpi .perfil-resumo b{color:var(--ink);text-decoration:underline;text-decoration-color:var(--blue-edge);text-underline-offset:2px}
+  .linha-prosp{margin:8px 2px 0;font-size:.8rem;color:var(--ink-soft)} .linha-prosp a{color:var(--blue-ink);font-weight:600} .linha-prosp .atraso-pros{color:var(--clay-ink);font-weight:600}
+  @media print{ .linha-prosp{display:none} .hero-main .v,.hero-main.plain .v{font-size:1.7rem} .hero-main .v.vlr{font-size:1.2rem} }
   .callout{
     margin:0 0 12px;font-size:.72rem;color:var(--ink-faint)
   }
@@ -494,7 +510,7 @@
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v43</small></h1>
+    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v44</small></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
@@ -531,39 +547,36 @@
     <div class="hero">
       <div class="hero-main amber" data-goto="em_negociacao" style="cursor:pointer">
         <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
-        <span class="k">▸ 1º &nbsp; Em Negociação</span>
+        <span class="k">▸ Em Negociação</span>
         <span class="v" data-k="em_negociacao">–</span>
         <span class="sub">Comece por aqui · Foco do dia!</span>
         <span class="lnk">↗ abrir lista</span>
       </div>
-      <div class="hero-main blue">
-        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
-        <span class="k">Minha carteira ativa</span>
-        <span class="v" data-k="carteira_ativa">–</span>
-        <span class="sub">Placar de clientes</span>
-        <span class="lnk" data-goto="cab-carteira" style="cursor:pointer">↗ abrir lista</span>
-        <span class="breakdown">
-          <b data-k="c_ativos" data-goto="carteira_ativos">–</b> ativos &nbsp;·&nbsp;
-          <b data-k="c_negociacao" data-goto="carteira_negociacao">–</b> em negociação &nbsp;·&nbsp;
-          <b data-k="c_semmov" data-goto="carteira_semmov">–</b> sem movimentação
-          &nbsp;|&nbsp; <span class="off"><b data-k="c_inativos" data-goto="carteira_inativos">–</b> inativos (fora do placar)</span>
-        </span>
-        <div class="regiao-link" data-goto="por_regiao">
-          <span class="sub">Clientes por região</span>
-          <span class="lnk">↗ abrir resumo por região</span>
-        </div>
-        <div class="regiao-link" data-goto="perfil_carteira">
-          <span class="sub">Clientes por perfil</span>
-          <span class="perfil-resumo" id="perfil-resumo"></span>
-          <span class="lnk">↗ abrir perfil da carteira (o que falta preencher)</span>
-        </div>
+      <div class="hero-main green">
+        <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
+        <span class="k">Vendas do Mês Atual</span>
+        <span class="v vlr" data-k="vendas_mes">–</span>
+        <span class="sub">Confirmados · até o momento</span>
+        <span class="nota-pecas" id="nota-pecas-bnz"><b class="pecas" data-k="vendas_pecas">–</b> <span data-k="vendas_pecas_label">peças vendidas</span></span>
+        <span class="nota-miuda" id="vendas-acess" hidden>+ <span data-k="vendas_acessorios">–</span> acessórios · <span data-k="vendas_arame_kg">–</span> kg de arame</span>
+        <span class="nota-pecas" id="nota-pecas-ciaplac-metros" hidden><b class="pecas" data-k="ciaplac_metros">–</b> m de Forro</span>
+        <span class="nota-pecas" id="nota-kg-bb" hidden><b class="pecas" data-k="vendas_kg">–</b> kg de bobinas</span>
+        <span class="nota-pecas" id="nota-pecas-ciaplac-unid" hidden><b class="pecas" data-k="ciaplac_unidades">–</b> un. de Acabamento/Acessório</span>
+        <span class="lnk" data-goto="vendas_por_regiao" style="cursor:pointer">↗ ver por região</span>
+      </div>
+      <div class="hero-main amber" data-goto="alvos" style="cursor:pointer">
+        <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
+        <span class="k">Não compraram este mês</span>
+        <span class="v" data-k="alvos_mes">–</span>
+        <span class="sub">Alvos do mês</span>
+        <span class="lnk">↗ abrir lista</span>
       </div>
       <div class="hero-main plain" data-goto="pedidos_sem_entrega" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-caixa"/></svg></span>
         <span class="k">Pedidos a entregar</span>
         <span class="v" data-k="pedidos_sem_entrega_qtd">–</span>
         <span class="valor-ped" data-k="pedidos_valor" hidden>–</span>
-        <span class="sub">Confirmados e ainda não entregues por inteiro (entrega parcial: só o que falta)</span>
+        <span class="sub">Confirmados, ainda não entregues por inteiro</span>
         <span class="nota-pecas" id="ped-pecas" hidden><b class="pecas" data-k="pedidos_pecas">–</b> peças a entregar</span>
         <span class="nota-miuda" id="ped-acess" hidden>+ <span data-k="pedidos_acessorios">–</span> acessórios · <span data-k="pedidos_arame_kg">–</span> kg de arame</span>
         <span class="nota-pecas" id="ped-metros" hidden><b class="pecas" data-k="pedidos_metros">–</b> m de Forro a entregar</span>
@@ -574,22 +587,17 @@
     </div>
 
     <div class="kpi-strip">
-      <div class="kpi green">
-        <span class="badge green"><svg class="ico"><use href="#i-dinheiro"/></svg></span>
-        <span class="k">Vendas do Mês Atual</span>
-        <span class="v" data-k="vendas_mes">–</span>
-        <span class="note">Confirmados · até o momento<br><span style="color:var(--blue-ink);font-weight:600;cursor:pointer" data-goto="vendas_por_regiao">↗ ver por região</span></span>
-        <span class="nota-pecas" id="nota-pecas-bnz"><b class="pecas" data-k="vendas_pecas">–</b> <span data-k="vendas_pecas_label">peças vendidas</span></span>
-        <span class="nota-miuda" id="vendas-acess" hidden>+ <span data-k="vendas_acessorios">–</span> acessórios · <span data-k="vendas_arame_kg">–</span> kg de arame</span>
-        <span class="nota-pecas" id="nota-pecas-ciaplac-metros" hidden><b class="pecas" data-k="ciaplac_metros">–</b> m de Forro</span>
-        <span class="nota-pecas" id="nota-kg-bb" hidden><b class="pecas" data-k="vendas_kg">–</b> kg de bobinas</span>
-        <span class="nota-pecas" id="nota-pecas-ciaplac-unid" hidden><b class="pecas" data-k="ciaplac_unidades">–</b> un. de Acabamento/Acessório</span>
-      </div>
-      <div class="kpi amber" data-goto="alvos" style="cursor:pointer">
-        <span class="badge amber"><svg class="ico"><use href="#i-alvo"/></svg></span>
-        <span class="k">Não compraram este mês</span>
-        <span class="v" data-k="alvos_mes">–</span>
-        <span class="note">Alvos do mês<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
+      <div class="kpi blue">
+        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
+        <span class="k">Minha carteira ativa</span>
+        <span class="v" data-k="carteira_ativa">–</span>
+        <span class="note">Placar de clientes<br><span style="color:var(--blue-ink);font-weight:600;cursor:pointer" data-goto="cab-carteira">↗ abrir lista</span></span>
+        <span class="breakdown">
+          <b data-k="c_ativos" data-goto="carteira_ativos">–</b> ativos<br>
+          <b data-k="c_negociacao" data-goto="carteira_negociacao">–</b> em negociação<br>
+          <b data-k="c_semmov" data-goto="carteira_semmov">–</b> sem movimentação<br>
+          <span class="off"><b data-k="c_inativos" data-goto="carteira_inativos">–</b> inativos (fora do placar)</span>
+        </span>
       </div>
       <div class="kpi blue" data-goto="curva_a" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
@@ -597,14 +605,23 @@
         <span class="v" data-k="curva_a_qtd">–</span>
         <span class="note">Curva A · top 20% dos clientes (12m)<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir lista</span></span>
       </div>
-      <div class="kpi blue">
+      <div class="kpi blue" data-goto="por_regiao" style="cursor:pointer">
         <span class="badge blue"><svg class="ico"><use href="#i-radar"/></svg></span>
-        <span class="k">Prospecção</span>
-        <span class="note">Buscar novos clientes<br><span class="link"><a id="link-prospeccao" href="#">Ver painel ↗</a></span></span>
-        <span class="nota-pecas" id="pros-ativ" hidden><b class="pecas" data-k="prospect_atividades">–</b> atividades de prospect<span class="atraso-pros"> · <span data-k="prospect_atividades_atrasadas">–</span> atrasadas</span></span>
-        <span class="note"><span class="link"><a id="link-prospeccao-ativ" href="#">Ver as atividades de prospect ↗</a></span></span>
+        <span class="k">Clientes por região</span>
+        <span class="v" data-k="regioes_qtd">–</span>
+        <span class="note">regiões com clientes<br><span style="color:var(--blue-ink);font-weight:600">↗ abrir resumo por região</span></span>
+      </div>
+      <div class="kpi blue" data-goto="perfil_carteira" style="cursor:pointer">
+        <span class="badge blue"><svg class="ico"><use href="#i-pessoas"/></svg></span>
+        <span class="k">Clientes por perfil</span>
+        <span class="v" data-k="perfil_qtd">–</span>
+        <span class="perfil-resumo" id="perfil-resumo"></span>
+        <span class="note"><span style="color:var(--blue-ink);font-weight:600">↗ o que falta preencher</span></span>
       </div>
     </div>
+    <p class="linha-prosp">🔭 Seus prospects: <a id="link-prospeccao" href="#">ver o painel de prospects ↗</a>
+      <span id="pros-ativ" hidden>· <b data-k="prospect_atividades">–</b> atividades de prospect<span class="atraso-pros"> (<span data-k="prospect_atividades_atrasadas">–</span> atrasadas)</span> — <a id="link-prospeccao-ativ" href="#">ver as atividades ↗</a></span>
+    </p>
 
     <section>
       <p class="band-label"><svg class="ico"><use href="#i-agenda"/></svg> Check-list de Atividades</p>
@@ -657,6 +674,7 @@
           <span class="count" data-k="inativos_missao">–</span>
           <span class="name">Inativos<small>60 dias ou mais sem pedido — tratativa especial de recuperação</small><span class="lnk">↗ abrir lista</span></span>
         </div>
+
       </div>
     </section>
 
@@ -665,7 +683,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v43 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v44 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -791,7 +809,7 @@ function pintaKpis(kpi){
     alvos_mes: kpi.alvos_mes,
     atividades: kpi.atividades, atividades_atrasadas: kpi.atividades_atrasadas,
     contato_preventivo: m.contato_preventivo, recuperacao: m.recuperacao, em_formacao: m.em_formacao,
-    cotou_30d: kpi.cotou_30d,
+    cotou_30d: kpi.cotou_30d, regioes_qtd: kpi.regioes_qtd, perfil_qtd: kpi.perfil_qtd,
     sem_movimentacao_30d: al.sem_movimentacao_30d, sem_conversa_zap: al.sem_conversa_zap, inativos_missao: al.inativos,
     curva_a_qtd: kpi.curva_a_qtd, vendas_pecas: kpi.vendas_pecas, pedidos_sem_entrega_qtd: kpi.pedidos_sem_entrega_qtd
   };
@@ -1030,6 +1048,9 @@ function renderListas(listas){
   const kpis = regioesSel.size ? kpisDasListas(L, DADOS.kpis || {}) : (DADOS.kpis || {});
   pintaKpis(kpis);
   // v42: "Clientes por perfil" no placar da carteira ativa (conta o campo Perfil do Cliente do card; sem perfil = ainda não preenchido)
+  const _rq = $('[data-k="regioes_qtd"]'), _pq = $('[data-k="perfil_qtd"]');
+  if(_rq) _rq.textContent = fmtInt((L.por_regiao || []).filter(r => r.regiao).length);
+  if(_pq) _pq.textContent = fmtInt((L.perfil_carteira || []).length);
   const prf = $("#perfil-resumo");
   if(prf){
     const pc = L.perfil_carteira || [], cont = {};
