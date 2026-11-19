@@ -465,7 +465,7 @@
 </style>
 </head>
 <body>
-<!-- Copiloto de Vendas — v42 (número da versão também no cabeçalho; "Clientes por perfil" no placar da carteira ativa com link pra lista do Perfil; colunas do Perfil na MESMA ORDEM da tela do card no CRM) v41 = (lista 🧠 "Perfil da carteira ativa": os 9 campos da ficha de compra do card do CRM viram colunas, vazio = ⬜, etiquetas sempre inteiras (quebram linha); atalho no título da Carteira ativa; n8n v53) v40 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; script compartilhar.js do portal; fluxo n8n Compartilhar_Link_Paineis_v1) v39 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v38 = (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
+<!-- Copiloto de Vendas — v43 (card "Cotaram e não fecharam" nos últimos 30 dias = lista nova cotou_nao_fechou, vem do fluxo n8n v56; texto do Sem Movimentação corrigido: 30 a 59 dias sem PEDIDO, cotação não conta mais) v42 = (número da versão também no cabeçalho; "Clientes por perfil" no placar da carteira ativa com link pra lista do Perfil; colunas do Perfil na MESMA ORDEM da tela do card no CRM) v41 = (lista 🧠 "Perfil da carteira ativa": os 9 campos da ficha de compra do card do CRM viram colunas, vazio = ⬜, etiquetas sempre inteiras (quebram linha); atalho no título da Carteira ativa; n8n v53) v40 = (botão 🔗 Compartilhar: link que abre sem login com a foto da tela, vale 30 dias; script compartilhar.js do portal; fluxo n8n Compartilhar_Link_Paineis_v1) v39 = (Ficha 📋 ganha o "🧠 Resumo" no topo: última compra, com quem compra, preço do concorrente, material, volume, recompra, pagamento, perfil, estratégia; precisa do fluxo de Ações v6) v38 = (na Ficha do cliente, cada atividade aberta tem ✔ Feito / ✎ editar-reprogramar / ✕ cancelar; depois da ação a ficha recarrega; precisa do n8n Ações v4). v37 = (a Ficha do cliente usa o MESMO fluxo das ações: n8n "Copiloto de Vendas - Ações v3"; não existe mais fluxo separado da ficha). v36 = Ficha do cliente: botão 📋 ao lado do nome abre as anotações do CRM (assistente do vendedor, Copiloto, Odoo) + atividades abertas, com ✏️ pra corrigir o texto; precisa do n8n v47. v35 = (Check-list: coluna "Criada em" e destaque 💬 quando falou com o cliente depois de criada a atividade; "Previsão da próxima compra" (vermelho se já passou); "sem ciclo" em vez de traço; dicas explicando o ciclo; precisa do n8n v46). v34 = (botão do pop-up diz quantas atividades serão canceladas/concluídas em massa). v33 = (cópia dos últimos dados: se o Odoo, o n8n ou a internet caírem mostra a última consulta boa com aviso "dados de dd/mm às hh:mm"; precisa do n8n v45). v32 = (Check-list: colunas com largura arrastável (alça no título), texto longo cortado com "…" e dica ao passar o mouse, botões Editar/Cancelar só com ícone, sem coluna Responsável; n8n continua v44). v31 = (Check-list de Atividades ganha a coluna "Últ. conversa Zap", com "hoje hh:mm" em destaque; precisa do n8n v44). v30 = (coluna Empresa nas listas quando está no Total; n8n continua v42). v29 = (Curva A mostra o Estágio de cada cliente, com destaque pra Sem Movimentação/Inativo; n8n continua v42). v28 = (colunas "Compra a cada" e "Próxima compra" nas listas de clientes, vindas do ciclo da Inteligência Comercial; precisa do n8n v42). v27 = (Pedidos a Entregar inclui entrega parcial mostrando só o que falta: colunas Situação, A entregar e Valor; precisa do n8n v41). v26 = (era 2.25; daqui pra frente só número inteiro: 26, 27, 28…) (BB entra: botão BB roxo, bobinas em kg nos cards Vendas do Mês e Pedidos a Entregar; botões em ordem BB · BNZ · CIAPLAC · Total; precisa do n8n v38). v2.24 = (nova tabela "Vendas do Mês por Região": pedidos e R$ por região, com total e %; link "ver por região" no card Vendas do Mês). v2.23 = (título "Carteira ativa" antes das 3 listas do placar, com botão de imprimir o bloco; "Fora do placar" nos inativos; "abrir lista" do card da carteira leva ao título). v2.22 = (filtro 📍 por DDD e região, várias de uma vez; números e listas recalculados; botão "Imprimir esta lista"). v2.21 = ajustes de impressão/cabeçalho, resumo por região, colunas das listas. Precisa do n8n v37 (região em cada linha). -->
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-alvo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
@@ -494,7 +494,7 @@
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v42</small></h1>
+    <h1>Copiloto de Vendas <span>— Missões</span> <small class="ver" id="ver-cab">v43</small></h1>
     <div class="meta">
       <span class="chip-co" id="chip-co">BNZ&nbsp;·&nbsp;CIAPLAC</span>
       <span id="hoje">—</span>
@@ -641,17 +641,21 @@
       <p class="band-label alerta"><svg class="ico"><use href="#i-radar"/></svg> Radar Inteligente — Sinal Amarelo</p>
       <p class="band-hint"><b>Hora de agir</b> — um contato agora evita a perda. Confira também a coluna <b>Dias desde Última Compra</b> em cada lista.</p>
       <div class="rows">
+        <div class="row a" data-goto="cotou_nao_fechou">
+          <span class="count" data-k="cotou_30d">–</span>
+          <span class="name">Cotou e não fechou — últimos 30 dias<small>pediram cotação e não fizeram pedido depois dela — ligar para reativar (os de Sem Movimentação e Inativos aparecem em destaque)</small><span class="lnk">↗ abrir lista</span></span>
+        </div>
         <div class="row a" data-goto="conversa_zap">
           <span class="count" data-k="sem_conversa_zap">–</span>
           <span class="name">Sem conversa no Zap +20 dias<small>faz +20 dias sem falar — manter o relacionamento ativo</small><span class="lnk">↗ abrir lista</span></span>
         </div>
         <div class="row c" data-goto="sem_movimentacao">
           <span class="count" data-k="sem_movimentacao_30d">–</span>
-          <span class="name">Sem Movimentação +30 dias<small>deixaram de ser ativos — 30 dias sem cotação ou pedido</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Sem Movimentação +30 dias<small>deixaram de ser ativos — de 30 a 59 dias sem pedido (a cotação não conta)</small><span class="lnk">↗ abrir lista</span></span>
         </div>
         <div class="row c" data-goto="inativos">
           <span class="count" data-k="inativos_missao">–</span>
-          <span class="name">Inativos<small>+60 dias sem pedido — tratativa especial de recuperação</small><span class="lnk">↗ abrir lista</span></span>
+          <span class="name">Inativos<small>60 dias ou mais sem pedido — tratativa especial de recuperação</small><span class="lnk">↗ abrir lista</span></span>
         </div>
       </div>
     </section>
@@ -661,7 +665,7 @@
       <div class="listbox" id="listbox"></div>
     </section>
 
-    <p class="updated">Copiloto de Vendas v42 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
+    <p class="updated">Copiloto de Vendas v43 · atualizado em <span id="updated-at">—</span> · por <a class="autor" href="https://instagram.com/pessoaco" target="_blank" rel="noopener">@pessoaco</a></p>
   </div>
 
   <div class="loading" id="loading" hidden>carregando o painel…</div>
@@ -720,7 +724,8 @@ const LISTAS = [
   {k:"em_formacao",         titulo:"Missão · Em Formação",                                                  cor:"purple"},
   {k:"atividades",          titulo:"Check-list de Atividades",                                              cor:"amber"},
   {k:"alvos",               titulo:"Não compraram este mês (Alvos)",                                        cor:"amber"},
-  {k:"conversa_zap",        titulo:"Alerta · Sem conversa no Zap +20 dias",                                 cor:"clay"},
+  {k:"cotou_nao_fechou",    titulo:"Alerta · Cotou e não fechou (cotação aberta nos últimos 30 dias)",       cor:"amber"},
+  {k:"conversa_zap",        titulo:"Alerta · Sem conversa no Zap +20 dias",                                cor:"clay"},
   {k:"sem_movimentacao",    titulo:"Alerta · Sem Movimentação +30 dias",                                    cor:"clay"},
   {k:"inativos",            titulo:"Alerta · Inativos",                                                     cor:"clay"},
   {k:"curva_a",             titulo:"Curva A · Principais Clientes (top 20% por faturamento acumulado nos últimos 12 meses)", cor:"blue"},
@@ -750,6 +755,8 @@ COLS.carteira_ativos = COLS.carteira_negociacao = COLS.carteira_semmov = COLS.ca
 COLS.perfil_carteira = [["cliente","Cliente"],["fantasia","Nome Fantasia"],["estagio","Estágio"],["perfil","Perfil do Cliente"],["potencial","Potencial e Relacionamento"],["materiais","Material"],["volume_kg","Volume por compra (kg)"],["recompra_dias","Frequência - Recompra a cada (dias)"],["ritmo_dias","Ritmo de Contato (dias)"],["preco_conco","Último preço conco"],["comprou_de","Comprou por último de"],["condicao_pagto","Condição de pagto q faz"],["preenchidos","Preenchido"]];   // v42: mesma ordem da tela do card no CRM
 const PERFIL_CAMPOS = new Set(["comprou_de","perfil","materiais","volume_kg","recompra_dias","preco_conco","condicao_pagto","ritmo_dias","potencial"]);
 const perfilVazio = x => Array.isArray(x) ? x.length === 0 : (typeof x === "number" ? !(x > 0) : !String(x == null ? "" : x).trim());
+// v43: Cotou e não fechou (cotação aberta nos últimos 30 dias, sem pedido fechado)
+COLS.cotou_nao_fechou = [["cliente","Cliente"],["fantasia","Nome Fantasia"],["zap","Zap"],["cidade","Cidade"],["uf","UF"],["estagio","Estágio"],["cotacao_valor","Valor cotado"],["ultima_cotacao","Última cotação"],["dias_desde_cotacao","Dias desde a cotação"],["ultimo_pedido","Último pedido"],["dias_desde_ultima_compra","Dias desde Última Compra"],["ultima_conversa_zap","Últ. conversa Zap"],["marcadores","Marcadores"]];
 COLS.contato_preventivo = COLS.recuperacao = COLS.em_formacao = COLS.missao;
 COLS.conversa_zap = COLS.sem_movimentacao = COLS.inativos = COLS.alerta;
 
@@ -759,7 +766,7 @@ const $$ = s => document.querySelectorAll(s);
 const fmtInt = n => (n==null||isNaN(n)) ? "–" : Number(n).toLocaleString("pt-BR");
 const fmtBRL = n => (n==null||isNaN(n)) ? "R$ –" : Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
 const fmtDateTime = iso => { try{ return new Date(iso).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}catch(e){return iso||"—";} };
-const DATE_COLS = new Set(["proxima_compra","ultima_interacao","ultimo_pedido","vencimento","ultima_conversa_zap","entrega_efetiva","data_pedido"]);
+const DATE_COLS = new Set(["proxima_compra","ultima_interacao","ultimo_pedido","vencimento","ultima_conversa_zap","entrega_efetiva","data_pedido","ultima_cotacao"]);
 const fmtDateBR = v => { const m = String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? (m[3]+"/"+m[2]+"/"+m[1].slice(2)) : (v || ""); };
 
 function setStatus(state, text){
@@ -784,6 +791,7 @@ function pintaKpis(kpi){
     alvos_mes: kpi.alvos_mes,
     atividades: kpi.atividades, atividades_atrasadas: kpi.atividades_atrasadas,
     contato_preventivo: m.contato_preventivo, recuperacao: m.recuperacao, em_formacao: m.em_formacao,
+    cotou_30d: kpi.cotou_30d,
     sem_movimentacao_30d: al.sem_movimentacao_30d, sem_conversa_zap: al.sem_conversa_zap, inativos_missao: al.inativos,
     curva_a_qtd: kpi.curva_a_qtd, vendas_pecas: kpi.vendas_pecas, pedidos_sem_entrega_qtd: kpi.pedidos_sem_entrega_qtd
   };
@@ -925,7 +933,7 @@ function kpisDasListas(L, base){
   return {
     carteira_ativa: n("carteira_ativos") + n("carteira_negociacao") + n("carteira_semmov"),
     em_negociacao: n("em_negociacao"),
-    alvos_mes: n("alvos"),
+    alvos_mes: n("alvos"), cotou_30d: n("cotou_nao_fechou"),
     atividades: ativ.length, atividades_atrasadas: ativ.filter(a => a.estado === "atrasada").length,
     carteira: { ativos: n("carteira_ativos"), negociacao: n("carteira_negociacao"), sem_movimentacao: n("carteira_semmov"), inativos: n("carteira_inativos") },
     missoes: { contato_preventivo: n("contato_preventivo"), recuperacao: n("recuperacao"), em_formacao: n("em_formacao") },
@@ -955,7 +963,7 @@ let ULTIMA_LISTAS = {};   // listas como vieram do n8n (a busca por cliente e as
 const sortState = {};
 const selAtiv = new Set();   // atividades marcadas (ids em texto) pro "Feito/Cancelar nas selecionadas"
 let TIPOS = [];              // tipos de atividade do Odoo (pra "agendar a próxima")
-const NUM_COLS_COPILOTO = new Set(["ciclo_dias","dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao","volume_kg","recompra_dias","preco_conco","ritmo_dias","preenchidos"]);
+const NUM_COLS_COPILOTO = new Set(["cotacao_valor","dias_desde_cotacao","ciclo_dias","dias_desde_ultima_compra","ativos","inativos","pedidos","valor","participacao","volume_kg","recompra_dias","preco_conco","ritmo_dias","preenchidos"]);
 /* quanto falta entregar num pedido, na unidade de cada empresa (BNZ peças, CIAPLAC m/un., BB kg); parcial já vem só com o saldo */
 function textoAEntregar(r){
   const p = [];
@@ -1133,6 +1141,9 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             if(dz && dcriada && !isNaN(dcriada.getTime()) && dz > dcriada) v = '<span class="zap-depois" title="Falou com o cliente DEPOIS que esta atividade foi criada — talvez já tenha feito o contato e esqueceu de concluir">💬 '+v+'</span>';
           }
           if(c[0]==="dias_desde_ultima_compra") v = (v===""||v==null) ? "–" : v+"d";
+          if(c[0]==="dias_desde_cotacao") v = (v===""||v==null) ? "–" : v+"d";
+          if(k==="cotou_nao_fechou" && c[0]==="cotacao_valor") v = fmtBRL(r.cotacao_valor) + (Number(r.cotacoes_qtd) > 1 ? ' <small>('+r.cotacoes_qtd+' cotações)</small>' : "");
+          if(k==="cotou_nao_fechou" && c[0]==="cliente" && r.lead) v = '<a class="lk" href="'+ODOO_URL+'/odoo/crm/'+r.lead+'" target="_blank" rel="noopener" title="abrir o card no CRM">'+v+'</a>';
           // ciclo de compra (calculado na Inteligência Comercial): "a cada 28d"; sem ciclo ainda = Em Formação (menos de 3 compras) ou "–"
           if(c[0]==="ciclo_dias") v = Number(r.ciclo_dias) > 0 ? "a cada "+r.ciclo_dias+"d" : (r.situacao === "Em Formação" ? "em formação" : "sem ciclo");
           if(c[0]==="proxima_compra" && !v) v = "–";
@@ -1168,7 +1179,7 @@ function montarCard(k, titulo, cor, rows, pre, sortavel){
             ? '<button class="btn-ac ok" data-ac="feito" data-id="'+r.id+'" title="concluir a atividade">✔ Feito</button> <button class="btn-ac" data-ac="editar" data-id="'+r.id+'" title="editar resumo e vencimento">✎</button> <button class="btn-ac cancel" data-ac="cancelar" data-id="'+r.id+'" title="cancelar a atividade">✕</button>'
             : "";
           // Curva A: cliente grande parado (Sem Movimentação / Inativo) aparece em destaque pra ficar de olho
-          const alertaEst = (k==="curva_a" && c[0]==="estagio" && /Sem Movimenta|Inativ/.test(r.estagio||"")) ? " est-alerta" : "";
+          const alertaEst = ((k==="curva_a" || k==="cotou_nao_fechou") && c[0]==="estagio" && /Sem Movimenta|Inativ/.test(r.estagio||"")) ? " est-alerta" : "";
           // Check-list: texto cortado com "…" quando a coluna é estreita; o texto inteiro aparece ao passar o mouse
           let dica = (k==="atividades" && (c[0]==="cliente"||c[0]==="resumo"||c[0]==="tipo")) ? ' title="'+esc(String(r[c[0]]||""))+'"' : "";
           let extra = alertaEst + ((k==="perfil_carteira" && PERFIL_CAMPOS.has(c[0])) ? " pf-wrap"+(_pfVazio ? " pf-vazio-td" : "") : "");
@@ -1453,12 +1464,12 @@ document.addEventListener("click", e=>{
 
 const DEMO = {
   atualizado_em: new Date().toISOString(),
-  kpis: { carteira_ativa:59, em_negociacao:9, alvos_mes:51, vendas_mes:98935.25, atividades:16, atividades_atrasadas:16,
+  kpis: { cotou_30d:1, carteira_ativa:59, em_negociacao:9, alvos_mes:51, vendas_mes:98935.25, atividades:16, atividades_atrasadas:16,
     carteira:{ativos:33,negociacao:9,sem_movimentacao:17,inativos:32},
     missoes:{contato_preventivo:1,recuperacao:2,em_formacao:40},
     alertas:{sem_movimentacao_30d:6,sem_conversa_zap:4,inativos:26},
     curva_a_qtd:2, vendas_pecas:3480, vendas_pecas_label:"peças vendidas", ciaplac_metros:null, ciaplac_unidades:null, pedidos_sem_entrega_qtd:1 },
-  listas: { alvos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"https://wa.me/5511999990000",cidade:"São Paulo",uf:"SP",regiao:"SP - São Paulo",marcadores:"BB CLIENTE AÇO",estagio:"Clientes Ativos",ultimo_pedido:"2026-08-12"}],
+  listas: { cotou_nao_fechou:[{cliente:"(exemplo) A. F. ROCHA CALHAS",fantasia:"Calhas Mundial",zap:"https://wa.me/5519999990000",cidade:"Campinas",uf:"SP",regiao:"SP - Campinas",estagio:"Clientes Inativos",marcadores:"DRY CLI AÇO",cotacao_valor:1500.5,cotacoes_qtd:2,ultima_cotacao:"2026-11-15",dias_desde_cotacao:4,ultimo_pedido:"2026-07-30",dias_desde_ultima_compra:112}], alvos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",fantasia:"São José",zap:"https://wa.me/5511999990000",cidade:"São Paulo",uf:"SP",regiao:"SP - São Paulo",marcadores:"BB CLIENTE AÇO",estagio:"Clientes Ativos",ultimo_pedido:"2026-08-12"}],
     em_negociacao:[{cliente:"(exemplo) ANNA DECOR",fantasia:"Anna Decor",zap:"https://wa.me/5519999990000",cidade:"Piracicaba",uf:"SP",regiao:"SP - Campinas",marcadores:"",ultima_interacao:"2026-09-01"}],
     carteira_ativos:[{cliente:"(exemplo) GESSO SÃO JOSÉ",zap:"https://wa.me/5511999990000",regiao:"SP - São Paulo"},{cliente:"(exemplo) ANNA DECOR",zap:"https://wa.me/5519999990000",regiao:"SP - Campinas"}],
     por_regiao:[{regiao:"SP - Campinas",ativos:1,inativos:0},{regiao:"SP - São Paulo",ativos:1,inativos:0}],
@@ -1493,7 +1504,7 @@ function syncPrintPageStyle(){
   const el = $("#print-page-style");
   // a 1ª página já tem o cabeçalho grande no corpo; esta linha na margem só repete da 2ª página em diante
   // listas largas (11 a 13 colunas) impressas sozinhas saem em paisagem; o resto continua em retrato
-  const PAISAGEM = ["lista-alvos","lista-contato_preventivo","lista-recuperacao","lista-em_formacao","lista-conversa_zap","lista-sem_movimentacao","lista-inativos","lista-perfil_carteira"];
+  const PAISAGEM = ["lista-alvos","lista-cotou_nao_fechou","lista-contato_preventivo","lista-recuperacao","lista-em_formacao","lista-conversa_zap","lista-sem_movimentacao","lista-inativos","lista-perfil_carteira"];
   const paisagem = alvosImpressao.some(id => PAISAGEM.includes(id));
   if(el) el.textContent = '@media print{ '+(paisagem ? '@page{ size:A4 landscape; } ' : '')+'@page{ @top-left{ content:"'+texto+'"; font-family:Arial,sans-serif; font-size:9px; font-weight:bold; color:'+cor+'; } } @page :first{ @top-left{ content:""; } } @page{ @bottom-left{ content:"'+rodape+'"; font-family:Arial,sans-serif; font-size:8px; color:#888; } } }';
 }
